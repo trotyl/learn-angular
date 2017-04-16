@@ -8,7 +8,7 @@
 
 为此，谷歌于 2016 年正式发布了 Angular 框架，作为 AngularJS 的后继者，在保持了 AngularJS 开发风格的基础上，不仅解决了 AngularJS 现有的遗留问题，同时扩展了开发领域[^5]并且提供了更完善的功能和性能支持。
 
-本书的目的在于对 Angular 提供超过官方文档的详细介绍以及完整剖析，同时会保证绝对的严谨性，不会为了简化内容而混淆概念，需要特别注意的部分以及相关的外部内容都会在脚注中给出。因此，本书并不是快速入门，也不保证面向新手友好，请根据自己的实际需要阅读。
+本书的目的在于对 Angular 提供超过官方文档的详细介绍以及完整剖析，同时会保证绝对的严谨性，不会为了简化内容而混淆概念，需要特别注意的部分以及相关的外部内容都会在脚注中给出。因此，**本书并不是快速入门，也不保证面向新手友好，请根据自己的实际需要阅读**。
 
 
 [^1]: 谷歌于 2009 年发布的 JavaScript 框架叫做 AngularJS，官网为 [angularjs.org](https://angularjs.org)，代码库为 [angular/angular.js](https://github.com/angular/angular.js)；而 2016 年发布的 JavaScript 开发平台叫做 Angular，官网为 [angular.io](https://angular.io)，代码库为 [angular/angular](https://github.com/angular/angular)。关于两者名称的使用可以参考 [Branding Guidelines for Angular and AngularJS](http://angularjs.blogspot.hk/2017/01/branding-guidelines-for-angular-and.html)。
