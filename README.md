@@ -1,3 +1,14 @@
-# My Awesome Book
+# Learn Angular the hard way
 
-This file file serves as your book's preface, a great place to describe your book's content and ideas.
+早在 2009 年，谷歌发布了 AngularJS，引发了 Web 开发模式的重大变革，其创新性的双向数据绑定让开发 Web 应用的难度极大简化，很大程度上提高了开发效率，同时也大大推进了前后端分离的浪潮。
+
+虽然具备着重大的历史意义，但随着时间的推移，AngularJS 中的很多设计及实现也逐渐演变为历史负担，其中的缺陷也不断显现出来，其中的问题包括但不仅限于性能问题、缺乏跨平台运行能力以及臃肿的 API 设计等。
+
+与其同时，Web 前端开发环境也在不断演进。过去，人们往往靠着手动引入 `<script>` 标签以及控制引入顺序来完成「链接[^1]」过程；而现在，JavaScript 语言提供了标准的模块系统，需要引入的文件由依赖关系自动确定[^2]。
+
+为此，谷歌于 2016 年正式发布了 Angular 框架，作为 AngularJS 的后继者，在保持了 AngularJS 开发风格的基础上，相对于现有的解决了 AngularJS
+
+[^1]: 对于支持多文件的开发语言来说，从源代码到可执行文件往往需要经历「编译」（Compilation）和「链接」（Linking）两个步骤，而 JavaScript 虽然没有显式的「链接」过程，但实际的「链接」过程（文件间的交互）是通过 JavaScript 引擎提供的全局作用域来完成的，先引入的文件暴露某个变量从而供后引入的文件使用，因此对文件的引入顺序也会有严格要求。
+
+[^2]: 目前浏览器对 ES Module 的原生支持仍然不够完善（只有 Safari 提供），因此往往需要借助构建工具来预处理源代码从而模拟出相同的行为。常用的构建工具有 Webpack、Rollup 和 SystemJS 等。
+
