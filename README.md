@@ -6,7 +6,7 @@
 
 与其同时，Web 前端开发环境也在不断演进，前端开发领域已经由原先的网页脚本逐步转变为一套完整的工程实践。
 
-为此，谷歌于 2016 年正式发布了 Angular 框架，作为 AngularJS 的后继者，在保持了 AngularJS 开发风格的基础上，不仅解决了 AngularJS 现有的遗留问题，同时扩展了开发领域[^5]并且提供了更完善的功能和性能支持。
+为此，谷歌于 2016 年正式发布了 Angular 框架，作为 AngularJS 的后继者，在保持了 AngularJS 开发风格的基础上，不仅解决了 AngularJS 现有的遗留问题，同时扩展了开发领域[^2]并且提供了更完善的功能和性能支持。
 
 本书的目的在于对 Angular 提供超过官方文档的详细介绍以及完整剖析，同时会尽可能保证绝对的严谨性，不会为了简化内容而混淆概念，需要特别注意的部分以及相关的外部内容都会在脚注中给出。
 
@@ -18,11 +18,5 @@
 
 [^1]: 谷歌于 2009 年发布的 JavaScript 框架叫做 AngularJS，官网为 [angularjs.org](https://angularjs.org)，代码库为 [angular/angular.js](https://github.com/angular/angular.js)；而 2016 年发布的 JavaScript 开发平台叫做 Angular，官网为 [angular.io](https://angular.io)，代码库为 [angular/angular](https://github.com/angular/angular)。关于两者名称的使用可以参考 [Branding Guidelines for Angular and AngularJS](http://angularjs.blogspot.hk/2017/01/branding-guidelines-for-angular-and.html)。
 
-[^2]: 对于支持多文件的开发语言来说，从源代码到可执行文件往往需要经历「[编译](https://en.wikipedia.org/wiki/Compiler)」（Compilation）和「[链接](https://en.wikipedia.org/wiki/Linker_(computing)\)」（Linking）两个步骤，而 JavaScript 虽然没有显式的「链接」过程，但实际的「链接」过程（文件间的交互）是通过 JavaScript 引擎提供的全局作用域来完成的，先引入的文件暴露某个变量从而供后引入的文件使用，因此对文件的引入顺序也会有严格要求。
-
-[^3]: 目前浏览器对 ES Module 的 [原生支持](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) 仍然不够完善（本文写作时只有 Safari、Firefox 和 Edge 提供支持，且后两者需要手动开启），因此往往需要借助构建工具来预处理源代码从而模拟出相同的行为。常用的构建工具有 Webpack、Rollup 和 SystemJS 等。
-
-[^4]: ECMAScript 2017，简称 ES2017 或 ES8，已经通过 TC39 表决通过并提交到 ECMA，正式发布时间预期为 2017 年第二季度到第三季度间。更多详细内容可以参见 [ECMA, TC39 Meeting Notes](https://github.com/rwaldron/tc39-notes/blob/master/es8/2017-03/summary.md)。
-
-[^5]: Angular 的定位为开发平台而非 Web 框架，例如 Angular 也可用于移动端应用的开发等，可以参考 [NativeScript](https://www.nativescript.org/)、[ionic](http://ionicframework.com/) 等。
+[^2]: Angular 的定位为开发平台而非 Web 框架，例如 Angular 也可用于移动端应用的开发等，可以参考 [NativeScript](https://www.nativescript.org/)、[ionic](http://ionicframework.com/) 等。
 
