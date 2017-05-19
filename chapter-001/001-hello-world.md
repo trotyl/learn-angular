@@ -44,14 +44,14 @@ class AppComponent { }
 ```javascript
 class AppComponent { }
 
-AppComponent.annotations = [
+AppComponent.annotations = [
   new ng.core.Component({
     template: '<h1>Hello Angular</h1>'
   })
 ]
 ```
 
-上面我们 `AppComponent` 的 `annotations` 静态属性初始化为一个数组，显然，既然是复数名词，那么显然不止一个内容，而且从逻辑上也很容易知道，一个类型自然应该能够附加多组 **Metadata**。目前我们的数组中只有一个元素，是一个 `ng.core.Component` 类型的实例，带有一个匿名对象作为参数。该匿名对象具备一个 `template` 属性，其值即为我们所要定义的组件模版。
+上面我们 `AppComponent` 的 `annotations` 静态属性初始化为一个数组，显然，既然是复数名词，那么显然不止一个内容，而且从逻辑上也很容易知道，一个类型自然应该能够附加多组 **Metadata**。目前我们的数组中只有一个元素，是一个 `ng.core.Component` 类型的实例，带有一个匿名对象作为参数。该匿名对象具备一个 `template` 属性，其值即为我们所要定义的组件模版。
 
 不过，当我们再次刷新浏览器，我们会看到控制台出现了报错：
 
@@ -73,14 +73,14 @@ Uncaught ReferenceError: ng is not defined
 
 那么这里的 `core.umd.js` 是什么呢？分段解释就是：
 
-+ `https` 是一个 URI Scheme，废话不多说；
++ `https` 是一个 URI Scheme，废话不多说；
 + `unpkg.com` 是一个提供在线 NPM 包访问的 CDN 站点，也就是说，只要是 NPM public registry 里面的内容，都能通过该站点在线访问；
 + `@angular/core` 是 NPM 里一个 Scoped Package[^7]，Angular 采用模块化的方式发布，这里是 Angular 的核心运行时（平台无关）部分对应的 Package；
 + `4.1.3` 是本文写作时 Angular 的最新稳定版本；
-+ `bundles` 是发布内容中 UMD 文件所在的文件夹，用于适配不同的模块系统（以及不使用模块系统）的情况；
++ `bundles` 是发布内容中 UMD 文件所在的文件夹，用于适配不同的模块系统（以及不使用模块系统）的情况；
 + `core.umd.js` 是该模块中唯一的 umd 文件。
 
-可能需要注意的是，这里 `<script>` 标签的顺序很重要。不过现在我们会发现，控制台出现了另一个错误：
+可能需要注意的是，这里 `<script>` 标签的顺序很重要。不过现在我们会发现，控制台出现了另一个错误：
 
 ```text
 Uncaught TypeError: Cannot read property 'Observable' of undefined
@@ -95,7 +95,7 @@ Uncaught TypeError: ng.core.Component is not a constructor
 global.Rx.Observable
 ```
 
-这里我们看到一个新的全局变量，叫做 `Rx`。那么这里的 `Rx` 是什么东西呢？Rx 是 Reactive Extentions 的缩写，为微软研究院开发的基于 .Net Framework 的 Reactive Programming（响应式编程）类库，我们这里使用的是 JavaScript 语言的移植版本，因此也叫 RxJS。
+这里我们看到一个新的全局变量，叫做 `Rx`。那么这里的 `Rx` 是什么东西呢？Rx 是 Reactive Extentions 的缩写，为微软研究院开发的基于 .Net Framework 的 Reactive Programming（响应式编程）类库，我们这里使用的是 JavaScript 语言的移植版本，因此也叫 RxJS。
 
 而这里 RxJS 是 Angular 的一个重要的第三方依赖，所以我们也需要一个额外的标签来引入 RxJS：
 
@@ -110,13 +110,13 @@ global.Rx.Observable
 </script>
 ```
 
-在这之后，我们就可以继续期待新的错误了。正如我们所期望的那样，新的错误为：
+在这之后，我们就可以继续期待新的错误了。正如我们所期望的那样，新的错误为：
 
 ```text
 Uncaught reflect-metadata shim is required when using class decorators
 ```
 
-这里说的是我们需要使用一个 Polyfill。然而事实上并不需要，因为 Angular 不是人工智能，只是机械地检查预设条件，所以只要在浏览器编译的情况下，Angular 就会检测当前环境是否具备 `Reflect.*Metadata` 相关的功能。
+这里说的是我们需要使用一个 Polyfill。然而事实上并不需要，因为 Angular 不是人工智能，只是机械地检查预设条件，所以只要在浏览器编译的情况下，Angular 就会检测当前环境是否具备 `Reflect.*Metadata` 相关的功能。
 
 因为我们比 Angular 聪明很多，所以并不需要真的引入这个 Polyfill，简单地骗一骗 Angular 就好了，为此我们增加一个 `<script>` 标签，提供一个假的 `Reflect.getOwnMetadata` 定义：
 
@@ -136,18 +136,18 @@ Reflect.getOwnMetadata = () => {}
 
 然后继续。
 
-然而遗憾的是，并没有新的错误出现，为什么呢？因为并没有任何代码来启动我们的应用，我们仅仅完成了一个组件定义而已。等等，组件定义真的完成了么？
+然而遗憾的是，并没有新的错误出现，为什么呢？因为并没有任何代码来启动我们的应用，我们仅仅完成了一个组件定义而已。等等，组件定义真的完成了么？
 
 前面说到，对于组件我们需要考虑两个问题：*有什么样的视图* 和 *如何复用*。*有什么样的视图* 这个问题我们已经解决了，那么要如何进行复用，或者说，如何确定什么时候使用这个组件呢？
 
-为了保持和 Web Components 的一致性，Angular 采用了自定义 **Selector（选择器）** 的方式来配置何时应用该组件，这里的 **Selector** 和之前的 **Template** 一样都是 **Component** 的 **Metadata**。
+为了保持和 Web Components 的一致性，Angular 采用了自定义 **Selector（选择器）** 的方式来配置何时应用该组件，这里的 **Selector** 和之前的 **Template** 一样都是 **Component** 的 **Metadata**。
 
 我们继续添加 `selector` 属性：
 
 ```javascript
 class AppComponent { }
 
-AppComponent.annotations = [
+AppComponent.annotations = [
   new ng.core.Component({
     selector: 'main',
     template: '<h1>Hello Angular</h1>',
@@ -159,12 +159,12 @@ class AppComponent { }
 
 从 2.0.0-rc.5 版本开始，Angular 中新引入了一个 **NgModule** 的概念，用于充当应用的基本可分割单元。每个 **Component** 都必须所属于某个 **NgModule**。
 
-和 **Component** 类似，每一样 **NgModule** 也是一个 **JavaScript Class**，这里我们定义一个叫 `AppModule` 的 **NgModule**：
+和 **Component** 类似，每一样 **NgModule** 也是一个 **JavaScript Class**，这里我们定义一个叫 `AppModule` 的 **NgModule**：
 
 ```javascript
 class AppComponent { }
 
-AppComponent.annotations = [
+AppComponent.annotations = [
   //...
 ]
 
@@ -182,7 +182,7 @@ AppModule.annotations = [
 ]
 ```
 
-这里我们提供的 **Metadata** 与之前的不同，是一个 `ng.core.NgModule` 类型的实例，其参数中用到了 `imports` 属性和 `declarations` 属性。`imports` 属性是一个数组，用于指定这个 **NgModule** 所依赖的其它 **NgModule**，例如所有面向 Web 的 Angular App 都需要在 **Root NgModule** 中依赖 `BrowserModule`，其中包含了浏览器平台的相关基础设施（如操作 DOM 的工具等）。
+这里我们提供的 **Metadata** 与之前的不同，是一个 `ng.core.NgModule` 类型的实例，其参数中用到了 `imports` 属性和 `declarations` 属性。`imports` 属性是一个数组，用于指定这个 **NgModule** 所依赖的其它 **NgModule**，例如所有面向 Web 的 Angular App 都需要在 **Root NgModule** 中依赖 `BrowserModule`，其中包含了浏览器平台的相关基础设施（如操作 DOM 的工具等）。
 
 再次刷新浏览器，我们终于得到了新的错误：
 
@@ -233,7 +233,7 @@ _angular_common.PlatformLocation
 
 `_angular_common` 就指的是 `@angular/common` 这个 **Package**，这个是包含了 Angular 的通用类库代码的部分。
 
-如果我们具备 AngularJS 基础的话，应该知道 `PlatformLocation` 是一个 **Service（服务）**，而这些 Angular 内置的基础 **Service** 等内容就包含在 `@angular/common` 这个 **Package** 当中。除了 **Service** 内容外，`@angular/common` 还包含有基本的 **Directive（指令）**、**Pipe（管道）** 等。
+如果我们具备 AngularJS 基础的话，应该知道 `PlatformLocation` 是一个 **Service（服务）**，而这些 Angular 内置的基础 **Service** 等内容就包含在 `@angular/common` 这个 **Package** 当中。除了 **Service** 内容外，`@angular/common` 还包含有基本的 **Directive（指令）**、**Pipe（管道）** 等。
 
 继续添加一个 `<script>` 标签：
 
@@ -258,7 +258,7 @@ Reflect.getOwnMetadata = () => {}
 ```javascript
 class AppComponent { }
 
-AppComponent.annotations = [
+AppComponent.annotations = [
   //...
 ]
 
@@ -286,7 +286,7 @@ AppModule.annotations = [
 ```javascript
 class AppComponent { }
 
-AppComponent.annotations = [
+AppComponent.annotations = [
   //...
 ]
 
@@ -307,7 +307,7 @@ Uncaught Error: No provider for CompilerFactory!
 
 很明显，我们缺少 `CompilerFactory` 这个内容。事实上，Angular 和 AngularJS 很大的一点不同是，AngularJS 的模版是基于 DOM 的，HTML 内容会被交给浏览器解析，随后 AngularJS 遍历 DOM 节点来实现自己的功能扩展；而 Angular 中的模版是平台无关的，HTML 内容会被事先编译成操作视图的 JavaScript 代码，而浏览器永远也见不到模版的 HTML 内容。
 
-因此，Angular 使用了一个功能强大的模版编译器，在不依靠预处理工具的情况下，我们只能在浏览器里引入这个编译器，位于 `@angular/compiler`：
+因此，Angular 使用了一个功能强大的模版编译器，在不依靠预处理工具的情况下，我们只能在浏览器里引入这个编译器，位于 `@angular/compiler`：
 
 ```html
 <!DOCTYPE html>
@@ -326,7 +326,7 @@ Reflect.getOwnMetadata = () => {}
 </script>
 ```
 
-不过，很遗憾的是，这次错误并没有消失也没有变化。事实上，`@angular/platform-browser` 的 API 仅仅适用于对已经预编译过的 **NgModule**，而对于无构建工具的在线运行，我们需要使用另一个 API，位于 `@angular/platform-browser-dynamic`。`PlatformBrowserDynamic` 能够在运行时融合 `PlatformBrowser` 和 `Compiler`，提供运行时动态编译的功能。因此，继续添加一个 `<script>` 标签：
+不过，很遗憾的是，这次错误并没有消失也没有变化。事实上，`@angular/platform-browser` 的 API 仅仅适用于对已经预编译过的 **NgModule**，而对于无构建工具的在线运行，我们需要使用另一个 API，位于 `@angular/platform-browser-dynamic`。`PlatformBrowserDynamic` 能够在运行时融合 `PlatformBrowser` 和 `Compiler`，提供运行时动态编译的功能。因此，继续添加一个 `<script>` 标签：
 
 ```html
 <!DOCTYPE html>
@@ -351,7 +351,7 @@ Reflect.getOwnMetadata = () => {}
 ```javascript
 class AppComponent { }
 
-AppComponent.annotations = [
+AppComponent.annotations = [
   //...
 ]
 
@@ -361,7 +361,7 @@ AppModule.annotations = [
   //...
 ]
 
-ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
+ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 ```
 
 在此之后，我们得到了最后一个错误（八年抗战到最后一年了？）：
@@ -443,7 +443,7 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 </script>
 ```
 
-至此，我们在没有使用任何开发工具或语言扩展的情况下，完成了一个最为传统的（只使用 `<script>` 标签引入内容）的 Hello World for Angular 的版本。
+至此，我们在没有使用任何开发工具或语言扩展的情况下，完成了一个最为传统的（只使用 `<script>` 标签引入内容）的 Hello World for Angular 的版本。
 
 ## 可能的疑惑
 
@@ -461,19 +461,19 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 
 #### 是否能够以不用 ES2015（类）的方式使用？
 
-可以，后文中会提及。
+可以，后文中会提及。
 
-#### Angular 是否能够使用 CDN 引入？
+#### Angular 是否能够使用 CDN 引入？
 
 你有没有动手？
 
 #### Angular 是否提供官方 CDN 站点？
 
-不提供，而且也不推荐运行时引入的方式。
+不提供，而且也不推荐运行时引入的方式。
 
 #### @angular 的 Scope 里有多少 Packages？
 
-目前仍在维护的有 22 个，不同平台不同需求下需要用到的内容不同，另外很大一部分为工具，不属于运行时依赖，详见：[@angular](https://www.npmjs.com/~angular)。
+目前仍在维护的有 22 个，不同平台不同需求下需要用到的内容不同，另外很大一部分为工具，不属于运行时依赖，详见：[@angular](https://www.npmjs.com/~angular)。
 
 #### Angular 需要多少外部依赖？
 
@@ -483,17 +483,17 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 
 只有在同时使用 **Decorator 语法** 和 **JIT 编译** 方式的情况下才会用到。
 
-#### Angular 的元数据有几种提供方式。
+#### Angular 的元数据有几种提供方式？
 
-后文中会提及。
+后文中会提及。
 
 #### NgModule 的意义是什么？
 
-后文中会提及。
+后文中会提及。
 
 #### Angular 有哪些启动方式？
 
-后文中会提及。
+后文中会提及。
 
 ---
 
@@ -501,13 +501,13 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 
 [^2]: 浏览器并不属于开发工具，只是普通的日常 App，所以并不违反我们上面不使用开发工具的承诺。当然，这里要求浏览器能够支持 ES2015。
 
-[^3]: 在 Angular 项目中，对于 Component 类型的 JavaScript class 而言，其命名通常以 Component 结尾。此外，对于应用的根元素，通常采用 AppComponent 作为其名称。不过这些都 Angular 团队推荐的代码风格，对实现并不会造成任何影响。
+[^3]: 在 Angular 项目中，对于 Component 类型的 JavaScript class 而言，其命名通常以 Component 结尾。此外，对于应用的根元素，通常采用 AppComponent 作为其名称。不过这些都 Angular 团队推荐的代码风格，对实现并不会造成任何影响。
 
 [^4]: 组件本身并不会有任何「作为根组件」的标记，而设计根组件的一个常用方式是通过 NgModule 的相关 Metadata，其它设置方式会在之后的部分覆盖。
 
 [^5]: 之后我们所有自己写的 JavaScript 代码都在这个 `<script>` 标签中，如无特殊情况不再特别说明。
 
-[^6]: ES2015 中并没有提供值属性的语法，只有访问器属性和方法的声明语法。目前有一个 Stage 2 的 ES Proposal 中给出了类的值属性语法的相应提案，详情参见：[tc39/proposal-class-public-fields](https://github.com/tc39/proposal-class-public-fields)。
+[^6]: ES2015 中并没有提供值属性的语法，只有访问器属性和方法的声明语法。目前有一个 Stage 2 的 ES Proposal 中给出了类的值属性语法的相应提案，详情参见：[tc39/proposal-class-public-fields](https://github.com/tc39/proposal-class-public-fields)。
 
 [^7]: Scope Packages 是 NPM 提供的服务，用于提供自定义的命名空间从而解决全局名称冲突的问题。详情参见：[scope | npm Documentation](https://docs.npmjs.com/misc/scope)。
 
