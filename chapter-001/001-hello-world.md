@@ -140,7 +140,7 @@ Reflect.getOwnMetadata = () => {}
 
 前面说到，对于组件我们需要考虑两个问题：*有什么样的视图* 和 *如何复用*。*有什么样的视图* 这个问题我们已经解决了，那么要如何进行复用，或者说，如何确定什么时候使用这个组件呢？
 
-为了保持和 Web Components 的一致性，Angular 采用了自定义 **Selector（选择器）** 的方式来配置何时应用该组件，这里的 **Selector** 和之前的 **Template** 一样都是 **Component** 的 **Metadata**。
+为了保持和 Web Components 的一致性[^8]，Angular 采用了自定义 **Selector（选择器）** 的方式来配置何时应用该组件，这里的 **Selector** 和之前的 **Template** 一样都是 **Component** 的 **Metadata**。
 
 我们继续添加 `selector` 属性：
 
@@ -253,7 +253,7 @@ Reflect.getOwnMetadata = () => {}
 </script>
 ```
 
-有进入到了没有错误的状态，不过仍然什么也没有发生。现在已经有了 **NgModule**，我们可以考虑来启动我们的 Angular 应用。启动一个 Angular 应用有很多种方式，其中最简单的方式就是通过 **NgModule** 的 **Metadata** 中的 `bootstrap` 属性来设置：
+又进入到了没有错误的状态，不过仍然什么也没有发生。现在已经有了 **NgModule**，我们可以考虑来启动我们的 Angular 应用。启动一个 Angular 应用有很多种方式，其中最简单的方式就是通过 **NgModule** 的 **Metadata** 中的 `bootstrap` 属性来设置：
 
 ```javascript
 class AppComponent { }
@@ -367,7 +367,7 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 在此之后，我们得到了最后一个错误（八年抗战到最后一年了？）：
 
 ```text
-Error: Angular requires Zone.js prolyfill[^8].
+Error: Angular requires Zone.js prolyfill[^9].
 ```
 
 这里就十分浅显易懂了，而且解决方案就是如其所述，添加一个 Zone.js 的 `<script>` 标签：
@@ -511,4 +511,6 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 
 [^7]: Scope Packages 是 NPM 提供的服务，用于提供自定义的命名空间从而解决全局名称冲突的问题。详情参见：[scope | npm Documentation](https://docs.npmjs.com/misc/scope)。
 
-[^8]: Prolifill = Probably a polyfill，由于 Zone API 仍然处于 Stage 0，也就是说仅仅在 tc39 留档。而 Stage 1 开始才属于语言提案，Stage 4 之后才进入语言规范中。所以 Zone API 仅仅是可能作为未来标准的 Polyfill。关于 Polyfill、Ponyfill 和 Prolifill 的辨析可以参考：[Polyfill, Ponyfill & Prollyfill](https://kikobeats.com/polyfill-ponyfill-and-prollyfill/)。
+[^8]: 早期的 Angular 设计方案中也有过基于 Web Components 实现的方案，类似于现在的 Polymer。
+
+[^9]: Prolifill = Probably a polyfill，由于 Zone API 仍然处于 Stage 0，也就是说仅仅在 tc39 留档。而 Stage 1 开始才属于语言提案，Stage 4 之后才进入语言规范中。所以 Zone API 仅仅是可能作为未来标准的 Polyfill。关于 Polyfill、Ponyfill 和 Prolifill 的辨析可以参考：[Polyfill, Ponyfill & Prollyfill](https://kikobeats.com/polyfill-ponyfill-and-prollyfill/)。
