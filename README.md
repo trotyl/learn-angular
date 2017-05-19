@@ -1,4 +1,4 @@
-# [^5]Learn Angular the hard way
+# Learn Angular the hard way
 
 早在 2009 年，谷歌发布了 AngularJS[^1]，引发了 Web 开发模式的重大变革，其创新性的双向数据绑定让开发 Web 应用的难度极大简化，开发效率极大地提高，同时也大大推进了前后端分离的浪潮。
 
