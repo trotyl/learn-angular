@@ -157,7 +157,7 @@ AppComponent.annotations = [
 
 现在组件的定义已经完成了，接着来考虑如何启动应用。
 
-从 2.0.0-rc.5 版本开始，Angular 中新引入了一个 **NgModule** 的概念，用于充当应用的基本可分割单元。每个 **Component** 都必须所属于某个 **NgModule**。
+从 2.0.0-rc.5 版本开始，Angular 中新引入了一个 **NgModule** 的概念[^9]，用于充当应用的基本可分割单元。每个 **Component** 都必须所属于某个 **NgModule**。
 
 和 **Component** 类似，每一样 **NgModule** 也是一个 **JavaScript Class**，这里我们定义一个叫 `AppModule` 的 **NgModule**：
 
@@ -305,7 +305,7 @@ ng.platformBrowser.platformBrowser().bootstrapModule(AppModule)
 Uncaught Error: No provider for CompilerFactory!
 ```
 
-很明显，我们缺少 `CompilerFactory` 这个内容。事实上，Angular 和 AngularJS 很大的一点不同是，AngularJS 的模版是基于 DOM 的，HTML 内容会被交给浏览器解析，随后 AngularJS 遍历 DOM 节点来实现自己的功能扩展；而 Angular 中的模版是平台无关的，HTML 内容会被事先编译成操作视图的 JavaScript 代码，而浏览器永远也见不到模版的 HTML 内容。
+很明显，我们缺少 `CompilerFactory` 这个内容。事实上，Angular 和 AngularJS 很大的一点不同是，AngularJS 的模版是基于 DOM 的，HTML 内容会被交给浏览器解析，随后 AngularJS 遍历 DOM 节点来实现自己的功能扩展；而 Angular 中的模版是平台无关的，HTML 内容会被事先编译成视图相关的 JavaScript 代码，而浏览器永远也见不到模版的 HTML 内容。
 
 因此，Angular 使用了一个功能强大的模版编译器，在不依靠预处理工具的情况下，我们只能在浏览器里引入这个编译器，位于 `@angular/compiler`：
 
@@ -367,7 +367,7 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 在此之后，我们得到了最后一个错误（八年抗战到最后一年了？）：
 
 ```text
-Error: Angular requires Zone.js prolyfill[^9].
+Error: Angular requires Zone.js prolyfill[^10].
 ```
 
 这里就十分浅显易懂了，而且解决方案就是如其所述，添加一个 Zone.js 的 `<script>` 标签：
@@ -511,6 +511,8 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 
 [^7]: Scope Packages 是 NPM 提供的服务，用于提供自定义的命名空间从而解决全局名称冲突的问题。详情参见：[scope | npm Documentation](https://docs.npmjs.com/misc/scope)。
 
-[^8]: 早期的 Angular 设计方案中也有过基于 Web Components 实现的方案，类似于现在的 Polymer。详情参见：[Angular 2: Emulated Components](https://docs.google.com/document/d/1NFmp2ptjFfzTEYf0OPcpkacRV2_7LgTIrP5nWfJQL0o/edit#heading=h.z2blzd2pdtwt)
+[^8]: 早期的 Angular 设计方案中也有过基于 Web Components 实现的方案，类似于现在的 Polymer。详情参见：[Angular 2: Emulated Components](https://docs.google.com/document/d/1NFmp2ptjFfzTEYf0OPcpkacRV2_7LgTIrP5nWfJQL0o/edit#heading=h.z2blzd2pdtwt)。
 
-[^9]: Prolifill = Probably a polyfill，由于 Zone API 仍然处于 Stage 0，也就是说仅仅在 tc39 留档。而 Stage 1 开始才属于语言提案，Stage 4 之后才进入语言规范中。所以 Zone API 仅仅是可能作为未来标准的 Polyfill。关于 Polyfill、Ponyfill 和 Prolifill 的辨析可以参考：[Polyfill, Ponyfill & Prollyfill](https://kikobeats.com/polyfill-ponyfill-and-prollyfill/)。
+[^9]: 实际上，只有 TypeScript 实现的 Angular 才引入了 NgModule 的概念，而 Dart 版本的 Angular 并没有 NgModule，仍然使用类似于 2.0.0-rc.4 及之前的方式进行开发。详情参考：[About AngularDart](https://webdev.dartlang.org/angular)。不过绝大多数情况下我们默认说的都是 Angular 的 TypeScript 实现。
+
+[^10]: Prolifill = Probably a polyfill，由于 Zone API 仍然处于 Stage 0，也就是说仅仅在 tc39 留档。而 Stage 1 开始才属于语言提案，Stage 4 之后才进入语言规范中。所以 Zone API 仅仅是可能作为未来标准的 Polyfill。关于 Polyfill、Ponyfill 和 Prolifill 的辨析可以参考：[Polyfill, Ponyfill & Prollyfill](https://kikobeats.com/polyfill-ponyfill-and-prollyfill/)。
