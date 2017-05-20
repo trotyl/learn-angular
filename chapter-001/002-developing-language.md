@@ -64,13 +64,13 @@ MyApp.parameters = [
 MyApp.prototype.greet.returns = String
 ```
 
-可以看出，所有的标注信息都被附加到运行时[^6]中，即具备 **Type Introspection（内省）** 的能力。当然，这么做仅仅是附加信息，本身并不能提供任何功能，而是由其它使用该内容的代码根据相应的数据来动态确定行为。这种方式非常类似于 Java 的 **Annotation** 或者 C# 的 **Attribute**。
+可以看出，所有的标注信息都被附加到运行时[^6]中，即具备 **Type Introspection（内省）** 的能力。当然，这么做仅仅是附加信息，本身并不能提供任何功能，而是由其它使用该内容的代码根据相应的数据来动态确定行为。这种方式非常类似于 Java 的 **Annotation** 或者 C# 的 **Attribute**。
 
 随后在 NG-Conf 2015 上，Angular 团队宣布了迁移至 TypeScript 的消息[^7]。在 Angular 团队与 TypeScript 团队的合作计划中，TypeScript 将增加 **Metadata Annotation** 的语法以及对应的 **Introspection API**[^8]。
 
-不过，这件事最后并没有发生。随着 ES2015 的正式发布，JavaScript 语言开始进入稳定的持续迭代发展阶段，TypeScript 也不再接受新的语言特性，而是仅仅提供对 JavaScript 语言特性的支持以及提供相应的类型检查。于是 TypeScript 最后增加了对语法相似（但是语义完全不同）的 **Decorator** 特性的支持（**Decorator** 本身是 JavaScript 的语言提案，并不是 TypeScript 的扩展内容），而 Angular 也将相应的 API 改用 **Decorator** 实现。不过对于一般用户而言，这个重大的改动似乎并没有什么实际影响（以及在 2015 年的时候实际上也没有多少用户存在）。
+不过，这件事最后并没有发生。随着 ES2015 的正式发布，JavaScript 语言开始进入稳定的持续迭代发展阶段，TypeScript 也不再接受新的语言特性，而是仅仅提供对 JavaScript 语言特性的支持以及提供相应的类型检查。于是 TypeScript 最后增加了对语法相似（但是语义完全不同）的 **Decorator** 特性的支持（**Decorator** 本身是 JavaScript 的语言提案，并不是 TypeScript 的扩展内容），而 Angular 也将相应的 API 改用 **Decorator** 实现。不过对于一般用户而言，这个重大的改动似乎并没有什么实际影响（以及在 2015 年的时候实际上也没有多少用户存在）。
 
-此外，为了解决 Angular 需要运行时获取构造函数参数信息的问题（关于 **Dependency Injection** 的内容会在之后的部分覆盖），TypeScript 提供了一个新的编译器选项 `emitDecoratorMetadata`，为具备 **Decorator** 的 Class 暴露构造函数参数信息，默认情况下是基于 **Metadata Reflection API**[^9] 所实现的，后者是一个还不是语言提案的「提案」。
+此外，为了解决 Angular 需要运行时获取构造函数参数信息的问题（关于 **Dependency Injection** 的内容会在之后的部分覆盖），TypeScript 提供了一个新的编译器选项 `emitDecoratorMetadata`，为具备 **Decorator** 的 Class 暴露构造函数参数信息，默认情况下是基于 **Metadata Reflection API**[^9] 所实现的，后者是一个还不是语言提案的「提案」。
 
 
 
@@ -84,9 +84,9 @@ MyApp.prototype.greet.returns = String
 
 [^4]: 正如我们在第一节中尝试过的那样，Angular 并不要求使用 Decorator 语法，只是在使用该语法的情况下能够大量提高代码可读性，提高开发效率。
 
-[^5]: Annotation 并不仅仅表示 `@Something` 这样的内容，这种情况下通常译作「注解」，AtScript 中叫做 Metadata Annotation；而 `name: string` 这样的内容一般叫做 Type Annotation，译作「类型标注」。
+[^5]: Annotation 并不仅仅表示 `@Something` 这样的内容，这种情况下通常译作「注解」，AtScript 中叫做 Metadata Annotation；而 `name: string` 这样的内容一般叫做 Type Annotation，译作「类型标注」。
 
-[^6]: AtScript 的一个独特的功能就是运行时的类型检查，这点和 TypeScript 纯粹的编译时检查不同，即便是直接使用编译后的 JavaScript 代码也同样能保证类型安全。
+[^6]: AtScript 的一个独特的功能就是运行时的类型检查，这点和 TypeScript 纯粹的编译时检查不同，即便是直接使用编译后的 JavaScript 代码也同样能保证类型安全。
 
 [^7]: Twitter 链接为：[ng-conf on Twitter: "AtScript is Typescript #ngconf"
 ](https://twitter.com/ngconf/status/573521849780305920)。
