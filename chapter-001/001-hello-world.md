@@ -140,7 +140,7 @@ Reflect.getOwnMetadata = () => {}
 
 前面说到，对于组件我们需要考虑两个问题：*有什么样的视图* 和 *如何复用*。*有什么样的视图* 这个问题我们已经解决了，那么要如何进行复用，或者说，如何确定什么时候使用这个组件呢？
 
-为了保持和 Web Components 的一致性[^9]，Angular 采用了自定义 **Selector（选择器）** 的方式来配置何时应用该组件，这里的 **Selector** 和之前的 **Template** 一样都是 **Component** 的 **Metadata**。
+为了保持和 Web Components 的一致性[^9]，Angular 采用了自定义 **Selector（选择器）** 的方式来配置何时应用该组件，这里的 **Selector** 和之前的 **Template** 一样都是 **Component** 的 **Metadata**。
 
 我们继续添加 `selector` 属性：
 
@@ -515,6 +515,6 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 
 [^9]: 早期的 Angular 设计方案中也有过基于 Web Components 实现的方案，类似于现在的 Polymer。详情参见：[Angular 2: Emulated Components](https://docs.google.com/document/d/1NFmp2ptjFfzTEYf0OPcpkacRV2_7LgTIrP5nWfJQL0o/edit#heading=h.z2blzd2pdtwt)。
 
-[^10]: 实际上，只有 TypeScript 实现的 Angular 才引入了 NgModule 的概念，而 Dart 版本的 Angular 并没有 NgModule，仍然使用类似于 2.0.0-rc.4 及之前的方式进行开发。详情参考：[About AngularDart](https://webdev.dartlang.org/angular)。不过绝大多数情况下我们默认说的都是 Angular 的 TypeScript 实现。
+[^10]: 实际上，只有 TypeScript 实现的 Angular 才引入了 NgModule 的概念，而 Dart 版本的 Angular 并没有 NgModule，仍然使用类似于 2.0.0-rc.4 及之前的方式进行开发。详情参考：[About AngularDart](https://webdev.dartlang.org/angular)。不过绝大多数情况下我们默认说的都是 Angular 的 TypeScript 实现。
 
 [^11]: Prolifill = Probably a polyfill，由于 Zone API 仍然处于 Stage 0，也就是说仅仅在 tc39 留档。而 Stage 1 开始才属于语言提案，Stage 4 之后才进入语言规范中。所以 Zone API 仅仅是可能作为未来标准的 Polyfill。关于 Polyfill、Ponyfill 和 Prolifill 的辨析可以参考：[Polyfill, Ponyfill & Prollyfill](https://kikobeats.com/polyfill-ponyfill-and-prollyfill/)。
