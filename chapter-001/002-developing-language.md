@@ -72,7 +72,7 @@ MyApp.prototype.greet.returns = String
 
 此外，为了解决 Angular 需要运行时获取构造函数参数信息的问题（关于 **Dependency Injection** 的内容会在之后的部分覆盖），TypeScript 提供了一个新的编译器选项 `emitDecoratorMetadata`，为具备 **Decorator** 的 Class 暴露构造函数参数信息，默认情况下是基于 **Metadata Reflection API**[^9] 所实现的，后者是一个还不是语言提案的「提案」。
 
-
+// TODO
 
 ---
 
