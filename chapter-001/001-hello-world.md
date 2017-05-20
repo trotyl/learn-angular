@@ -116,7 +116,7 @@ global.Rx.Observable
 Uncaught reflect-metadata shim is required when using class decorators
 ```
 
-这里说的是我们需要使用一个 Polyfill。然而事实上并不需要，因为 Angular 不是人工智能，只是机械地检查预设条件，所以只要在浏览器编译的情况下，Angular 就会检测当前环境是否具备 `Reflect.*Metadata` 相关的功能。
+这里说的是我们需要使用一个 Polyfill。然而事实上并不需要，因为 Angular 不是人工智能，只是机械地检查预设条件，所以只要在浏览器编译的情况下，Angular 就会检测当前环境是否具备 **Metadata Reflection API**[^8] 相关的功能。
 
 因为我们比 Angular 聪明很多，所以并不需要真的引入这个 Polyfill，简单地骗一骗 Angular 就好了，为此我们增加一个 `<script>` 标签，提供一个假的 `Reflect.getOwnMetadata` 定义：
 
@@ -140,7 +140,7 @@ Reflect.getOwnMetadata = () => {}
 
 前面说到，对于组件我们需要考虑两个问题：*有什么样的视图* 和 *如何复用*。*有什么样的视图* 这个问题我们已经解决了，那么要如何进行复用，或者说，如何确定什么时候使用这个组件呢？
 
-为了保持和 Web Components 的一致性[^8]，Angular 采用了自定义 **Selector（选择器）** 的方式来配置何时应用该组件，这里的 **Selector** 和之前的 **Template** 一样都是 **Component** 的 **Metadata**。
+为了保持和 Web Components 的一致性[^9]，Angular 采用了自定义 **Selector（选择器）** 的方式来配置何时应用该组件，这里的 **Selector** 和之前的 **Template** 一样都是 **Component** 的 **Metadata**。
 
 我们继续添加 `selector` 属性：
 
@@ -157,7 +157,7 @@ AppComponent.annotations = [
 
 现在组件的定义已经完成了，接着来考虑如何启动应用。
 
-从 2.0.0-rc.5 版本开始，Angular 中新引入了一个 **NgModule** 的概念[^9]，用于充当应用的基本可分割单元。每个 **Component** 都必须所属于某个 **NgModule**。
+从 2.0.0-rc.5 版本开始，Angular 中新引入了一个 **NgModule** 的概念[^10]，用于充当应用的基本可分割单元。每个 **Component** 都必须所属于某个 **NgModule**。
 
 和 **Component** 类似，每一样 **NgModule** 也是一个 **JavaScript Class**，这里我们定义一个叫 `AppModule` 的 **NgModule**：
 
@@ -367,7 +367,7 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 在此之后，我们得到了最后一个错误（八年抗战到最后一年了？）：
 
 ```text
-Error: Angular requires Zone.js prolyfill[^10].
+Error: Angular requires Zone.js prolyfill[^11].
 ```
 
 这里就十分浅显易懂了，而且解决方案就是如其所述，添加一个 Zone.js 的 `<script>` 标签：
@@ -479,7 +479,7 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 
 1 个或 2 个，取决于是否把 Zone.js 当作 Angular 的一部分。
 
-#### Angular 是否需要用到 Reflect.*Metadata 相关 API？
+#### Angular 是否需要用到 Metadata Reflection API？
 
 只有在同时使用 **Decorator 语法** 和 **JIT 编译** 方式的情况下才会用到。
 
@@ -511,8 +511,10 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 
 [^7]: Scope Packages 是 NPM 提供的服务，用于提供自定义的命名空间从而解决全局名称冲突的问题。详情参见：[scope | npm Documentation](https://docs.npmjs.com/misc/scope)。
 
-[^8]: 早期的 Angular 设计方案中也有过基于 Web Components 实现的方案，类似于现在的 Polymer。详情参见：[Angular 2: Emulated Components](https://docs.google.com/document/d/1NFmp2ptjFfzTEYf0OPcpkacRV2_7LgTIrP5nWfJQL0o/edit#heading=h.z2blzd2pdtwt)。
+[^8]: Metadata Reflection API 所在 Repo 为：[rbuckton/reflect-metadata](https://github.com/rbuckton/reflect-metadata)，文档在：[Metadata Proposal - ECMAScript](https://rbuckton.github.io/reflect-metadata/)。目前并未提交给 TC39，所以不属于任何 Stage。
 
-[^9]: 实际上，只有 TypeScript 实现的 Angular 才引入了 NgModule 的概念，而 Dart 版本的 Angular 并没有 NgModule，仍然使用类似于 2.0.0-rc.4 及之前的方式进行开发。详情参考：[About AngularDart](https://webdev.dartlang.org/angular)。不过绝大多数情况下我们默认说的都是 Angular 的 TypeScript 实现。
+[^9]: 早期的 Angular 设计方案中也有过基于 Web Components 实现的方案，类似于现在的 Polymer。详情参见：[Angular 2: Emulated Components](https://docs.google.com/document/d/1NFmp2ptjFfzTEYf0OPcpkacRV2_7LgTIrP5nWfJQL0o/edit#heading=h.z2blzd2pdtwt)。
 
-[^10]: Prolifill = Probably a polyfill，由于 Zone API 仍然处于 Stage 0，也就是说仅仅在 tc39 留档。而 Stage 1 开始才属于语言提案，Stage 4 之后才进入语言规范中。所以 Zone API 仅仅是可能作为未来标准的 Polyfill。关于 Polyfill、Ponyfill 和 Prolifill 的辨析可以参考：[Polyfill, Ponyfill & Prollyfill](https://kikobeats.com/polyfill-ponyfill-and-prollyfill/)。
+[^10]: 实际上，只有 TypeScript 实现的 Angular 才引入了 NgModule 的概念，而 Dart 版本的 Angular 并没有 NgModule，仍然使用类似于 2.0.0-rc.4 及之前的方式进行开发。详情参考：[About AngularDart](https://webdev.dartlang.org/angular)。不过绝大多数情况下我们默认说的都是 Angular 的 TypeScript 实现。
+
+[^11]: Prolifill = Probably a polyfill，由于 Zone API 仍然处于 Stage 0，也就是说仅仅在 tc39 留档。而 Stage 1 开始才属于语言提案，Stage 4 之后才进入语言规范中。所以 Zone API 仅仅是可能作为未来标准的 Polyfill。关于 Polyfill、Ponyfill 和 Prolifill 的辨析可以参考：[Polyfill, Ponyfill & Prollyfill](https://kikobeats.com/polyfill-ponyfill-and-prollyfill/)。
