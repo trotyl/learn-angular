@@ -220,9 +220,9 @@ Access to Script at 'file:///Users/zjyu/GitBook/Library/Import/learn-angular/cod
 Hello Angular
 ```
 
-这样就完成了 **模块化** 的过程，不过需要注意的是，**目前为止我们使用的都是能够直接在浏览器中运行的没有使用任何预处理的普通的 JavaScript**。
+这样就完成了 **模块化** 的过程，不过需要注意的是，**目前为止我们使用的都是能够直接在浏览器中运行的没有使用任何预处理的普通的 JavaScript**。
 
-如果我们熟悉 ES Module 的话，为了美观，我们可以把 `export` 部分[^18] inline 化，得到：
+如果我们熟悉 ES Module 的话，为了美观，我们可以把 `export` 部分[^18] inline 化，得到：
 
 ```javascript
 /* app.component.js */
