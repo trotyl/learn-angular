@@ -74,7 +74,7 @@ MyApp.prototype.greet.returns = String
 
 于是现在我们解决了第一个问题，Angular（的我们所关心的那个实现）是使用 TypeScript 所开发的。那么接下来的另一个问题是，基于 Angular 的项目是否需要使用 TypeScript 开发呢？
 
-是也不是。在上一节中我们已经尝试过使用 Pure JavaScript 来开发一个简单的 Angular 应用，所以使用 JavaScript 来开发在技术上是切实可行的。但是我们知道，TypeScript 具备很多优势，例如提供了编译时的静态类型检查，提供了最新的（以及提案中的）的 JavaScript 语言特性的转译支持，提供了完善的语言服务集成等等。
+是也不是。在上一节中我们已经尝试过使用 Pure JavaScript 来开发一个简单的 Angular 应用，所以使用 JavaScript 来开发在技术上是切实可行的。但是我们知道，TypeScript 具备很多优势，例如提供了编译时的静态类型检查，提供了最新的（以及提案中的）的 JavaScript 语言特性的转译支持，提供了完善的语言服务集成等等。
 
 不过其实这些都不是重点，最重要的地方时，Angular 的静态编译工具是基于 TypeScript 封装实现的，也就是说，在不使用 TypeScript 工具链[^12]的情况下，便无法在开发时使用 Angular 的模版编译器[^13]，从而无法构建出适合生产环境使用的发行版本。
 
@@ -257,7 +257,7 @@ AppModule.annotations = [
 
 这样代码组织上会显得更加简洁。
 
-之后，我们更进一步，借助预处理工具，把外部依赖也改用 Module 的形式引入，并且最后只引入一个 JavaScript 文件。首先将 JavaScript 文件修改为：
+之后，我们更进一步，借助预处理工具，把外部依赖也改用 Module 的形式引入，并且最后只引入一个 JavaScript 文件。首先将 JavaScript 文件修改为：
 
 ```javascript
 /* app.component.js */
