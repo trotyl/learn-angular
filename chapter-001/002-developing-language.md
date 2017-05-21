@@ -68,7 +68,7 @@ MyApp.prototype.greet.returns = String
 
 随后在 NG-Conf 2015 上，Angular 团队宣布了迁移至 TypeScript 的消息[^9]。在 Angular 团队与 TypeScript 团队的合作计划中，TypeScript 将增加 **Metadata Annotation** 的语法以及对应的 **Introspection API**[^10]。
 
-不过，这件事最后并没有发生。随着 ES2015 的正式发布，JavaScript 语言开始进入稳定的持续迭代发展阶段，TypeScript 也不再接受新的语言特性，而是仅仅提供对 JavaScript 语言特性的支持以及提供相应的类型检查。于是 TypeScript 最后增加了对语法相似（但是语义完全不同）的 **Decorator** 特性的支持（**Decorator** 本身是 JavaScript 的语言提案，并不是 TypeScript 的扩展内容），而 Angular 也将相应的 API 改用 **Decorator** 实现。不过对于一般用户而言，这个重大的改动似乎并没有什么实际影响（以及在 2015 年的时候实际上也没有多少用户存在）。
+不过，这件事最后并没有发生。随着 ES2015 的正式发布，JavaScript 语言开始进入稳定的持续迭代发展阶段，TypeScript 也不再接受新的语言特性，而是仅仅提供对 JavaScript 语言特性的支持以及提供相应的类型检查。于是 TypeScript 最后增加了对语法相似（但是语义完全不同）的 **Decorator** 特性的支持（**Decorator** 本身是 JavaScript 的语言提案，并不是 TypeScript 的扩展内容），而 Angular 也将相应的 API 改用 **Decorator** 实现[^11]。不过对于一般用户而言，这个重大的改动似乎并没有什么实际影响（以及在 2015 年的时候实际上也没有多少用户存在）。
 
 此外，为了解决 Angular 需要运行时获取构造函数参数信息的问题（关于 **Dependency Injection** 的内容会在之后的部分覆盖），TypeScript 提供了一个新的编译器选项 `emitDecoratorMetadata`，为具备 **Decorator** 的 Class 暴露构造函数参数信息，默认情况下是基于 **Metadata Reflection API** 所实现的，后者是一个还不是语言提案的「提案」。
 
@@ -76,7 +76,7 @@ MyApp.prototype.greet.returns = String
 
 是也不是。在上一节中我们已经尝试过使用 Pure JavaScript 来开发一个简单的 Angular 应用，所以使用 JavaScript 来开发在技术上是切实可行的。但是我们知道，TypeScript 具备很多优势，例如提供了编译时的静态类型检查，提供了最新的（以及提案中的）的 JavaScript 语言特性的转译支持，提供了完善的语言服务集成等等。
 
-不过其实这些都不是重点，最重要的地方时，Angular 的静态编译工具是基于 TypeScript 封装实现的，也就是说，在不使用 TypeScript 工具链[^11]的情况下，便无法在开发时使用 Angular 的模版编译器[^12]，从而无法构建出适合生产环境使用的发行版本。
+不过其实这些都不是重点，最重要的地方时，Angular 的静态编译工具是基于 TypeScript 封装实现的，也就是说，在不使用 TypeScript 工具链[^12]的情况下，便无法在开发时使用 Angular 的模版编译器[^13]，从而无法构建出适合生产环境使用的发行版本。
 
 所以说，就目前的客观事实下，如果想用 Angular 开发实际项目，那么就应该使用 TypeScript。
 
@@ -201,9 +201,9 @@ Reflect.getOwnMetadata = () => {}
 
 和上一节中不同，现在我们确实需要使用到 **开发工具** 级别的浏览器了，选项有：
 
-1. 安装最新版本的 Chrome Canary[^13] (>= 60.0)，进入 `chrome://flags`，开启 `Experimental Web Platform features` 这个开关；
-2. 安装最新版本的 Firefox Beta / Firefox Developer / Firefox Nightly[^14] (>= 54.0)，进入 `about:config`，开启 `dom.moduleScripts.enabled` 这个开关；
-3. 安装最新版本的 Safari[^15] (>= 10.1)，什么准备操作也不用做。
+1. 安装最新版本的 Chrome Canary[^14] (>= 60.0)，进入 `chrome://flags`，开启 `Experimental Web Platform features` 这个开关；
+2. 安装最新版本的 Firefox Beta / Firefox Developer / Firefox Nightly[^15] (>= 54.0)，进入 `about:config`，开启 `dom.moduleScripts.enabled` 这个开关；
+3. 安装最新版本的 Safari[^16] (>= 10.1)，什么准备操作也不用做。
 
 然后再次用刚刚准备好的浏览器打开我们的 `index.html` 文件，发现出现了一条报错（以 Chrome 为例）：
 
@@ -213,7 +213,7 @@ Access to Script at 'file:///Users/zjyu/GitBook/Library/Import/learn-angular/cod
 
 这是因为使用 `file://` 协议的时候对于 **Origin（域）** 的判断上会有些问题，任何一个 Web 前端工程师都应该知道相应的解决方案 —— 开一个 Server。
 
-我们可以使用 `yarn global add http-server`[^16] 来快速安装一个静态文件服务器（如果有其它的 Server 或者其它的包管理器，自行调整即可，对结果没有影响）。
+我们可以使用 `yarn global add http-server`[^17] 来快速安装一个静态文件服务器（如果有其它的 Server 或者其它的包管理器，自行调整即可，对结果没有影响）。
 
 这时我们在 `index.html` 所在的路径使用 `http-server` 启动一个服务器，然后在浏览器中访问 `http://localhost:8080/`（以自己的实际端口为准），又一次得到了同样的内容：
 
@@ -223,7 +223,7 @@ Hello Angular
 
 这样就完成了 **模块化** 的过程，不过需要注意的是，**目前为止我们使用的都是能够直接在浏览器中运行的没有使用任何预处理的普通的 JavaScript**。
 
-如果我们熟悉 ES Module 的话，为了美观，我们可以把 `export` 部分[^17] inline 化，得到：
+如果我们熟悉 ES Module 的话，为了美观，我们可以把 `export` 部分[^18] inline 化，得到：
 
 ```javascript
 /* app.component.js */
@@ -260,7 +260,48 @@ AppModule.annotations = [
 
 之后，我们更进一步，借助预处理工具，把外部依赖也改用 Module 的形式引入，并且最后只引入一个 JavaScript 文件。首先将 JavaScript 文件修改为：
 
+```javascript
+/* app.component.js */
+import { Component } from '@angular/core'
 
+export class AppComponent { }
+
+AppComponent.annotations = [
+  new Component({
+    selector: 'main',
+    template: '<h1>Hello Angular</h1>',
+  })
+]
+
+/* app.module.js */
+import { NgModule } from '@angular/core'
+import { BrowserModule } from '@angular/platform-browser'
+import { AppComponent } from './app.component.js'
+
+export class AppModule { }
+
+AppModule.annotations = [
+  new NgModule({
+    imports: [
+      BrowserModule,
+    ],
+    declarations: [
+      AppComponent,
+    ],
+    bootstrap: [
+      AppComponent,
+    ],
+  })
+]
+
+/* main.js */
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'
+import { AppModule } from './app.module.js'
+
+platformBrowserDynamic().bootstrapModule(AppModule)
+```
+
+这样，我们就可以告别冗长的 `ng.moduleName.localName` 全局访问形式了，代码更为直观。
 
 
 ## 可能的疑惑
@@ -312,16 +353,18 @@ JavaScript 语言基础不在本书的覆盖范围内。请自行搜索其它外
 
 [^10]: 原计划中的 TypeScript Introspection API 设计文档：[TypeScript Introspection API](https://docs.google.com/document/d/1fvwKPz7z7O5gC5EZjTJBKotmOtAbd3mP5Net60k9lu8/edit#heading=h.v7s5x1d7wo5j)。
 
-[^11]: 更确切地说 AOT 编译的限制还有必须使用 Decorator 语法。
+[^11]: AtScript 原有的 Metadata Annotation 的功能基本可以通过 JavaScript 的 Decorator 模拟实现，改动后的 Re-design 文档可以参见：[Decorators vs Metadata Annotations](https://docs.google.com/document/d/1QchMCOhxsNVQz2zNvmzy8ibDMPT46MLf79X1QiDc_fU/edit)。
 
-[^12]: 对于 Angular 而言，在开发时预先编译模版内容叫做 AOT（Ahead-of-time）编译，在运行时编译模版内容叫做 JIT（Just-in-time）编译，如无特殊说明，本文中的编译方式均指代 Angular 模版编译器的编译方式。
+[^12]: 更确切地说 AOT 编译的限制还有必须使用 Decorator 语法。
 
-[^13]: Chome Canary 的下载地址：[Chrome Browser](https://www.google.com/chrome/browser/canary.html)。
+[^13]: 对于 Angular 而言，在开发时预先编译模版内容叫做 AOT（Ahead-of-time）编译，在运行时编译模版内容叫做 JIT（Just-in-time）编译，如无特殊说明，本文中的编译方式均指代 Angular 模版编译器的编译方式。
 
-[^14]: Firefox Nightly 的下载地址：[Try New Browser Features in Pre-Release Versions | Firefox](https://www.mozilla.org/en-US/firefox/channel/desktop/)。
+[^14]: Chome Canary 的下载地址：[Chrome Browser](https://www.google.com/chrome/browser/canary.html)。
 
-[^15]: Safari 的下载地址：[Apple - Support - Downloads](https://support.apple.com/downloads/safari)。
+[^15]: Firefox Nightly 的下载地址：[Try New Browser Features in Pre-Release Versions | Firefox](https://www.mozilla.org/en-US/firefox/channel/desktop/)。
 
-[^16]: Yarn 是一款 Facebook 推出的包管理器，基于 NPM Registry，相比 NPM 而言对功能和性能进行了一些增强。官网为：[Yarn](https://yarnpkg.com/)。
+[^16]: Safari 的下载地址：[Apple - Support - Downloads](https://support.apple.com/downloads/safari)。
 
-[^17]: 就语言规范的定义而言，`import` 和 `export` 这类语法形式构成的内容并不属于 **Statement（语句）**。
+[^17]: Yarn 是一款 Facebook 推出的包管理器，基于 NPM Registry，相比 NPM 而言对功能和性能进行了一些增强。官网为：[Yarn](https://yarnpkg.com/)。
+
+[^18]: 就语言规范的定义而言，`import` 和 `export` 这类语法形式构成的内容并不属于 **Statement（语句）**。
