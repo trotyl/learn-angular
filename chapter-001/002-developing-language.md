@@ -303,6 +303,64 @@ platformBrowserDynamic().bootstrapModule(AppModule)
 
 这样，我们就可以告别冗长的 `ng.moduleName.localName` 全局访问形式了，代码更为直观。
 
+接下来我们还需要进行打包，为了和之后的内容接轨，我们使用 Webpack[^19] 来作为打包工具。
+
+我们可以使用 `yarn global add webpack` 在全局安装 Webpack 的命令行工具。
+
+然后使用 `webpack main.js bundle.js`，即指定 `main.js` 为入口文件，`bundle.js` 为打包后的输出文件。这是我们会看到一些错误：
+
+```text
+ERROR in ./main.js
+Module not found: Error: Can't resolve '@angular/platform-browser-dynamic' in '/Users/zjyu/GitBook/Library/Import/learn-angular/code-examples/001-002/step-004'
+ @ ./main.js 1:0-74
+
+ERROR in ./app.module.js
+Module not found: Error: Can't resolve '@angular/core' in '/Users/zjyu/GitBook/Library/Import/learn-angular/code-examples/001-002/step-004'
+ @ ./app.module.js 1:0-40
+ @ ./main.js
+
+ERROR in ./app.module.js
+Module not found: Error: Can't resolve '@angular/platform-browser' in '/Users/zjyu/GitBook/Library/Import/learn-angular/code-examples/001-002/step-004'
+ @ ./app.module.js 2:0-57
+ @ ./main.js
+
+ERROR in ./app.component.js
+Module not found: Error: Can't resolve '@angular/core' in '/Users/zjyu/GitBook/Library/Import/learn-angular/code-examples/001-002/step-004'
+ @ ./app.component.js 1:0-41
+ @ ./app.module.js
+ @ ./main.js
+```
+
+简单地说，就是我们缺少了 `@angular/core`、`@angular/platform-browser` 和 `@angular/platform-browser-dynamic` 这几个包，虽然我们在 `index.html` 中手动引入了，但是 Webpack 仅仅根据 JavaScript 文件进行处理，是无法知晓的。事实上，这三个仅仅是我们所直接引用的，还有很多背后所依赖的 Packages。
+
+为了简单起见，我们直接给出完整的安装列表：
+
+```bash
+yarn add @angular/core@4.1.3 @angular/common@4.1.3 @angular/compiler@4.1.3 @angular/platform-browser@4.1.3 @angular/platform-browser-dynamic@4.1.3 rxjs@5.4.0
+```
+
+然后重新使用打包命令：
+
+```bash
+webpack main.js bundle.js
+```
+
+成功得到打包后的 `bundle.js` 文件，随后我们将 `index.html` 中的内容改为：
+
+```html
+<!DOCTYPE html>
+<title>Hello Angular</title>
+<main>TODO</main>
+<script>
+Reflect.getOwnMetadata = () => {}
+</script>
+<script src="https://unpkg.com/zone.js@0.8.10/dist/zone.js"></script>
+<script src="./bundle.js"></script>
+```
+
+启动服务器，刷新浏览器，又能重新见到我们的 `Hello Angular` 内容。
+
+// TODO
 
 ## 可能的疑惑
 
@@ -368,3 +426,5 @@ JavaScript 语言基础不在本书的覆盖范围内。请自行搜索其它外
 [^17]: Yarn 是一款 Facebook 推出的包管理器，基于 NPM Registry，相比 NPM 而言对功能和性能进行了一些增强。官网为：[Yarn](https://yarnpkg.com/)。
 
 [^18]: 就语言规范的定义而言，`import` 和 `export` 这类语法形式构成的内容并不属于 **Statement（语句）**。
+
+[^19]: Webpack 是一个通用的 JavaScript 模块打包器，官网为：[webpack](https://webpack.js.org/)。
