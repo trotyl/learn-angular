@@ -521,7 +521,7 @@ Uncaught TypeError: Reflect.defineMetadata is not a function
 
 最后，我们将 JavaScript 文件改成 TypeScript 文件，并不需要改动内容，仅仅是修改后缀名为 `.ts`：
 
-```javascript
+```typescript
 /* app.component.ts */
 import { Component } from '@angular/core'
 
