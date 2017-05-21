@@ -182,7 +182,6 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 ```
 
 ```html
-/* index.html */
 <!DOCTYPE html>
 <title>Hello Angular</title>
 <main>TODO</main>
@@ -276,7 +275,7 @@ AppComponent.annotations = [
 /* app.module.js */
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
-import { AppComponent } from './app.component.js'
+import { AppComponent } from './app.component'
 
 export class AppModule { }
 
@@ -296,7 +295,7 @@ AppModule.annotations = [
 
 /* main.js */
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'
-import { AppModule } from './app.module.js'
+import { AppModule } from './app.module'
 
 platformBrowserDynamic().bootstrapModule(AppModule)
 ```
@@ -360,7 +359,231 @@ Reflect.getOwnMetadata = () => {}
 
 启动服务器，刷新浏览器，又能重新见到我们的 `Hello Angular` 内容。
 
-// TODO
+剩下的内容还有什么呢？对了，迁移到 TypeScript 版本。
+
+首先，我们先迁移到 TypeScript 的工具链上，不过要注意，在更改后缀名之前，我们仍然使用的是 JavaScript 语言。全局安装 TypeScript CLI 工具的命令为：
+
+```bash
+yarn global add typescript@2.3.2
+```
+
+接着在不改动 JavaScript 文件的前提下，先试试 `tsc` 命令的效果：
+
+```bash
+tsc main.js
+```
+
+当然，我们还是继续秉承 EDD 的开发方式，我们现在出现的错误是：
+
+```text
+error TS6054: File 'main.js' has unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts'.
+```
+
+这里是说，`main.js` 并不符合 TypeScript 的后缀要求。不过，我们本来也就用的不是 TypeScript 文件，所以加上 `allowJs` 选项：
+
+```bash
+tsc --allowJs main.js
+```
+
+现在错误变了，为：
+
+```text
+error TS5055: Cannot write file '/Users/zjyu/GitBook/Library/Import/learn-angular/code-examples/001-002/step-005/app.component.js' because it would overwrite input file.
+  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+error TS5055: Cannot write file '/Users/zjyu/GitBook/Library/Import/learn-angular/code-examples/001-002/step-005/app.module.js' because it would overwrite input file.
+  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+error TS5055: Cannot write file 'main.js' because it would overwrite input file.
+  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+```
+
+这又是什么意思呢？
+
+简单地说，我们知道 TypeScript 文件会被编译为 JavaScript 文件，编译后后缀名由 `.ts` 变为 `.js`。那么如果直接编译 `.js` 文件呢？直接把源文件覆盖掉么？这样显然是不行的，为此我们需要指定输出目录：
+
+```bash
+tsc --allowJs --outDir dist main.js
+```
+
+输出到 `dist` 目录的话，总不用担心把源文件给覆盖掉了，不过现在又有一些其它问题：
+
+```text
+node_modules/@angular/common/src/directives/ng_class.d.ts(48,34): error TS2304: Cannot find name 'Set'.
+node_modules/@angular/compiler/src/aot/compiler.d.ts(48,32): error TS2304: Cannot find name 'Map'.
+node_modules/@angular/compiler/src/compile_metadata.d.ts(369,20): error TS2304: Cannot find name 'Set'.
+node_modules/@angular/compiler/src/compile_metadata.d.ts(371,28): error TS2304: Cannot find name 'Set'.
+node_modules/@angular/compiler/src/compile_metadata.d.ts(373,15): error TS2304: Cannot find name 'Set'.
+node_modules/@angular/compiler/src/compile_metadata.d.ts(375,23): error TS2304: Cannot find name 'Set'.
+node_modules/@angular/compiler/src/compile_metadata.d.ts(377,17): error TS2304: Cannot find name 'Set'.
+node_modules/@angular/compiler/src/compile_metadata.d.ts(379,25): error TS2304: Cannot find name 'Set'.
+node_modules/@angular/compiler/src/output/output_ast.d.ts(444,63): error TS2304: Cannot find name 'Set'.
+node_modules/@angular/core/src/change_detection/differs/default_iterable_differ.d.ts(28,32): error TS2304: Cannot find name 'Iterable'.
+node_modules/@angular/core/src/change_detection/differs/default_keyvalue_differ.d.ts(24,16): error TS2304: Cannot find name 'Map'.
+node_modules/@angular/core/src/change_detection/differs/default_keyvalue_differ.d.ts(32,16): error TS2304: Cannot find name 'Map'.
+node_modules/@angular/core/src/change_detection/differs/iterable_differs.d.ts(15,48): error TS2304: Cannot find name 'Iterable'.
+node_modules/@angular/core/src/change_detection/differs/keyvalue_differs.d.ts(23,18): error TS2304: Cannot find name 'Map'.
+node_modules/@angular/core/src/di/reflective_provider.d.ts(87,123): error TS2304: Cannot find name 'Map'.
+node_modules/@angular/core/src/di/reflective_provider.d.ts(87,165): error TS2304: Cannot find name 'Map'.
+node_modules/@angular/platform-browser/src/browser/browser_adapter.d.ts(79,33): error TS2304: Cannot find name 'Map'.
+node_modules/@angular/platform-browser/src/dom/dom_adapter.d.ts(97,42): error TS2304: Cannot find name 'Map'.
+node_modules/@angular/platform-browser/src/dom/shared_styles_host.d.ts(11,30): error TS2304: Cannot find name 'Set'.
+node_modules/@angular/platform-browser/src/dom/shared_styles_host.d.ts(22,30): error TS2304: Cannot find name 'Set'.
+node_modules/rxjs/Observable.d.ts(69,60): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+```
+
+虽然看着很长，其实信息只有一点，就是缺少一些 ES2015 中新增内容的类型定义。事实上，TypeScript 不仅支持编译到 JavaScript，还能设定不同的 JavaScript 级别，默认为 ES5。然后，在输出 ES5 的情况下，TypeScript 会发现我们使用了 ES2015 的内容，由于这些内容不是语法，只是 API，所以是不会通过转译实现的，而是要自行添加相应的 Polyfill。
+
+TypeScript 为我们提供了两种内置的解决方案，一种是保持输出级别为 ES5，但是告诉 TypeScript 我们能够自行解决 Polyfill 的问题：
+
+```bash
+tsc --allowJs --outDir dist --lib es2015,dom main.js
+```
+
+这里通过 `lib` 选项指定需要引入的类型定义文件[^20]。另一种方案是将输出级别改为 ES2015，如果我们的目标平台较为先进的话：
+
+```bash
+tsc --allowJs --outDir dist --target es2015 main.js
+```
+
+我们这里选择后者，因为仅仅是最为教学目的。
+
+由于 TypeScript 自带了对最新（以及比最新还要更新）的 JavaScript 语言特性，我们现在可以直接在 JavaScript 文件中使用更多的语法糖，例如 Decorator。
+
+我们将 JavaScript 文件修改为使用 Decorator 的版本[^21]：
+
+```javascript
+/* app.component.js */
+import { Component } from '@angular/core'
+
+@Component({
+  selector: 'main',
+  template: '<h1>Hello Angular</h1>',
+})
+export class AppComponent { }
+
+/* app.module.js */
+import { NgModule } from '@angular/core'
+import { BrowserModule } from '@angular/platform-browser'
+import { AppComponent } from './app.component'
+
+@NgModule({
+  imports: [
+    BrowserModule,
+  ],
+  declarations: [
+    AppComponent,
+  ],
+  bootstrap: [
+    AppComponent,
+  ],
+})
+export class AppModule { }
+```
+
+相比于手动属性赋值而言，这样又更加简洁直观了不少。
+
+然而当我们再次尝试使用 `tsc` 编译的时候，发现了新的错误：
+
+```text
+app.component.js(7,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option to remove this warning.
+app.module.js(16,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option to remove this warning.
+```
+
+这里是在说 Decorator 默认是不提供支持的，想要用的话自己加开关。所以很简单，加上开关就好了：
+
+```bash
+tsc --allowJs --outDir dist --target es2015 --experimentalDecorators main.js
+```
+
+成功编译文件。然后重新使用 Webpack 打包，注意路径的改动：
+
+```bash
+webpack dist/main.js bundle.js
+```
+
+刷新浏览器，我们在浏览器中看到了一个错误：
+
+```text
+Uncaught TypeError: Reflect.defineMetadata is not a function
+```
+
+这个是因为我们在上一节中提供了一个假的 Metadata Reflection API，因为当时还不需要用到。不过现在是真的需要了，为此我们加上对应的 Polyfill：
+
+```html
+<!DOCTYPE html>
+<title>Hello Angular</title>
+<main>TODO</main>
+<script src="https://unpkg.com/core-js@2.4.1/client/shim.js"></script>
+<script src="https://unpkg.com/zone.js@0.8.10/dist/zone.js"></script>
+<script src="./bundle.js"></script>
+```
+
+重新看到了我们的 `Hello Angular`。
+
+最后，我们将 JavaScript 文件改成 TypeScript 文件，并不需要改动内容，仅仅是修改后缀名为 `.ts`：
+
+```javascript
+/* app.component.ts */
+import { Component } from '@angular/core'
+
+@Component({
+  selector: 'main',
+  template: '<h1>Hello Angular</h1>',
+})
+export class AppComponent { }
+
+/* app.module.ts */
+import { NgModule } from '@angular/core'
+import { BrowserModule } from '@angular/platform-browser'
+import { AppComponent } from './app.component'
+
+@NgModule({
+  imports: [
+    BrowserModule,
+  ],
+  declarations: [
+    AppComponent,
+  ],
+  bootstrap: [
+    AppComponent,
+  ],
+})
+export class AppModule { }
+
+/* main.ts */
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'
+import { AppModule } from './app.module'
+
+platformBrowserDynamic().bootstrapModule(AppModule)
+```
+
+同样使用 `tsc` 编译，不过已经不需要 `allowJs` 和 `ourDir` 选项了：
+
+```bash
+tsc --target es2015 --experimentalDecorators main.ts
+```
+
+不过这次又有点小问题：
+
+```text
+app.component.ts(1,27): error TS2307: Cannot find module '@angular/core'.
+app.module.ts(1,26): error TS2307: Cannot find module '@angular/core'.
+app.module.ts(2,31): error TS2307: Cannot find module '@angular/platform-browser'.
+main.ts(1,40): error TS2307: Cannot find module '@angular/platform-browser-dynamic'.
+```
+
+为什么明明没有动 `node_modules` 目录，就找不到相应的模块了呢？这其实是 TypeScript 一个历史遗留问题，我们简单增加一个参数即可解决：
+
+```bash
+tsc --target es2015 --experimentalDecorators --moduleResolution node main.ts
+```
+
+随后重新打包：
+
+```bash
+webpack main.js bundle.js
+```
+
+刷新浏览器，发现一切正常。现在我们就成功地将整个项目 Script 形式的单文件 JavaScript 逐步迁移成了 Module 形式的多文件 TypeScript。不过目前我们 **并没有用到任何 TypeScript 语言** 的内容，仅仅是将 JavaScript 文件改了后缀名而已。
 
 ## 可能的疑惑
 
@@ -428,3 +651,7 @@ JavaScript 语言基础不在本书的覆盖范围内。请自行搜索其它外
 [^18]: 就语言规范的定义而言，`import` 和 `export` 这类语法形式构成的内容并不属于 **Statement（语句）**。
 
 [^19]: Webpack 是一个通用的 JavaScript 模块打包器，官网为：[webpack](https://webpack.js.org/)。
+
+[^20]: TypeScript 编译器的 `lib` 选项仅仅添加的是类型定义，用于通过类型检查，并不会添加实际的运行时内容。
+
+[^21]: 将静态属性改为 Decorator 的过程前后文件的语义是发生了变化的，在 JavaScript 语言层面并不等价，只是在 Angular 的功能实现上基本等价。

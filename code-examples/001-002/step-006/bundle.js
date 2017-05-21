@@ -23954,27 +23954,32 @@ module.exports = g;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_component__ = __webpack_require__(19);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 
 
 
+let AppModule = class AppModule {
+};
+AppModule = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["a" /* NgModule */])({
+        imports: [
+            __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["a" /* BrowserModule */],
+        ],
+        declarations: [
+            __WEBPACK_IMPORTED_MODULE_2__app_component__["a" /* AppComponent */],
+        ],
+        bootstrap: [
+            __WEBPACK_IMPORTED_MODULE_2__app_component__["a" /* AppComponent */],
+        ],
+    })
+], AppModule);
 
-class AppModule { }
-/* harmony export (immutable) */ __webpack_exports__["a"] = AppModule;
-
-
-AppModule.annotations = [
-  new __WEBPACK_IMPORTED_MODULE_0__angular_core__["a" /* NgModule */]({
-    imports: [
-      __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["a" /* BrowserModule */],
-    ],
-    declarations: [
-      __WEBPACK_IMPORTED_MODULE_2__app_component__["a" /* AppComponent */],
-    ],
-    bootstrap: [
-      __WEBPACK_IMPORTED_MODULE_2__app_component__["a" /* AppComponent */],
-    ],
-  })
-]
 
 
 /***/ }),
@@ -24169,18 +24174,23 @@ var platformBrowserDynamic = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 
+let AppComponent = class AppComponent {
+};
+AppComponent = __decorate([
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["b" /* Component */])({
+        selector: 'main',
+        template: '<h1>Hello Angular</h1>',
+    })
+], AppComponent);
 
-class AppComponent { }
-/* harmony export (immutable) */ __webpack_exports__["a"] = AppComponent;
-
-
-AppComponent.annotations = [
-  new __WEBPACK_IMPORTED_MODULE_0__angular_core__["b" /* Component */]({
-    selector: 'main',
-    template: '<h1>Hello Angular</h1>',
-  })
-]
 
 
 /***/ }),
@@ -52031,8 +52041,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(17);
 
 
-
-__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */])
+__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
 
 
 /***/ })
