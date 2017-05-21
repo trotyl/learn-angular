@@ -182,7 +182,7 @@ AppModule.annotations = [
 ]
 ```
 
-这里我们提供的 **Metadata** 与之前的不同，是一个 `ng.core.NgModule` 类型的实例，其参数中用到了 `imports` 属性和 `declarations` 属性。`imports` 属性是一个数组，用于指定这个 **NgModule** 所依赖的其它 **NgModule**，例如所有面向 Web 的 Angular App 都需要在 **Root NgModule** 中依赖 `BrowserModule`，其中包含了浏览器平台的相关基础设施（如操作 DOM 的工具等）。
+这里我们提供的 **Metadata** 与之前的不同，是一个 `ng.core.NgModule` 类型的实例，其参数中用到了 `imports` 属性和 `declarations` 属性。`imports` 属性是一个数组，用于指定这个 **NgModule** 所依赖的其它 **NgModule**，例如所有面向 Web 的 Angular App 都需要在 **Root NgModule** 中依赖 `BrowserModule`，其中包含了浏览器平台的相关基础设施（如操作 DOM 的工具等）；`declarations` 属性还是一个数组，用于声明所有该模块的视图层相关内容，包括 **Components**、**Directives** 以及 **Pipes**。
 
 再次刷新浏览器，我们终于得到了新的错误：
 

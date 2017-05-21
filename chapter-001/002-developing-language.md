@@ -15,7 +15,7 @@ Angular 项目本身是用 TypeScript[^1] 或 Dart[^2] 开发的。咦，为什�
 
 在说到 TypeScript 之前，不得不提及的一门语言是 AtScript[^5]。
 
-Angular 的一个重要设计理念就是 **Declarative（声明式）** 编程，为了落实这一理念，Angular 在 API 设计上的一个重大改进就是很大程度上基于[^5] `@Something` 的 **Annotation（注解）**／**Decorator（装饰器）** 语法。
+Angular 的一个重要设计理念就是 **Declarative（声明式）** 编程，为了落实这一理念，Angular 在 API 设计上的一个重大改进就是很大程度上基于[^6] `@Something` 的 **Annotation（注解）**／**Decorator（装饰器）** 语法。
 
 那么，这个语法到底是 **Annotation** 还是 **Decorator** 呢？
 
