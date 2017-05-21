@@ -587,6 +587,18 @@ webpack main.js bundle.js
 
 ## 可能的疑惑
 
+#### 为什么 Dart 版本的 Angular 没有流行起来？
+
+因为 Dart 没有流行起来。
+
+#### 现在是否还有办法使用 AtScript？
+
+Github 上有一个 PlayGround 的 Repo：[angular/atscript-playground](https://github.com/angular/atscript-playground)。
+
+#### Angular 的编译器是如何工作的？
+
+会在后文中覆盖。
+
 #### 既然 AOT 编译的要求是 TypeScript 工具和 Decorator 语法，那是否可以对使用 Decorator 语法的 JavaScript 文件进行 AOT 编译？
 
 理论上可行，Decorator 本身是（提案中的）JavaScript 语言特性，但是 TypeScript 工具对 JavaScript 文件的支持（Salsa）与 TypeScript 文件的支持略有差异，需要使用额外的构建步骤将 `.js` 文件重命名为 `.ts` 文件，另外可能还需要设置忽略相应的类型检查错误。
@@ -607,9 +619,25 @@ webpack main.js bundle.js
 
 HTML 规范所实现的 ES Module 的 Runtime Semantics: HostResolveImportedModule 过程与目前所有的模块使用方式都不兼容，详情参考：[为什么 ES Module 的浏览器支持没有意义 - 知乎专栏](https://zhuanlan.zhihu.com/p/25046637)。
 
+#### 为什么 file 协议会有跨域问题？
+
+Web 开发基础不在本书的覆盖范围内。请自行搜索其它外部资源。
+
 #### ES Module 到底有多少种 import 和 export 语法？
 
 JavaScript 语言基础不在本书的覆盖范围内。请自行搜索其它外部资源。
+
+#### 为什么要用 Webpack 做示例？
+
+因为 CLI 用的就是 Webpack。
+
+#### 为什么 TypeScript 工具的 JavaScript 支持部分叫做 Salsa？
+
+内部项目代号，大家后来习惯了就都这么叫。
+
+#### 哪里能查到 TypeScript CLI 的所有编译器选项？
+
+这里：[Compiler Options · TypeScript](http://www.typescriptlang.org/docs/handbook/compiler-options.html)。
 
 ---
 
