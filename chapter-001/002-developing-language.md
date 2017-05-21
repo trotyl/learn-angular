@@ -76,9 +76,169 @@ MyApp.prototype.greet.returns = String
 
 是也不是。在上一节中我们已经尝试过使用 Pure JavaScript 来开发一个简单的 Angular 应用，所以使用 JavaScript 来开发在技术上是切实可行的。但是我们知道，TypeScript 具备很多优势，例如提供了编译时的静态类型检查，提供了最新的（以及提案中的）的 JavaScript 语言特性的转译支持，提供了完善的语言服务集成等等。
 
-不过其实这些都不是重点，最重要的地方时，Angular 的静态编译工具是基于 TypeScript 封装实现的，也就是说，在不使用 TypeScript 工具链[^11]的情况下，便无法在开发时使用 Angular 的模版编译器，从而无法构建出适合生产环境使用的发行版本。
+不过其实这些都不是重点，最重要的地方时，Angular 的静态编译工具是基于 TypeScript 封装实现的，也就是说，在不使用 TypeScript 工具链[^11]的情况下，便无法在开发时使用 Angular 的模版编译器[^12]，从而无法构建出适合生产环境使用的发行版本。
+
+所以说，就目前的客观事实下，如果想用 Angular 开发实际项目，那么就应该使用 TypeScript。
+
+为此，我们现在就开始将我们上一节中完成 的 Hello World 项目迁移到使用 TypeScript 的方式。
+
+首先，我们将 JavaScript 文件从 HTML 文件中分离，命名为 `main.js`，内容为：
+
+```javascript
+/* main.js */
+class AppComponent { }
+
+AppComponent.annotations = [
+  new ng.core.Component({
+    selector: 'main',
+    template: '<h1>Hello Angular</h1>',
+  })
+]
+
+class AppModule { }
+
+AppModule.annotations = [
+  new ng.core.NgModule({
+    imports: [
+      ng.platformBrowser.BrowserModule,
+    ],
+    declarations: [
+      AppComponent,
+    ],
+    bootstrap: [
+      AppComponent,
+    ],
+  })
+]
+
+ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
+```
+
+相应的 HTML 中的内容为：
+
+```html
+<!DOCTYPE html>
+<title>Hello Angular</title>
+<main>TODO</main>
+<script>
+Reflect.getOwnMetadata = () => {}
+</script>
+<script src="https://unpkg.com/zone.js@0.8.10/dist/zone.js"></script>
+<script src="https://unpkg.com/rxjs@5.4.0/bundles/Rx.js"></script>
+<script src="https://unpkg.com/@angular/core@4.1.3/bundles/core.umd.js"></script>
+<script src="https://unpkg.com/@angular/common@4.1.3/bundles/common.umd.js"></script>
+<script src="https://unpkg.com/@angular/compiler@4.1.3/bundles/compiler.umd.js"></script>
+<script src="https://unpkg.com/@angular/platform-browser@4.1.3/bundles/platform-browser.umd.js"></script>
+<script src="https://unpkg.com/@angular/platform-browser-dynamic@4.1.3/bundles/platform-browser-dynamic.umd.js"></script>
+<script src="./main.js"></script>
+```
+
+现在，我们有了单独的 JavaScript 文件。不过，将所有代码放在一个 JavaScript 文件中显然不利于后期维护，为此我们借助自 ES2015 开始引入的 Module 特性，将 `main.js` 拆分为多个 Module 形式的 JavaScript 文件：
+
++ 将 AppComponent 的相关内容提取到 `app.component.js` 中；
++ 将 AppModule 的相关内容提取到 `app.module.js` 中；
++ 将剩下的内容保留在 `main.js` 中。
+
+之后我们得到：
+
+```javascript
+/* app.component.js */
+class AppComponent { }
+
+AppComponent.annotations = [
+  new ng.core.Component({
+    selector: 'main',
+    template: '<h1>Hello Angular</h1>',
+  })
+]
+
+export { AppComponent }
+
+/* app.module.js */
+import { AppComponent } from './app.component.js'
+
+class AppModule { }
+
+AppModule.annotations = [
+  new ng.core.NgModule({
+    imports: [
+      ng.platformBrowser.BrowserModule,
+    ],
+    declarations: [
+      AppComponent,
+    ],
+    bootstrap: [
+      AppComponent,
+    ],
+  })
+]
+
+export { AppModule }
+
+/* main.js */
+import { AppModule } from './app.module.js'
+
+ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
+
+/* index.html */
+<!DOCTYPE html>
+<title>Hello Angular</title>
+<main>TODO</main>
+<script>
+Reflect.getOwnMetadata = () => {}
+</script>
+<script src="https://unpkg.com/zone.js@0.8.10/dist/zone.js"></script>
+<script src="https://unpkg.com/rxjs@5.4.0/bundles/Rx.js"></script>
+<script src="https://unpkg.com/@angular/core@4.1.3/bundles/core.umd.js"></script>
+<script src="https://unpkg.com/@angular/common@4.1.3/bundles/common.umd.js"></script>
+<script src="https://unpkg.com/@angular/compiler@4.1.3/bundles/compiler.umd.js"></script>
+<script src="https://unpkg.com/@angular/platform-browser@4.1.3/bundles/platform-browser.umd.js"></script>
+<script src="https://unpkg.com/@angular/platform-browser-dynamic@4.1.3/bundles/platform-browser-dynamic.umd.js"></script>
+<script src="./main.js" type="module"></script>
+```
+
+和上一节中不同，现在我们确实需要使用到 **开发工具** 级别的浏览器了，选项有：
+
+1. 安装最新版本的 Chrome Canary (>= 60.0)，进入 `chrome://flags`，开启 `Experimental Web Platform features` 这个开关；
+2. 安装最新版本的 Firefox Beta / Firefox Developer / Firefox Nightly (>= 54.0)，进入 `about:config`，开启 `dom.moduleScripts.enabled` 这个开关；
+3. 安装最新版本的 Safari (>= 10.1)，什么准备操作也不用做。
+
+然后再次用刚刚准备好的浏览器打开我们的 `index.html` 文件，发现出现了一条报错（以 Chrome 为例）：
+
+```text
+Access to Script at 'file:///Users/zjyu/GitBook/Library/Import/learn-angular/code-examples/001-002/step-002/main.js' from origin 'null' has been blocked by CORS policy: Invalid response. Origin 'null' is therefore not allowed access.
+```
+
+这是因为使用 `file://` 协议的时候对于 **Origin（域）** 的判断上会有些问题，任何一个 Web 前端工程师都应该知道相应的解决方案 —— 开一个 Server。
+
+我们可以使用 `yarn global add http-server` 来快速安装一个静态文件服务器（如果有其它的 Server 或者其它的包管理器，自行调整即可，对结果没有影响）。
+
+这时我们在 `index.html` 所在的路径使用 `http-server` 启动一个服务器，然后在浏览器中访问 `http://localhost:8080/`（以自己的实际端口为准），又一次得到了同样的内容：
+
+```text
+Hello Angular
+```
 
 // TODO
+
+
+## 可能的疑惑
+
+#### 既然 AOT 编译的要求是 TypeScript 工具和 Decorator 语法，那是否可以对使用 Decorator 语法的 JavaScript 文件进行 AOT 编译？
+
+理论上可行，Decorator 本身是（提案中的）JavaScript 语言特性，但是 TypeScript 工具对 JavaScript 文件的支持（Salsa）与 TypeScript 文件的支持略有差异，需要使用额外的构建步骤将 `.js` 文件重命名为 `.ts` 文件，另外可能还需要设置忽略相应的类型检查错误。
+
+另外，不建议在没有相关实力的情况下主动踩坑。
+
+#### 既然 JIT 编译也会在运行时生成相应的 JavaScript 文件，那是否可以将浏览器中所生成的 JavaScript 文件拷贝出来当做源码使用，从而避免运行时编译？
+
+理论上可行，JIT 编译除了输出的语言级别和使用的模块机制外，与 AOT 编译的结果并无本质差异。但这样做会导致模版中的内容无法被正确地进行类型检查，可能产生不必要的错误隐患。
+
+另外，不建议在没有相关实力的情况下主动踩坑。
+
+#### 明明 Edge 浏览器也提供了 ES Module 支持，为什么不给出相应的选项？
+
+因为我现在手上用的是 Mac。
 
 ---
 
@@ -104,3 +264,5 @@ MyApp.prototype.greet.returns = String
 [^10]: 原计划中的 TypeScript Introspection API 设计文档：[TypeScript Introspection API](https://docs.google.com/document/d/1fvwKPz7z7O5gC5EZjTJBKotmOtAbd3mP5Net60k9lu8/edit#heading=h.v7s5x1d7wo5j)。
 
 [^11]: 更确切地说 AOT 编译的限制还有必须使用 Decorator 语法。
+
+[^12]: 对于 Angular 而言，在开发时预先编译模版内容叫做 AOT（Ahead-of-time）编译，在运行时编译模版内容叫做 JIT（Just-in-time）编译，如无特殊说明，本文中的编译方式均指代 Angular 模版编译器的编译方式。
