@@ -179,7 +179,9 @@ export { AppModule }
 import { AppModule } from './app.module.js'
 
 ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
+```
 
+```html
 /* index.html */
 <!DOCTYPE html>
 <title>Hello Angular</title>
@@ -199,9 +201,9 @@ Reflect.getOwnMetadata = () => {}
 
 和上一节中不同，现在我们确实需要使用到 **开发工具** 级别的浏览器了，选项有：
 
-1. 安装最新版本的 Chrome Canary (>= 60.0)，进入 `chrome://flags`，开启 `Experimental Web Platform features` 这个开关；
-2. 安装最新版本的 Firefox Beta / Firefox Developer / Firefox Nightly (>= 54.0)，进入 `about:config`，开启 `dom.moduleScripts.enabled` 这个开关；
-3. 安装最新版本的 Safari (>= 10.1)，什么准备操作也不用做。
+1. 安装最新版本的 Chrome Canary[^13] (>= 60.0)，进入 `chrome://flags`，开启 `Experimental Web Platform features` 这个开关；
+2. 安装最新版本的 Firefox Beta / Firefox Developer / Firefox Nightly[^14] (>= 54.0)，进入 `about:config`，开启 `dom.moduleScripts.enabled` 这个开关；
+3. 安装最新版本的 Safari[^15] (>= 10.1)，什么准备操作也不用做。
 
 然后再次用刚刚准备好的浏览器打开我们的 `index.html` 文件，发现出现了一条报错（以 Chrome 为例）：
 
@@ -211,7 +213,7 @@ Access to Script at 'file:///Users/zjyu/GitBook/Library/Import/learn-angular/cod
 
 这是因为使用 `file://` 协议的时候对于 **Origin（域）** 的判断上会有些问题，任何一个 Web 前端工程师都应该知道相应的解决方案 —— 开一个 Server。
 
-我们可以使用 `yarn global add http-server` 来快速安装一个静态文件服务器（如果有其它的 Server 或者其它的包管理器，自行调整即可，对结果没有影响）。
+我们可以使用 `yarn global add http-server`[^16] 来快速安装一个静态文件服务器（如果有其它的 Server 或者其它的包管理器，自行调整即可，对结果没有影响）。
 
 这时我们在 `index.html` 所在的路径使用 `http-server` 启动一个服务器，然后在浏览器中访问 `http://localhost:8080/`（以自己的实际端口为准），又一次得到了同样的内容：
 
@@ -219,7 +221,46 @@ Access to Script at 'file:///Users/zjyu/GitBook/Library/Import/learn-angular/cod
 Hello Angular
 ```
 
-// TODO
+这样就完成了 **模块化** 的过程，不过需要注意的是，**目前为止我们使用的都是能够直接在浏览器中运行的没有使用任何预处理的普通的 JavaScript**。
+
+如果我们熟悉 ES Module 的话，为了美观，我们可以把 `export` 部分[^17] inline 化，得到：
+
+```javascript
+/* app.component.js */
+export class AppComponent { }
+
+AppComponent.annotations = [
+  new ng.core.Component({
+    selector: 'main',
+    template: '<h1>Hello Angular</h1>',
+  })
+]
+
+/* app.module.js */
+import { AppComponent } from './app.component.js'
+
+export class AppModule { }
+
+AppModule.annotations = [
+  new ng.core.NgModule({
+    imports: [
+      ng.platformBrowser.BrowserModule,
+    ],
+    declarations: [
+      AppComponent,
+    ],
+    bootstrap: [
+      AppComponent,
+    ],
+  })
+]
+```
+
+这样代码组织上会显得更加简洁。
+
+之后，我们更进一步，借助预处理工具，把外部依赖也改用 Module 的形式引入，并且最后只引入一个 JavaScript 文件。首先将 JavaScript 文件修改为：
+
+
 
 
 ## 可能的疑惑
@@ -239,6 +280,14 @@ Hello Angular
 #### 明明 Edge 浏览器也提供了 ES Module 支持，为什么不给出相应的选项？
 
 因为我现在手上用的是 Mac。
+
+#### 为什么不在浏览器原生模块化的步骤中把外部依赖也使用 Module 的形式引入？
+
+HTML 规范所实现的 ES Module 的 Runtime Semantics: HostResolveImportedModule 过程与目前所有的模块使用方式都不兼容，详情参考：[为什么 ES Module 的浏览器支持没有意义 - 知乎专栏](https://zhuanlan.zhihu.com/p/25046637)。
+
+#### ES Module 到底有多少种 import 和 export 语法？
+
+JavaScript 语言基础不在本书的覆盖范围内。请自行搜索其它外部资源。
 
 ---
 
@@ -266,3 +315,13 @@ Hello Angular
 [^11]: 更确切地说 AOT 编译的限制还有必须使用 Decorator 语法。
 
 [^12]: 对于 Angular 而言，在开发时预先编译模版内容叫做 AOT（Ahead-of-time）编译，在运行时编译模版内容叫做 JIT（Just-in-time）编译，如无特殊说明，本文中的编译方式均指代 Angular 模版编译器的编译方式。
+
+[^13]: Chome Canary 的下载地址：[Chrome Browser](https://www.google.com/chrome/browser/canary.html)。
+
+[^14]: Firefox Nightly 的下载地址：[Try New Browser Features in Pre-Release Versions | Firefox](https://www.mozilla.org/en-US/firefox/channel/desktop/)。
+
+[^15]: Safari 的下载地址：[Apple - Support - Downloads](https://support.apple.com/downloads/safari)。
+
+[^16]: Yarn 是一款 Facebook 推出的包管理器，基于 NPM Registry，相比 NPM 而言对功能和性能进行了一些增强。官网为：[Yarn](https://yarnpkg.com/)。
+
+[^17]: 就语言规范的定义而言，`import` 和 `export` 这类语法形式构成的内容并不属于 **Statement（语句）**。
