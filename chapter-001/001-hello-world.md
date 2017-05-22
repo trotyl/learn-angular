@@ -495,6 +495,10 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 
 后文中会提及。
 
+#### 如果不给 Component 设定 selector 会怎样？
+
+对于 Bootstrap Component 而言，默认的 `selector` 为 `ng-component`，可以不手动设定。
+
 ---
 
 [^1]: 在 HTML 中，`<html>`、`<head>` 和 `<body>` 等都是可选标签，但是大部分情况下为了保持页面的结构清晰我们仍然会使用这些标签。详见：[HTML 5.1: 8. The HTML syntax](https://www.w3.org/TR/html/syntax.html#optional-tags)。
