@@ -444,7 +444,7 @@ tsc --allowJs --outDir dist --lib es2015,dom main.js
 tsc --allowJs --outDir dist --target es2015 main.js
 ```
 
-我们这里选择后者，因为仅仅是最为教学目的。
+我们这里选择后者，因为仅仅是作为教学目的。
 
 由于 TypeScript 自带了对最新（以及比最新还要更新）的 JavaScript 语言特性，我们现在可以直接在 JavaScript 文件中使用更多的语法糖，例如 Decorator。
 
