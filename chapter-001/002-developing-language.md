@@ -623,6 +623,10 @@ HTML 规范所实现的 ES Module 的 Runtime Semantics: HostResolveImportedModu
 
 Web 开发基础不在本书的覆盖范围内。请自行搜索其它外部资源。
 
+#### 为什么不直接写成 inline export 的形式？
+
+import, content, export 的三段式结构的表达形式更为清晰，且对原有内容几乎没有任何改动，有助于理解模块的本质。
+
 #### ES Module 到底有多少种 import 和 export 语法？
 
 JavaScript 语言基础不在本书的覆盖范围内。请自行搜索其它外部资源。
