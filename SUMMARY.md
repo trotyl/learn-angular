@@ -10,8 +10,9 @@
   * 数据绑定 (In Design)
   * 依赖注入 (In Design)
   * 模块划分 (In Design)
-* 第三章：实现原理
+* 第三章：实现原理 (In Design)
   * Angular Compiler (In Design)
+  * 元数据收集 (In Design)
   * 事件绑定 (In Design)
   * 模块加载 (In Design)
 * 第四章：实用功能（In Design）
