@@ -22,7 +22,24 @@
 
 其中，ES2015 的 FESM 格式是使用 Angular Compiler（命令行下为 `ngc`）编译的，对应的 `tsconfig` 文件（以 `@angular/core` 为例）位于：[angular/packages/core/tsconfig-build.json](https://github.com/angular/angular/blob/master/packages/core/tsconfig-build.json)；而 ES2015 的 UMD 格式是使用 Rollup.js[^6] 构建的，对应的 `rollup.config` 文件（以 `@angular/core` 为例）位于：[angular/packages/core/rollup.config.js](https://github.com/angular/angular/blob/master/packages/core/rollup.config.js)；至于 ES5 版本的文件，不再采用上述工具重新构建，而是直接使用 ES2015 版本的文件降级编译而成，该过程通过 TypeScript Compiler（命令行下为 `tsc`）实现。
 
-另外，Angular 团队目前已有引入谷歌官方 Bazel[^7] 构建工具的计划[^8]，
+另外，Angular 团队目前已有引入谷歌官方 Bazel[^7] 构建工具的计划[^8]。
+
+// TODO
+
+## 可能的疑惑
+
+#### 为什么要使用 FESM 格式的文件？
+
+参见 [The cost of small modules | Read the Tea Leaves](https://nolanlawson.com/2016/08/15/the-cost-of-small-modules/)。
+
+#### ngc 相对于 tsc 而言有哪些扩展配置？
+
+会在后文中详述。
+
+#### Angular 为什么不使用 Webpack 进行打包？
+
+Webpack 在打包过程中会引入额外的内容，增加不必要的运行时大小，基本只适用于最终应用，不适合类库。
+
 
 // TODO
 
