@@ -639,6 +639,10 @@ JavaScript 语言基础不在本书的覆盖范围内。请自行搜索其它外
 
 内部项目代号，大家后来习惯了就都这么叫。
 
+#### 为什么使用 TypeScript 工具编译 JavaScript 代码时不需要 --moduleResolution 选项？
+
+因为 TypeScript 默认对 JavaScript 代码不进行类型检查，因此虽然同样无法正确识别 `@angular/core` 的位置，鉴于其不会对编译结果造成影响（模块名原样保留），所以不会妨碍编译过程。另外，TypeScript 2.3 版本开始增加了一个 `--checkJs` 的选项用于提供对 JavaScript 文件的类型检查。
+
 #### 哪里能查到 TypeScript CLI 的所有编译器选项？
 
 这里：[Compiler Options · TypeScript](http://www.typescriptlang.org/docs/handbook/compiler-options.html)。

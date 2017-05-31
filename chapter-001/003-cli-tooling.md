@@ -22,7 +22,16 @@
 
 其中，ES2015 的 FESM 格式是使用 Angular Compiler（命令行下为 `ngc`）编译的，对应的 `tsconfig` 文件（以 `@angular/core` 为例）位于：[angular/packages/core/tsconfig-build.json](https://github.com/angular/angular/blob/master/packages/core/tsconfig-build.json)；而 ES2015 的 UMD 格式是使用 Rollup.js[^6] 构建的，对应的 `rollup.config` 文件（以 `@angular/core` 为例）位于：[angular/packages/core/rollup.config.js](https://github.com/angular/angular/blob/master/packages/core/rollup.config.js)；至于 ES5 版本的文件，不再采用上述工具重新构建，而是直接使用 ES2015 版本的文件降级编译而成，该过程通过 TypeScript Compiler（命令行下为 `tsc`）实现。
 
+Angular 的每个构建后的 Package 有专门的 Repo，例如 `@angular/core` 的 Repo 位于：[angular/core-builds: @angular/core build artifacts](https://github.com/angular/core-builds)，和 NPM Registry 上不同的是，这个 Repo 提供对应到每个 Commit 的版本，而 NPM Registry 中只会按照发布计划每周发布一次带有语义化版本号的相应版本。
+
 另外，Angular 团队目前已有引入谷歌官方 Bazel[^7] 构建工具的计划[^8]。
+
+接下来就是另一个我们更为关心的问题，我们使用 Angular 开发的最终应用需要使用什么样的构建方式呢？
+
+事实上，除了 `ngc` 之外，其它步骤都没有任何特殊要求，选择自己熟悉的构建方案即可。
+
+不过，即便不考虑 `ngc`，从零构造一个同时具备调试和生产环境构建方案也有不小的成本，更不用说对 `ngc` 的整合。为此，对于简单项目而言，我们可以直接食用 Angular 团队所提供的解决方案——Angular CLI。
+
 
 // TODO
 
