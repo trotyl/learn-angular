@@ -166,7 +166,7 @@ enableProdMode();
 platformBrowser().bootstrapModuleFactory(AppModuleNgFactory);
 ```
 
-也就是将 `platformBrowserDynamic` 替换为 `platformBrowser`，`NgModule` 替换为 `AppModuleNgFactory`。`@angular/platform-browser-dynamic` 是专门为 JIT 编译方式所设置的平台，具备运行时的编译器；而 `@angular/platform-browser` 为 AOT 编译方式所使用的平台，不具备运行时编译器，只能用于启动已经编译完成的 NgModuleFactory。
+也就是将 `platformBrowserDynamic` 替换为 `platformBrowser`，`Module` 替换为 `ModuleNgFactory`。`@angular/platform-browser-dynamic` 是专门为 JIT 编译方式所设置的平台，具备运行时的编译器；而 `@angular/platform-browser` 为 AOT 编译方式所使用的平台，不具备运行时编译器，只能用于启动已经编译完成的 NgModuleFactory。
 
 得到了所有的 JavaScript 文件之后，我们可以使用上一小节中介绍过的 Webpack 工具进行打包：
 
@@ -240,7 +240,7 @@ Webpack 在打包过程中会引入额外的内容，增加不必要的运行时
 
 #### enableProdMode 的影响有哪些？
 
-不添加调试用的 class、attribute 和 comment；不暴露调试用的 ng.probe 方法；不进行确保单项数据流稳定性的额外变化监测。
+不添加调试用的 class、attribute 和 comment；不暴露调试用的 `ng.probe` 方法；不进行确保单项数据流稳定性的额外变化监测。
 
 #### angularCompilerOptions 的所有选项在哪里可以找到？
 
