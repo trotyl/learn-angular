@@ -34,7 +34,7 @@ Angular 的每个构建后的 Package 有专门的 Repo，例如 `@angular/core`
 
 现在我们将完全抛弃之前的成果，本节及之后的内容都会基于 Angular CLI 来进行。
 
-首先我们需要安装 Angular CLI，这里以 yarn 为例：
+首先我们需要安装 Angular CLI，这里以 Yarn 为例：
 
 ```bash
 yarn global add @angular/cli
@@ -128,12 +128,71 @@ ng eject
 现在我们尝试不使用 Angular CLI 来完成 AOT 方式下的构建，为了避免复杂的路径映射，我们将所有文件原地输出，修改 `src/tsconfig.app.json` 文件为：
 
 ```json
-
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": ".",
+    "target": "es2015",
+    "module": "es2015",
+    "baseUrl": "",
+    "types": []
+  },
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts"
+  ]
+}
 ```
 
-// TODO
+之后执行同样的 `ngc` 命令：
+
+```bash
+./node_modules/.bin/ngc -p src/tsconfig.app.json
+./node_modules/.bin/ngc -p src/tsconfig.app.json
+```
+
+是的，没有看错，这里执行了两次，目的是为了把第一次构建时才生成的 `.ngfactory.ts` 文件等编译为 JavaScript 文件，所以说第二次命令原理上也可以用 `tsc` 替代。这个额外的步骤在当前 Angular Compiler 的工作机制下是需要的，不过在自动化构建方式时，不会产生可观测的影响。
+
+接着修改 `src/main.js` 文件为：
+
+```javascript
+import { enableProdMode } from '@angular/core';
+import { platformBrowser } from '@angular/platform-browser';
+import { AppModuleNgFactory } from './app/app.module.ngfactory';
+import { environment } from './environments/environment';
+
+enableProdMode();
+
+platformBrowser().bootstrapModuleFactory(AppModuleNgFactory);
+```
+
+也就是将 `platformBrowserDynamic` 替换为 `platformBrowser`，`NgModule` 替换为 `AppModuleNgFactory`。`@angular/platform-browser-dynamic` 是专门为 JIT 编译方式所设置的平台，具备运行时的编译器；而 `@angular/platform-browser` 为 AOT 编译方式所使用的平台，不具备运行时编译器，只能用于启动已经编译完成的 NgModuleFactory。
+
+得到了所有的 JavaScript 文件之后，我们可以使用上一小节中介绍过的 Webpack 工具进行打包：
+
+```bash
+webpack src/main.js out-webpack/bundle.js
+```
+
+再添加一个 `index.html` 文件至 `out-webpack` 目录：
+
+```html
+<!DOCTYPE html>
+<title>Hello Angular</title>
+<app-root>TODO</app-root>
+<script src="https://unpkg.com/zone.js@0.8.10/dist/zone.js"></script>
+<script src="./bundle.js"></script>
+```
+
+打开该 HTML 文件，即可看到 `app works!` 的字样。
+
+至此，我们已经能够不借助于 Angular CLI 实现完整的 AOT 编译方式下应用的构建过程。
 
 ## 可能的疑惑
+
+#### 为什么前端开发的工具在越来越复杂？
+
+因为前端开发的业务内容在越来越复杂。
 
 #### 为什么要使用 FESM 格式的文件？
 
@@ -147,8 +206,45 @@ ng eject
 
 Webpack 在打包过程中会引入额外的内容，增加不必要的运行时大小，基本只适用于最终应用，不适合类库。
 
+#### 为什么我的 NPM Package 经常安装失败？
 
-// TODO
+不宜公开讨论的政治内容。
+
+#### 将 Webpack Dev Server 用于生产环境是否可行？
+
+功能上可行，性能和稳定性上不一定可行。
+
+#### ng 命令是哪来的？
+
+由 `@angular/cli` 提供，通常作为全局依赖（以及同时作为局部依赖）。
+
+#### ngc 命令是哪来的？
+
+由 `@angular/compiler-cli` 提供，通常作为局部依赖。
+
+#### （Angular Compiler 的）JIT 编译方式有什么优势？
+
+可以配合 Online Editor 制作在线示例。
+
+#### Angular CLI 是否适用于构造 Angular 的第三方类库？
+
+不适用。
+
+#### 如何构建一个 Angular 的第三方类库？
+
+官方文档正在增加该内容，详情参见：[WIP - AIO: Third party library guide](https://github.com/angular/angular/pull/16486)。
+
+#### Angular 编译器的工作原理的怎样的？
+
+会在后文中详述。
+
+#### enableProdMode 的影响有哪些？
+
+不添加调试用的 class、attribute 和 comment；不暴露调试用的 ng.probe 方法；不进行确保单项数据流稳定性的额外变化监测。
+
+#### angularCompilerOptions 的所有选项在哪里可以找到？
+
+这里：[angular/options.ts at master · angular/angular](https://github.com/angular/angular/blob/master/tools/%40angular/tsc-wrapped/src/options.ts)。
 
 ---
 
