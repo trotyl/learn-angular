@@ -84,6 +84,49 @@ ng eject
 
 这样就能看到对应的 `webpack.config.js` 文件[^12]并对其进行任意修改。
 
+其实 Angular CLI 还有其它的很多功能，我们可以通过 `ng help` 来浏览全部可用命令。
+
+不过一个很严峻的问题是，在没有 Angular CLI 的情况下，我们要如何构建一个使用了 Angular 的最终应用呢？
+
+前面我们已经提到过，除了 `ngc` 之外，其它的步骤都没有任何的特殊性，因此，我们只要能够自行完成 `ngc` 就足够了。
+
+现在我们对 `src/tsconfig.app.json` 文件增加一部分内容：
+
+```json
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "module": "es2015",
+    "baseUrl": "",
+    "types": []
+  },
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts"
+  ],
+  "angularCompilerOptions": {
+    "genDir": "../out-aot"
+  }
+}
+```
+
+上面的配置中增加了 `angularCompilerOptions` 的部分内容，其中带有一个 `genDir` 属性，用于指定 AOT 编译时的输出目录[^13]。
+
+然后执行以下命令（for *nix）：
+
+```bash
+./node_modules/.bin/ngc -p src/tsconfig.app.json
+```
+
+这样就会出现 `out-aot` 和 `out-tsc` 两个文件夹。
+
+`out-aot` 中的内容为 Angular Compiler 所生成的额外内容，核心内容为 Component 与 NgModule 的 NgFactory 文件，所有 HTML 模版中的信息都转移至此，因此我们不再需要用到 HTML 模版文件。
+
+`out-tsc` 中的内容为 Angular Compiler 将原有的 TypeScript 代码编译为 JavaScript 的结果，可能与 TypeScript 自身的编译结果略有差异。
+
+然后我们将 `out-aot` 中的内容合流到 `out-tsc` 当中：
+
 // TODO
 
 ## 可能的疑惑
@@ -128,3 +171,5 @@ Webpack 在打包过程中会引入额外的内容，增加不必要的运行时
 [^11]: 不过目前使用 `--prod` 的形式也能正常工作，官方文档中也对此存在不一致的地方，相关 Tracker 在 [ng build prod confusion: --prod vs -prod (one vs two dashes)](https://github.com/angular/angular-cli/issues/6383)。
 
 [^12]: 不过需要注意的是，`ng eject` 只能够根据参数生成某个特定方式的 Webpack 配置，如果需要得到一个通用的 Webpack 项目，可能需要多次进行 `ng eject` 然后提取 Webpack 配置中的通用部分。
+
+[^13]: 这里 `genDir` 的配置并不是必须的，但如果不配置该项的话 AOT 编译的结果会直接在原目录中产生，影响代码结构和自动化工具的识别。
