@@ -30,8 +30,59 @@ Angular 的每个构建后的 Package 有专门的 Repo，例如 `@angular/core`
 
 事实上，除了 `ngc` 之外，其它步骤都没有任何特殊要求，选择自己熟悉的构建方案即可。
 
-不过，即便不考虑 `ngc`，从零构造一个同时具备调试和生产环境构建方案也有不小的成本，更不用说对 `ngc` 的整合。为此，对于简单项目而言，我们可以直接食用 Angular 团队所提供的解决方案——Angular CLI。
+不过，即便不考虑 `ngc`，从零构造一个同时具备调试和生产环境构建方案也有不小的成本，更不用说对 `ngc` 的整合。为此，对于简单项目而言，我们可以直接使用 Angular 团队所提供的解决方案——Angular CLI。
 
+现在我们将完全抛弃之前的成果，本节及之后的内容都会基于 Angular CLI 来进行。
+
+首先我们需要安装 Angular CLI，这里以 yarn 为例：
+
+```bash
+yarn global add @angular/cli
+```
+
+紧接着我们可以使用 `ng` 命令来快速创建项目：
+
+```bash
+ng new --skip-install learn-angular
+```
+
+这条命令应当能够在 1 秒之内完成。要注意的是这里我们使用了 `--skip-install` 选项，这个参数很重要，这样做能够帮助我们了解 Angular CLI 的职责，仅仅是根据预设的模版创建项目。
+
+当然，现在的项目显然是不能用的，不过我们在 `package.json` 中定义了一些依赖，我们需要安装这些依赖[^9]：
+
+```bash
+yarn install
+```
+
+需要注意的是，安装 NPM 上的依赖与 Angular CLI 并无直接关联，如果无法正常安装的话，那可能是一些众所周知的其它原因所导致。
+
+安装完成之后（并且安装成功的情况下），我们可以使用 Angular CLI 内置的调试服务器来启动服务：
+
+```bash
+ng serve --aot
+```
+
+Angular 使用将 HTML 模版编译成 JavaScript 代码的方式来实现视图层的相关操作，而 AOT（Ahead-of-Time）编译是指在开发时就进行该编译步骤，而后直接将编译后的代码打包到最终发行文件中，避免了运行时引入编译器影响传输文件大小和启动时间。
+
+而在之后的版本中[^10]，Angular CLI 将会把 AOT 设定为默认的调试启动方式，从而避免某些情况下 JIT 和 AOT 编译行为的不一致性影响开发体验。
+
+不过，现在我们所生成的代码都在内存当中。不过对于生产环境，我们并不会使用 Webpack Dev Server 作为应用服务器，为此我们需要把生成的静态文件取出。为此我们可以使用另一个命令：
+
+```bash
+ng build -prod
+```
+
+注意这里 `-prod` 正确的写法是单横杠[^11]，作为 `--target=production` 的 Alias。
+
+然后我们可以在 `dist` 目录中得到全部的静态文件内容，拷贝到服务器相应的静态文件目录中即可正常工作。
+
+最后，Angular CLI 提供的功能仍然有限，我们可能需要定制化部分构建方式。为此我们可以将 Angular CLI 项目转化为普通的 Webpack 项目：
+
+```bash
+ng eject
+```
+
+这样就能看到对应的 `webpack.config.js` 文件[^12]并对其进行任意修改。
 
 // TODO
 
@@ -69,3 +120,11 @@ Webpack 在打包过程中会引入额外的内容，增加不必要的运行时
 [^7]: Bazel 为谷歌推出的通用构建工具。官网为：[Home - Bazel](https://bazel.build/)，Github 地址为：[bazelbuild/bazel: a fast, scalable, multi-language and extensible build system](https://github.com/bazelbuild/bazel)。
 
 [^8]: 目前已有引入 Bazel 的 PR：[build: Introduce Bazel build rules by alexeagle · Pull Request #16972 · angular/angular](https://github.com/angular/angular/pull/16972)。概念上而言该工具的功能与当前使用的编译及打包工具相正交，并不会发生取代的情况。
+
+[^9]: 这里并没有给出 `cd` 的步骤，如果没有能力自行切换工作路径的话，那可能不是特别适合当前的练习。
+
+[^10]: 目前将 AOT 设定为默认选项的方案仅仅在路线图中，可能于 2.x 的版本中正式引入。当前几乎唯一的 Blocker 就是 Angular Compiler 还不具备增量编译模式，使得每次改动所需要的重新编译时间较长。
+
+[^11]: 不过目前使用 `--prod` 的形式也能正常工作，官方文档中也对此存在不一致的地方，相关 Tracker 在 [ng build prod confusion: --prod vs -prod (one vs two dashes)](https://github.com/angular/angular-cli/issues/6383)。
+
+[^12]: 不过需要注意的是，`ng eject` 只能够根据参数生成某个特定方式的 Webpack 配置，如果需要得到一个通用的 Webpack 项目，可能需要多次进行 `ng eject` 然后提取 Webpack 配置中的通用部分。

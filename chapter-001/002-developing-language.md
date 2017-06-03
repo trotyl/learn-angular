@@ -210,7 +210,7 @@ Reflect.getOwnMetadata = () => {}
 Access to Script at 'file:///Users/zjyu/GitBook/Library/Import/learn-angular/code-examples/001-002/step-002/main.js' from origin 'null' has been blocked by CORS policy: Invalid response. Origin 'null' is therefore not allowed access.
 ```
 
-这是因为使用 `file://` 协议的时候对于 **Origin（域）** 的判断上会有些问题，任何一个 Web 前端工程师都应该知道相应的解决方案 —— 开一个 Server。
+这是因为使用 `file://` 协议的时候对于 **Origin（源）** 的判断上会有些问题，任何一个 Web 前端工程师都应该知道相应的解决方案 —— 开一个 Server。
 
 我们可以使用 `yarn global add http-server`[^17] 来快速安装一个静态文件服务器（如果有其它的 Server 或者其它的包管理器，自行调整即可，对结果没有影响）。
 
@@ -633,7 +633,7 @@ JavaScript 语言基础不在本书的覆盖范围内。请自行搜索其它外
 
 #### 为什么要用 Webpack 做示例？
 
-因为 CLI 用的就是 Webpack。
+因为 Angular CLI 用的就是 Webpack。（仅限于正式版本中）
 
 #### 为什么 TypeScript 工具的 JavaScript 支持部分叫做 Salsa？
 
