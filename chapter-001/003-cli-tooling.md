@@ -125,7 +125,11 @@ ng eject
 
 `out-tsc` 中的内容为 Angular Compiler 将原有的 TypeScript 代码编译为 JavaScript 的结果，可能与 TypeScript 自身的编译结果略有差异。
 
-然后我们将 `out-aot` 中的内容合流到 `out-tsc` 当中：
+现在我们尝试不使用 Angular CLI 来完成 AOT 方式下的构建，为了避免复杂的路径映射，我们将所有文件原地输出，修改 `src/tsconfig.app.json` 文件为：
+
+```json
+
+```
 
 // TODO
 
