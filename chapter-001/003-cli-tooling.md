@@ -204,7 +204,7 @@ webpack src/main.js out-webpack/bundle.js
 
 #### Angular 为什么不使用 Webpack 进行打包？
 
-Webpack 在打包过程中会引入额外的内容，增加不必要的运行时大小，基本只适用于最终应用，不适合类库。
+Webpack 在打包过程中会引入额外的内容，增加不必要的运行时大小，基本只适用于最终应用，不适合类库。Webpack 3.0 以上版本增加的 Scope Hoisting 功能能够一定程度上缓解该问题，Angular CLI 也已经在尝试借助该功能来进一步减小应用体积（[位于 webpack-next 分支](https://github.com/angular/angular-cli/tree/webpack-next)）。
 
 #### 为什么我的 NPM Package 经常安装失败？
 
