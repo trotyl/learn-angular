@@ -5,8 +5,8 @@
   * [开发语言](chapter-001/002-developing-language.md)
   * [命令行工具](chapter-001/003-cli-tooling.md)
 * [第二章：基础知识 (In Progress)](chapter-002/README.md)
-  * [概念辨析 (In Progress)](chapter-002/001-conceptions.md)
-  * 模版语法 (In Design)
+  <!--* [概念辨析 (In Progress)](chapter-002/000-conceptions.md)-->
+  * [模版语法 (In Progress)](chapter-002/001-template-syntax.md)
   * 数据绑定 (In Design)
   * 依赖注入 (In Design)
   * 模块划分 (In Design)
