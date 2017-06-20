@@ -57,7 +57,7 @@ ng g c interpolation
 之后在组件模版中添加：
 
 ```html
-<img src="{{ avatar }}">
+<img src="https://avatars0.githubusercontent.com/u/{{ avatarId }}?v=3&s=460">
 ```
 
 并在类定义中添加：
@@ -65,7 +65,7 @@ ng g c interpolation
 ```typescript
 /* ... */
 export class InterpolationComponent {
-  avatar = 'https://avatars0.githubusercontent.com/u/6059170?v=3&s=460'
+  avatarId = '6059170'
 }
 ```
 

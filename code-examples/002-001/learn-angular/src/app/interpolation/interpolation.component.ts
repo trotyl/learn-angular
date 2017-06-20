@@ -6,5 +6,5 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./interpolation.component.css']
 })
 export class InterpolationComponent {
-  avatar = 'https://avatars0.githubusercontent.com/u/6059170?v=3&s=460'
+  avatarId = '6059170'
 }
