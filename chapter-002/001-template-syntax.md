@@ -18,8 +18,38 @@ ng new learn-angular
 
 这里的 `{{title}}` 就是一个 **插值（Interpolation）** 语法。不过，确切的说，插值语法是一个可配置内容，双花括号（`{{ }}`）仅仅是默认的选项。
 
+打开 `app.component.ts`，在 `AppComponent` 的元数据中增加一项 `interpolation` 属性：
+
+```typescript
+@Component({
+  /* ... */
+  interpolation: ['%start%', '%end%'],
+})
+export class AppComponent { /* ... */ }
+```
+
+再次启动应用，我们会发现现在浏览器控制台有报错：
+
+```text
+Unexpected character "EOF" (Do you have an unescaped "{" in your template? Use "{{ '{' }}") to escape it.)
+```
+
+这个提示确实非常不友好，出现这个报错是由于除了（可选的）双花括号语法用于插值外，Angular 模版中还有单花括号（`{ }`）语法用于 ICU Message[^3]，所以在双括号不用于插值后，我们原有的绑定就变成了一个非法的 ICU Message。解决起来也非常简单，把 `app.component.html` 模版里的双花括号替换成新的插值语法即可：
+
+```html
+<h1>
+  Welcome to %start%title%end%!!
+</h1>
+```
+
+虽然这里的新语法非常浮夸，也完全没有美感，不过现在我们的应用确实能够正常使用了。不过，虽然插值语法可以自由配置，但是大多数时候完全没有必要，在本文的其它部分以及其它文章中如无特殊说明的情况下均适用默认的插值语法。
+
+
+
 ---
 
 [^1]: HTML Attribute Name 中，`[]`、`()` 以及 `*` 都是合法的字符，只不过本身没有语义上的行为（即这样的 Attribute 不起作用）。类似的，HTML 不区分大小写也是语义上的行为，并不是语法上的要求，不论是使用大写或者小写字母都是合法的 HTML。
 
 [^2]: 本文中所有的 Angular CLI 项目都以 `learn-angular` 作为项目名，实际使用时可以自行调整以避免命名冲突（如果需要保留原有项目的话），例如增加后缀变成 `learn-angular-1` 等等。
+
+[^3]: ICU Message 是 Blabla //TODO
