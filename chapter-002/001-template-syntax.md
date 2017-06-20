@@ -42,9 +42,40 @@ Unexpected character "EOF" (Do you have an unescaped "{" in your template? Use "
 </h1>
 ```
 
-虽然这里的新语法非常浮夸，也完全没有美感，不过现在我们的应用确实能够正常使用了。不过，虽然插值语法可以自由配置，但是大多数时候完全没有必要，在本文的其它部分以及其它文章中如无特殊说明的情况下均适用默认的插值语法。
+虽然这里的新语法非常浮夸，也完全没有任何美感，不过现在我们的应用确实能够正常使用了。不过，虽然插值语法可以自由配置，但是大多数时候完全没有必要，在本文的其它部分以及其它文章中如无特殊说明的情况下均适用默认的插值语法。
 
+上面我们在 Text Node 当中使用了插值语法，不过这并不是唯一能够使用插值的地方，事实上，Attribute Value 中也能进行插值。
 
+由于我们的 `AppComponent` 已经被奇怪的语法所污染，这里我们创建一个新组件，通过 CLI 可以很方便地完成这一操作：
+
+```bash
+ng g c interpolation
+```
+
+这里的 `g` 和 `c` 分别是 `generate` 和 `component` 的简写，完整的 CLI 命令列表可以参考：[Home · angular/angular-cli Wiki](https://github.com/angular/angular-cli/wiki)。
+
+之后在组件模版中添加：
+
+```html
+<img src="{{ avatar }}">
+```
+
+并在类定义中添加：
+
+```typescript
+/* ... */
+export class InterpolationComponent {
+  avatar = 'https://avatars0.githubusercontent.com/u/6059170?v=3&s=460'
+}
+```
+
+之后我们可以看到，什么都没有发生。是的，因为我们并没有任何地方使用这一组件，为此我们在 `AppComponent` 的模版中增加该组件 Selector 对应的元素：
+
+```html
+<app-interpolation></app-interpolation>
+```
+
+之后就能在应用中看到我们新增的图像了。
 
 ---
 
