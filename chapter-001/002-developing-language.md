@@ -335,7 +335,7 @@ Module not found: Error: Can't resolve '@angular/core' in '/Users/zjyu/GitBook/L
 为了简单起见，我们直接给出完整的安装列表：
 
 ```bash
-yarn add @angular/core@4.1.3 @angular/common@4.1.3 @angular/compiler@4.1.3 @angular/platform-browser@4.1.3 @angular/platform-browser-dynamic@4.1.3 rxjs@5.4.0
+yarn add @angular/core @angular/common @angular/compiler @angular/platform-browser @angular/platform-browser-dynamic rxjs
 ```
 
 然后重新使用打包命令：
@@ -364,7 +364,7 @@ Reflect.getOwnMetadata = () => {}
 首先，我们先迁移到 TypeScript 的工具链上，不过要注意，在更改后缀名之前，我们仍然使用的是 JavaScript 语言。全局安装 TypeScript CLI 工具的命令为：
 
 ```bash
-yarn global add typescript@2.3.2
+yarn global add typescript
 ```
 
 接着在不改动 JavaScript 文件的前提下，先试试 `tsc` 命令的效果：
