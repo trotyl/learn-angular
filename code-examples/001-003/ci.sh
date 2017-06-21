@@ -86,6 +86,12 @@ platformBrowser().bootstrapModuleFactory(AppModuleNgFactory);
 
 echo "Bundling app using Webpack"
 webpack src/main.js out-webpack/bundle.js
-echo "Bundle generated"
+
+echo "Checking webpack results"
+if [ ! -f ./out-webpack/bundle.js ]; then
+    echo "bundle.js not found in out-webpack!"
+    exit 1
+fi
+echo "Webpack bundle generated"
 
 echo "All process checked"
