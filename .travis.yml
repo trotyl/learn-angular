@@ -5,5 +5,6 @@ before_install:
   - npm install --global yarn
 install:
   - yarn global add @angular/cli
+  - yarn global add webpack
 script:
   - bash code-examples/001-003/ci.sh
