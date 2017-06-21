@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - "7"
+install:
+  - yarn global add @angular/cli
+script:
+  - bash code-examples/001-003/ci.sh
