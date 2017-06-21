@@ -2,7 +2,8 @@ language: node_js
 node_js:
   - "7"
 before_install:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
+  - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 install:
   - yarn global add @angular/cli
 script:
