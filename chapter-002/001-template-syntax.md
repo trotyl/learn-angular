@@ -77,9 +77,50 @@ export class InterpolationComponent {
 
 之后就能在应用中看到我们新增的图像了。
 
-如果具备 AngularJS 基础的话，我们可能会怀疑这么做是否合适。在 AngularJS 中，如果我们直接在 `src` 中使用插值的话，会导致一个额外的无效请求，为此推荐使用 `ngSrc` 属性。而在 Angular 中，我们不再有次顾虑，所有插值操作都在实际 DOM 建立之前完成，所以上面的代码并没有任何不对的地方，除了不好看。
+如果具备 AngularJS 基础的话，我们可能会怀疑这么做是否合适。在 AngularJS 中，如果我们直接在 `src` 中使用插值的话，会导致一个额外的无效请求，为此推荐使用 `ngSrc` 属性。而在 Angular 中，我们不再有次顾虑，所有插值操作都在实际 DOM 建立之前完成，所以上面的代码并没有任何不对的地方。
+
+上面的模版代码中，大部分内容都是当作普通的 HTML 处理的，但是当使用了插值语法时，插值符号中的部分被称为 **模版表达式（Template Expression）**，其内容将不再作为字面值，而是作为 JavaScript[^4] 表达式进行处理，整个表达式的值会被转换成字符串与插值符号以外的内容相连接，从而产生实际内容。并且插值符号本身也不会出现在实际内容中，仅仅用于指示插值的存在。
+
+除此之外，我们也可以直接绑定表达式：
+
+```html
+<img [src]="'https://avatars0.githubusercontent.com/u/' + avatarId + '?v=3&s=460'">
+```
+
+或者
+
+```html
+<img bind-src="'https://avatars0.githubusercontent.com/u/' + avatarId + '?v=3&s=460'">
+```
+
+这样的情况下，HTML Attribute 所对应的 Value 部分直接作为模版表达式，而不再需要使用插值语法。
+
+对于表达式属性绑定，Angular 提供了两种方式，一种是使用方括号 `[]`，另一种是 `bind-` 前缀。通常来说，使用方括号要更加简洁美观[^5]，因此在没有特殊说明的情况下，我们的表达式属性绑定均使用方括号的语法来进行。
+
+这里也是和 AngularJS 有一定的区别的地方。在 AngularJS 中，一个属性值作为字面值还是表达式执行是由指令本身所预设的，通过 DDO 中的 `scope` 或 `bindToController` 属性中使用相应的符号[^5] 来决定。而在 Angular 中，使用了更为通用的模版设计，组件本身仅仅要求属性存在与否，而使用者可以根据需实际情况选择使用的方式。
+
+那么我们可能会好奇的是：
+
+```html
+<element attr="{{value}}">
+```
+
+与
+
+```html
+<element [attr]="value">
+```
+
+是否等价呢？
+
+不过答案的否定的。
 
 
+## 可能的疑惑
+
+#### 为什么 AngularJS 中不适合在 src 属性中插值？
+
+AngularJS 使用的是基于 DOM 的模版，也就是说，模版会先被浏览器渲染成 DOM 树，之后 AngularJS 通过 DOM API 来寻找使用了插值的地方并进行修改。而浏览器对 img 内容的获取是在页面渲染过程中自动进行的，所以在这种模式下，会产生对包含模版内容的错误地址（例如 https://avatars0.githubusercontent.com/u/{{%2BavatarId%2B}}?v=3&s=460）进行请求，从而引发不必要的错误。
 
 ---
 
@@ -88,3 +129,7 @@ export class InterpolationComponent {
 [^2]: 本文中所有的 Angular CLI 项目都以 `learn-angular` 作为项目名，实际使用时可以自行调整以避免命名冲突（如果需要保留原有项目的话），例如增加后缀变成 `learn-angular-1` 等等。
 
 [^3]: ICU 的全称是 International Components for Unicode，主要提供了一系列用于 I18n 的规范和相应的工具，Angular 支持它的一个子集以用于 I18n 内容的处理，ICU Message 的规范可以参考：[Formatting Messages - ICU User Guide](http://userguide.icu-project.org/formatparse/messages)，一个制作精良的在线示例可以参考 [ICU Message Format for Translators](https://format-message.github.io/icu-message-format-for-translators/)。
+
+[^4]: 模版表达式所支持的部分确切的说是 JavaScript 的子集以及一些额外扩展，存在一些语法限制，详情参见：[Angular - linkTemplate Syntax#Template expressions](https://angular.io/guide/template-syntax#template-expressions)
+
+[^5]: 在属性本身为 camelCase 的情况下，使用 kebab-case 的前缀会让风格显得很奇怪，例如 `bind-ngClass="{ 'foo': true }"`，虽然也可以使用让属性本身使用 kebab-case，但那样需要额外的配置且增加认知成本。所以一般情况下 Angular 推荐使用 camelCase 来设计属性名，并且使用 `[]` 语法来进行表达式属性绑定。
