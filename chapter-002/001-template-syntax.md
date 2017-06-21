@@ -120,7 +120,7 @@ export class InterpolationComponent {
 
 #### 为什么 AngularJS 中不适合在 src 属性中插值？
 
-AngularJS 使用的是基于 DOM 的模版，也就是说，模版会先被浏览器渲染成 DOM 树，之后 AngularJS 通过 DOM API 来寻找使用了插值的地方并进行修改。而浏览器对 img 内容的获取是在页面渲染过程中自动进行的，所以在这种模式下，会产生对包含模版内容的错误地址（例如 https://avatars0.githubusercontent.com/u/{{%2BavatarId%2B}}?v=3&s=460）进行请求，从而引发不必要的错误。
+AngularJS 使用的是基于 DOM 的模版，也就是说，模版会先被浏览器渲染成 DOM 树，之后 AngularJS 通过 DOM API 来寻找使用了插值的地方并进行修改。而浏览器对 img 内容的获取是在页面渲染过程中自动进行的，所以在这种模式下，会产生对包含模版内容的错误地址（例如 https://avatars0.githubusercontent.com/u/{{avatarId}}?v=3&s=460）进行请求，从而引发不必要的错误。
 
 ---
 
