@@ -49,7 +49,7 @@ Unexpected character "EOF" (Do you have an unescaped "{" in your template? Use "
 由于我们的 `AppComponent` 已经被奇怪的语法所污染，这里我们创建一个新组件，通过 CLI 可以很方便地完成这一操作：
 
 ```bash
-ng g c interpolation
+ng g c template-syntax
 ```
 
 这里的 `g` 和 `c` 分别是 `generate` 和 `component` 的简写，完整的 CLI 命令列表可以参考：[Home · angular/angular-cli Wiki](https://github.com/angular/angular-cli/wiki)。
@@ -64,7 +64,7 @@ ng g c interpolation
 
 ```typescript
 /* ... */
-export class InterpolationComponent {
+export class TemplateSyntaxComponent {
   avatarId = 6059170
 }
 ```
@@ -72,7 +72,7 @@ export class InterpolationComponent {
 之后我们可以看到，什么都没有发生。是的，因为我们并没有任何地方使用这一组件，为此我们在 `AppComponent` 的模版中增加该组件 Selector 对应的元素：
 
 ```html
-<app-interpolation></app-interpolation>
+<app-template-syntax></app-template-syntax>
 ```
 
 之后就能在应用中看到我们新增的图像了。
