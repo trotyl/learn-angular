@@ -16,7 +16,7 @@ ng new learn-angular
 </h1>
 ```
 
-这里的 `{{title}}` 就是一个 **插值（Interpolation）** 语法。不过，确切的说，插值语法是一个可配置内容，双花括号（`{{ }}`）仅仅是默认的选项。
+这里的 `{{title}}` 就是一个 **插值（Interpolation）** 语法。不过，确切的说，插值语法是一个可配置内容，双花括号（`{{ }}`，Double Curly Braces）仅仅是默认的选项。
 
 打开 `app.component.ts`，在 `AppComponent` 的元数据中增加一项 `interpolation` 属性：
 
@@ -65,7 +65,7 @@ ng g c interpolation
 ```typescript
 /* ... */
 export class InterpolationComponent {
-  avatarId = '6059170'
+  avatarId = 6059170
 }
 ```
 
@@ -79,7 +79,7 @@ export class InterpolationComponent {
 
 如果具备 AngularJS 基础的话，我们可能会怀疑这么做是否合适。在 AngularJS 中，如果我们直接在 `src` 中使用插值的话，会导致一个额外的无效请求，为此推荐使用 `ngSrc` 属性。而在 Angular 中，我们不再有次顾虑，所有插值操作都在实际 DOM 建立之前完成，所以上面的代码并没有任何不对的地方。
 
-上面的模版代码中，大部分内容都是当作普通的 HTML 处理的，但是当使用了插值语法时，插值符号中的部分被称为 **模版表达式（Template Expression）**，其内容将不再作为字面值，而是作为 JavaScript[^4] 表达式进行处理，整个表达式的值会被转换成字符串与插值符号以外的内容相连接，从而产生实际内容。并且插值符号本身也不会出现在实际内容中，仅仅用于指示插值的存在。
+上面的模版代码中，大部分内容都是当作普通的 HTML 处理的，但是当使用了插值语法时，插值符号中的部分被称为 **模版表达式（Template Expression）**，其内容将不再作为字面值，而是作为 JavaScript[^4] 表达式进行处理，整个表达式的值会被转换成字符串与插值符号以外的内容相连接，从而产生实际内容。并且插值符号本身也不会出现在实际内容中，仅仅用于指示插值的存在。模版表达式的一个特性是无副作用，即对模版表达式的执行不会改变组件的状态，这是 Angular 的要求之一。
 
 除此之外，我们也可以直接绑定表达式：
 
@@ -115,12 +115,51 @@ export class InterpolationComponent {
 
 不过答案的否定的。
 
+事实上，我们可以认为：
+
+```html
+<element attr="{{value}}">
+```
+
+等价于：
+
+```html
+<element [attr]="value.toString()">
+```
+
+即 **使用插值的 Attribute Value 所对应的属性绑定结果一定是字符串**。而属性绑定本身（对于 Angular Directive 而言）可以是任何类型，并且 Angular 会对属性绑定进行类型检查，确保输入的类型相符。
+
+除了属性绑定外，还有一个很方便的语法称为 **事件绑定（）**，使用圆括号 `()`或者 `on-` 前缀[^6]定义，我们可以为我们的图片绑定 `(click)` 事件：
+
+```html
+<img [src]="'https://avatars0.githubusercontent.com/u/' + avatarId + '?v=3&s=460'" (click)="avatarId = avatarId + 1">
+```
+
+或者
+
+```html
+<img bind-src="'https://avatars0.githubusercontent.com/u/' + avatarId + '?v=3&s=460'" on-click="avatarId = avatarId + 1">
+```
+
+当然，由于我无法得知之后的用户都用的什么头像，所以如果出现不适宜的内容也与本文无关哦。
 
 ## 可能的疑惑
 
 #### 为什么 AngularJS 中不适合在 src 属性中插值？
 
 AngularJS 使用的是基于 DOM 的模版，也就是说，模版会先被浏览器渲染成 DOM 树，之后 AngularJS 通过 DOM API 来寻找使用了插值的地方并进行修改。而浏览器对 img 内容的获取是在页面渲染过程中自动进行的，所以在这种模式下，会产生对包含模版内容的错误地址（例如 https://avatars0.githubusercontent.com/u/{{avatarId}}?v=3&s=460）进行请求，从而引发不必要的错误。
+
+#### 为什么属性绑定和事件绑定也叫输入绑定和输出绑定？
+
+我们知道（不知道的下一节也会知道），指令的属性绑定和事件绑定分别使用 `@Input()` 和 `@Output()`（或元数据中的 `host` 属性）来定义，所以可以简单地意会为输入和输出。不过从功能上，属性绑定也是完全可以实现输出功能的，例如主动传入一个 `EventEmitter` 作为输入。
+
+但是问题来了，这是只表明了 **输入** 和 **输出**，那么 **属性** 和 **事件** 的概念是哪里来的呢？
+
+事实上，在现有的语法之前，Angular 使用过 `@Property()` 和 `@Event()` 作为装饰器的名称，之后才 [改为](https://github.com/angular/angular/pull/4435) 现有语法的，而且在语法的最终版本上也经过了很多激烈的讨论。除此之外，称做属性绑定和事件绑定也符合语义上的行为，便于理解。
+
+#### Angular 是如何确定事件绑定的事件源是 DOM 事件还是用户声明事件的？
+
+实际上 Angular 自始至终都无法得知事件绑定的事件来源，该内容会在下一节覆盖。
 
 ---
 
@@ -133,3 +172,5 @@ AngularJS 使用的是基于 DOM 的模版，也就是说，模版会先被浏�
 [^4]: 模版表达式所支持的部分确切的说是 JavaScript 的子集以及一些额外扩展，存在一些语法限制，详情参见：[Angular - linkTemplate Syntax#Template expressions](https://angular.io/guide/template-syntax#template-expressions)
 
 [^5]: 在属性本身为 camelCase 的情况下，使用 kebab-case 的前缀会让风格显得很奇怪，例如 `bind-ngClass="{ 'foo': true }"`，虽然也可以使用让属性本身使用 kebab-case，但那样需要额外的配置且增加认知成本。所以一般情况下 Angular 推荐使用 camelCase 来设计属性名，并且使用 `[]` 语法来进行表达式属性绑定。
+
+[^6]: 使用 `on-` 前缀进行事件绑定时，要确保没有遗漏最后的连字符，否则将使用原生的事件绑定。

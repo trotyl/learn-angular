@@ -2,5 +2,5 @@
   interpolation-attribute-value works!
 </p>
 <img src="https://avatars0.githubusercontent.com/u/{{ avatarId }}?v=3&s=460">
-<img [src]="'https://avatars0.githubusercontent.com/u/' + avatarId + '?v=3&s=460'">
-<img bind-src="'https://avatars0.githubusercontent.com/u/' + avatarId + '?v=3&s=460'">
+<img [src]="'https://avatars0.githubusercontent.com/u/' + avatarId + '?v=3&s=460'" (click)="avatarId = avatarId + 1">
+<img bind-src="'https://avatars0.githubusercontent.com/u/' + avatarId + '?v=3&s=460'" on-click="avatarId = avatarId + 1">
