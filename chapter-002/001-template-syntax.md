@@ -143,6 +143,54 @@ export class TemplateSyntaxComponent {
 
 当然，由于我无法得知之后的用户都用的什么头像，所以如果出现不适宜的内容也与本文无关哦。
 
+上面我们简要介绍了属性绑定和事件绑定，由于本节的内容是 **模版语法**，所以并不会对实现细节进行深入描述。
+
+不论是属性绑定还是事件绑定，数据[^7]的传递都是单向的。而有时候，为了使用上的编译，我们会把两者使用语法糖来结合，而结合后的语法，就是两者的语法之和。我们可以在图片之前增加一个 `input` 元素：
+
+```html
+<input type="number" [(ngModel)]="avatarId">
+<br>
+```
+
+不过，这时候我们会看到控制台的报错：
+
+```text
+Can't bind to 'ngModel' since it isn't a known property of 'input'.
+```
+
+这是因为我们并没有任何指令定义了 `ngModel` 这个属性输入。
+
+其实这里也是和 AngularJS 相比明显改善了的地方，在 Angular 模版中，属性绑定是 **强类型** 的，即所有指令都会定义自己所需的属性输入，而如果我们在某个地方使用了任何指令都没有定义过的属性，Angular 就能在编译时发现错误，有效地缩短了反馈时间，提高开发效率。
+
+可是问题来了，为什么 Angular 自带的 `ngModel` 会找不到呢？
+
+如果我们浏览 Angular 的 [API](https://angular.io/api)，就能发现 [NgModel](https://angular.io/api/forms/NgModel) 处于 `forms` 这个 package 当中，并由 [FormsModule](https://angular.io/api/forms/FormsModule) 所声明。
+
+为此，如果我们需要使用 `ngModel` 的话，就必须要导入 `FormsModule` 这个 NgModule。为此，在 `app.module.ts` 中，添加相应的内容：
+
+```typescript
+/* ... */
+import { FormsModule } from '@angular/forms'
+
+/* ... */
+
+@NgModule({
+  /* ... */
+  imports: [
+    /* ... */
+    FormsModule
+  ],
+  /* ... */
+})
+export class AppModule { }
+```
+
+现在我们就能看到页面中的输入框，其中的默认值就是我们初始化的 `avatarId` 的值。
+
+如果我们修改该数值，就能看到图片发生变化。反过来，如果我们点击图片，也会看到该数值发生变化。
+
+为此这种形式就叫做 **双向绑定**。
+
 ## 可能的疑惑
 
 #### 为什么 AngularJS 中不适合在 src 属性中插值？
@@ -174,3 +222,5 @@ AngularJS 使用的是基于 DOM 的模版，也就是说，模版会先被浏�
 [^5]: 在属性本身为 camelCase 的情况下，使用 kebab-case 的前缀会让风格显得很奇怪，例如 `bind-ngClass="{ 'foo': true }"`，虽然也可以使用让属性本身使用 kebab-case，但那样需要额外的配置且增加认知成本。所以一般情况下 Angular 推荐使用 camelCase 来设计属性名，并且使用 `[]` 语法来进行表达式属性绑定。
 
 [^6]: 使用 `on-` 前缀进行事件绑定时，要确保没有遗漏最后的连字符，否则将使用原生的事件绑定。
+
+[^7]: 对于事件绑定而言，可能不产生数据，仅仅进行事件通知，例如使用 `EventEmitter<void>` 类型。
