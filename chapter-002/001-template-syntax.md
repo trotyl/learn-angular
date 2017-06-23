@@ -141,6 +141,8 @@ export class TemplateSyntaxComponent {
 <img bind-src="'https://avatars0.githubusercontent.com/u/' + avatarId + '?v=3&s=460'" on-click="avatarId = avatarId + 1">
 ```
 
+事件绑定中的执行环境被称为 **模版语句（Template Statement）**，相比于模版表达式而言，允许了副作用的存在，例如我们这里使用的赋值操作。
+
 当然，由于我无法得知之后的用户都用的什么头像，所以如果出现不适宜的内容也与本文无关哦。
 
 上面我们简要介绍了属性绑定和事件绑定，由于本节的内容是 **模版语法**，所以并不会对实现细节进行深入描述。
@@ -149,6 +151,13 @@ export class TemplateSyntaxComponent {
 
 ```html
 <input type="number" [(ngModel)]="avatarId">
+<br>
+```
+
+或
+
+```html
+<input type="number" bindon-ngModel="avatarId">
 <br>
 ```
 
@@ -190,6 +199,24 @@ export class AppModule { }
 如果我们修改该数值，就能看到图片发生变化。反过来，如果我们点击图片，也会看到该数值发生变化。
 
 为此这种形式就叫做 **双向绑定**。
+
+所以，刚刚究竟发生了些什么呢？
+
+对于双向绑定的语法糖，编译器会首先将其拆分成独立的属性绑定和事件绑定，其中的事件名增加 `Change` 后缀，也就是说：
+
+```html
+<element [(xxx)]="prop"></element>
+```
+
+等价于：
+
+```html
+<element [xxx]="prop" (xxxChange)="prop = $event"></element>
+```
+
+所以说，双向绑定中的表达式必须可以同时作为左值和右值，实际可用的运算符非常有限，仅限于 [属性访问](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Property_accessors)。
+
+由于双向绑定只是一个普通的语法糖，我们随时可以新建一个支持双向绑定的指令，但是出于工程上的考虑，大部分情况下往往会让自定义指令来支持 `ngModel`，从而复用相应逻辑，这部分内容会在表单部分覆盖。
 
 ## 可能的疑惑
 
