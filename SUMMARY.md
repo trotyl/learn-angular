@@ -7,7 +7,6 @@
 * [第二章：基础知识 (In Progress)](chapter-002/README.md)
   <!--* [概念辨析 (In Progress)](chapter-002/000-conceptions.md)-->
   * [模版语法 (In Progress)](chapter-002/001-template-syntax.md)
-  * 数据绑定 (In Design)
   * 依赖注入 (In Design)
   * 模块划分 (In Design)
 * 第三章：实现原理 (In Design)
