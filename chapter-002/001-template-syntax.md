@@ -95,7 +95,9 @@ export class TemplateSyntaxComponent {
 
 这样的情况下，HTML Attribute 所对应的 Value 部分直接作为模版表达式，而不再需要使用插值语法。
 
-对于表达式属性绑定，Angular 提供了两种方式，一种是使用方括号 `[]`，另一种是 `bind-` 前缀。通常来说，使用方括号要更加简洁美观[^5]，因此在没有特殊说明的情况下，我们的表达式属性绑定均使用方括号的语法来进行。
+对于 **表达式属性绑定**，Angular 提供了两种方式，一种是使用方括号 `[]`，另一种是 `bind-` 前缀。通常来说，使用方括号要更加简洁美观[^5]，因此在没有特殊说明的情况下，我们的表达式属性绑定均使用方括号的语法来进行。
+
+除了 **表达式属性绑定**，我们也可以使用 **字面值属性绑定**，简单地说也就是不加方括号，看起来就类似于普通的 HTML Attribute，不过针对的不是 HTML Element，而仅限于 Angular Directive。
 
 这里也是和 AngularJS 有一定的区别的地方。在 AngularJS 中，一个属性值作为字面值还是表达式执行是由指令本身所预设的，通过 DDO 中的 `scope` 或 `bindToController` 属性中使用相应的符号[^5] 来决定。而在 Angular 中，使用了更为通用的模版设计，组件本身仅仅要求属性存在与否，而使用者可以根据需实际情况选择使用的方式。
 
@@ -129,6 +131,8 @@ export class TemplateSyntaxComponent {
 
 即 **使用插值的 Attribute Value 所对应的属性绑定结果一定是字符串**。而属性绑定本身（对于 Angular Directive 而言）可以是任何类型，并且 Angular 会对属性绑定进行类型检查，确保输入的类型相符。
 
+有一点需要注意的是，属性绑定中使用的是 DOM Property 而非 HTML Attribute，对于 img 的 src 来说，由于其 HTML Attribute 和 DOM Property 的形式完全相同，所以这里没有差异。
+
 除了属性绑定外，还有一个很方便的语法称为 **事件绑定（）**，使用圆括号 `()`或者 `on-` 前缀[^6]定义，我们可以为我们的图片绑定 `(click)` 事件：
 
 ```html
@@ -144,8 +148,6 @@ export class TemplateSyntaxComponent {
 事件绑定中的执行环境被称为 **模版语句（Template Statement）**，相比于模版表达式而言，允许了副作用的存在，例如我们这里使用的赋值操作。
 
 当然，由于我无法得知之后的用户都用的什么头像，所以如果出现不适宜的内容也与本文无关哦。
-
-上面我们简要介绍了属性绑定和事件绑定，由于本节的内容是 **模版语法**，所以并不会对实现细节进行深入描述。
 
 不论是属性绑定还是事件绑定，数据[^7]的传递都是单向的。而有时候，为了使用上的编译，我们会把两者使用语法糖来结合，而结合后的语法，就是两者的语法之和。我们可以在图片之前增加一个 `input` 元素：
 
@@ -218,6 +220,12 @@ export class AppModule { }
 
 由于双向绑定只是一个普通的语法糖，我们随时可以新建一个支持双向绑定的指令，但是出于工程上的考虑，大部分情况下往往会让自定义指令来支持 `ngModel`，从而复用相应逻辑，这部分内容会在表单部分覆盖。
 
+上面我们已经提高过对于 **表达式属性绑定** 可以通过方括号语法（或 `bind-` 前缀）来完成，不过反过来并不成立，即使用方括号语法的绑定未必是 **表达式属性绑定**。
+
+例如，我们可以通过 `[attr.foo]` 来将数据（只能是字符串）绑定到 `foo` Attribute 而非 `foo` Property 上。以及 `[class.bar]`，用来动态调整 `bar` 这个 class 的存在与否（所以 Value 部分只能是 Boolean）。
+
+
+
 ## 可能的疑惑
 
 #### 为什么 AngularJS 中不适合在 src 属性中插值？
@@ -232,9 +240,37 @@ AngularJS 使用的是基于 DOM 的模版，也就是说，模版会先被浏�
 
 事实上，在现有的语法之前，Angular 使用过 `@Property()` 和 `@Event()` 作为装饰器的名称，之后才 [改为](https://github.com/angular/angular/pull/4435) 现有语法的，而且在语法的最终版本上也经过了很多激烈的讨论。除此之外，称做属性绑定和事件绑定也符合语义上的行为，便于理解。
 
+#### 属性绑定和方括号语法之间有什么关系？
+
+概率上的相关性。属性绑定不一定使用方括号语法（或 `bind-` 前缀，下同），方括号语法也不一定是属性绑定。
+
+不过在日常交流时，很难要求用户保持绝对的严谨性，因此在其它地方，很可能会用属性绑定来指代方括号语法或者反之。
+
+#### 方括号绑定的 target 是 Property 还是 Attribute？
+
+在不使用 `attr.` 的情况下，绑定的都是 Property，不论是对 DOM Element 还是 Angular Directive。虽然话是这么说，不过由于太多用户分不清 HTML Attribute 和 DOM Property，也有个别特例对用户妥协了，比如 `htmlFor`，所以现在事实上也可以使用 `<label [for]="abc">` 这样的错误写法。详见：[feat(core): map for property to htmlFor](https://github.com/angular/angular/pull/10546)。
+
+*Angular 团队内心 OS：这届用户水平真是不行。*
+
+#### 不使用方括号绑定的 target 是 Property 还是 Attribute？
+
+Angular Compiler 本身内部存有所有 HTML Element 可能的 Attribute 列表，对于已知的 HTML Element 的已知 Attribute Name 而言，绑定的 target 就是 HTML Attribute，虽然实现上也是通过自动翻译成对应的 DOM Property 完成的（在存在的情况下），因为直接修改 HTML Attribute 的性能较差。
+
+而对于 Angular Directive 的情况，一般使用场景下都会绑定到 Property 上（使用 `@Input()` 定义），但也可以设定为对 Attribute 的「绑定」（通过 `@Attribute()` 注入）。关于 Angular Directive 搭配 Attribute 的使用会在 **依赖注入** 部分覆盖。
+
+对于其它的情况，例如 Web Components 等（默认不允许，需要手动设定 schema 开关），绑定的 target 都是 HTML Attribute，通过 DOM 的 Attribute API 设置。因为映射关系未知（甚至可能不存在），显然无法转化成对 DOM Property 的操作。
+
 #### Angular 是如何确定事件绑定的事件源是 DOM 事件还是用户声明事件的？
 
 实际上 Angular 自始至终都无法得知事件绑定的事件来源，该内容会在下一节覆盖。
+
+#### 什么情况下需要定义自己的双向绑定指令？
+
+几乎任何时候都不需要，双向绑定的语义过于狭隘，有一个 Directive 支持的情况下基本足够。除非是在对运行时大小有严格要求，所以想用 NgModel 又不愿引入 FormsModule 的场景中。
+
+#### 为什么没有提到 *foo 的 DSL 语法？
+
+因为这部分内容过于复杂，需要单独开一节来讲述。
 
 ---
 
