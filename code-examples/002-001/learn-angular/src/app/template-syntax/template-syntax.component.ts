@@ -7,4 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TemplateSyntaxComponent {
   avatarId = 6059170
+  htmlStr = `
+    <ul>
+      <li>1
+      <li>2
+      <li>3
+    </ul>
+  `
 }

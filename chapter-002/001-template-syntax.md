@@ -2,21 +2,38 @@
 
 类似于其它很多 MV* 框架，Angular 也是基于模版来定义视图。Angular 的模版严格基于 HTML 语法[^1]，并且扩展了 HTML 的语义以实现更丰富的功能。
 
-显然，我们的目的并不是学习 HTML，所以仅仅需要考虑 Angular 所扩展的部分。为了方便起见，我们再次使用 Angular CLI 创建一个新的 Angular 项目[^2]：
+显然，我们的目的并不是学习 HTML，所以仅仅需要考虑 Angular 所扩展的部分及其所具备的语义。为了方便起见，我们再次使用 Angular CLI 创建一个新的 Angular 项目[^2]：
 
 ```bash
 ng new learn-angular
 ```
 
+## 插值／Interpolation
+
 在建成的项目中，存在一个名为 `AppComponent` 的默认组件，我们可以发现在它的模版（`app.component.html`）中，有一处特殊的地方：
 
 ```html
-<h1>
-  Welcome to {{title}}!!
-</h1>
+<h1>Welcome to {{title}}!!</h1>
 ```
 
-这里的 `{{title}}` 就是一个 **插值（Interpolation）** 语法。不过，确切的说，插值语法是一个可配置内容，双花括号（`{{ }}`，Double Curly Braces）仅仅是默认的选项。
+这里的 `{{title}}` 就是一个 **插值（Interpolation）** 语法。
+
+既然叫做插值，某种意义上来说也就是字符串的拼接，所以假设上面的内容作为字符串模版的话，实现类似于：
+
+```typescript
+const { title } = context
+const html = `<h1>Welcome to ${title}!!</h1>`
+```
+
+如果使用 Vritual DOM 实现，效果类似于：
+
+```typescript
+const element = createElement('h1', {}, `Welcome to ${title}!!`)
+```
+
+所以，不论如何，`Welcome to {{title}}!!` 部分都将作为一个内容整体称为 `h1` 元素的内容，而 `{{title}}` 会被某个名为 `title` 的变量所替换。
+
+不过，在 Angular 中，插值语法是一个可配置内容，双花括号（`{{ }}`，Double Curly Braces）仅仅是默认的选项。
 
 打开 `app.component.ts`，在 `AppComponent` 的元数据中增加一项 `interpolation` 属性：
 
@@ -37,9 +54,7 @@ Unexpected character "EOF" (Do you have an unescaped "{" in your template? Use "
 这个提示确实非常不友好，出现这个报错是由于除了（可选的）双花括号语法用于插值外，Angular 模版中还有单花括号（`{ }`）语法用于 ICU Format[^3]，所以在双括号不用于插值后，我们原有的绑定就变成了一个非法的 ICU Format。解决起来也非常简单，把 `app.component.html` 模版里的双花括号替换成新的插值语法即可：
 
 ```html
-<h1>
-  Welcome to %start%title%end%!!
-</h1>
+<h1>Welcome to %start%title%end%!!</h1>
 ```
 
 虽然这里的新语法非常浮夸，也完全没有任何美感，不过现在我们的应用确实能够正常使用了。不过，虽然插值语法可以自由配置，但是大多数时候完全没有必要，在本文的其它部分以及其它文章中如无特殊说明的情况下均适用默认的插值语法。
@@ -81,7 +96,9 @@ export class TemplateSyntaxComponent {
 
 上面的模版代码中，大部分内容都是当作普通的 HTML 处理的，但是当使用了插值语法时，插值符号中的部分被称为 **模版表达式（Template Expression）**，其内容将不再作为字面值，而是作为 JavaScript[^4] 表达式进行处理，整个表达式的值会被转换成字符串与插值符号以外的内容相连接，从而产生实际内容。并且插值符号本身也不会出现在实际内容中，仅仅用于指示插值的存在。模版表达式的一个特性是无副作用，即对模版表达式的执行不会改变组件的状态，这是 Angular 的要求之一。
 
-除此之外，我们也可以直接绑定表达式：
+### 属性绑定／Property Binding
+
+对于 DOM Element 而言，除了对其 HTML Attribute 进行插值外，我们也可以直接对其 Property 绑定表达式：
 
 ```html
 <img [src]="'https://avatars0.githubusercontent.com/u/' + avatarId + '?v=3&s=460'">
@@ -131,9 +148,31 @@ export class TemplateSyntaxComponent {
 
 即 **使用插值的 Attribute Value 所对应的属性绑定结果一定是字符串**。而属性绑定本身（对于 Angular Directive 而言）可以是任何类型，并且 Angular 会对属性绑定进行类型检查，确保输入的类型相符。
 
-有一点需要注意的是，属性绑定中使用的是 DOM Property 而非 HTML Attribute，对于 img 的 src 来说，由于其 HTML Attribute 和 DOM Property 的形式完全相同，所以这里没有差异。
+有一点需要注意的是，**属性绑定中使用的是 DOM Property 而非 HTML Attribute**，对于 img 的 src 来说，由于其 HTML Attribute 和 DOM Property 的形式完全相同，所以这里没有差异。
 
-除了属性绑定外，还有一个很方便的语法称为 **事件绑定（）**，使用圆括号 `()`或者 `on-` 前缀[^6]定义，我们可以为我们的图片绑定 `(click)` 事件：
+为此我们也可以使用更强大的功能，例如直接绑定 HTML 文档。例如在 `template-syntax.component.html` 中使用：
+
+```html
+<div [innerHTML]="htmlStr"></div>
+```
+
+以及在 `template-syntax.component.ts` 中定义相应的属性：
+
+```typescript
+htmlStr = `
+  <ul>
+    <li>1
+    <li>2
+    <li>3
+  </ul>
+`
+```
+
+这样[^6]就能在组件视图中添加一个列表元素。
+
+### 事件绑定／Event Binding
+
+除了属性绑定外，还有一个很方便的语法称为 **事件绑定（）**，使用圆括号 `()`或者 `on-` 前缀[^7]定义，我们可以为我们的图片绑定 `(click)` 事件：
 
 ```html
 <img [src]="'https://avatars0.githubusercontent.com/u/' + avatarId + '?v=3&s=460'" (click)="avatarId = avatarId + 1">
@@ -149,7 +188,9 @@ export class TemplateSyntaxComponent {
 
 当然，由于我无法得知之后的用户都用的什么头像，所以如果出现不适宜的内容也与本文无关哦。
 
-不论是属性绑定还是事件绑定，数据[^7]的传递都是单向的。而有时候，为了使用上的编译，我们会把两者使用语法糖来结合，而结合后的语法，就是两者的语法之和。我们可以在图片之前增加一个 `input` 元素：
+### 双向绑定／Two-way Data Binding
+
+不论是属性绑定还是事件绑定，数据[^8]的传递都是单向的。而有时候，为了使用上的编译，我们会把两者使用语法糖来结合，而结合后的语法，就是两者的语法之和。我们可以在图片之前增加一个 `input` 元素：
 
 ```html
 <input type="number" [(ngModel)]="avatarId">
@@ -284,6 +325,8 @@ Angular Compiler 本身内部存有所有 HTML Element 可能的 Attribute 列�
 
 [^5]: 在属性本身为 camelCase 的情况下，使用 kebab-case 的前缀会让风格显得很奇怪，例如 `bind-ngClass="{ 'foo': true }"`，虽然也可以使用让属性本身使用 kebab-case，但那样需要额外的配置且增加认知成本。所以一般情况下 Angular 推荐使用 camelCase 来设计属性名，并且使用 `[]` 语法来进行表达式属性绑定。
 
-[^6]: 使用 `on-` 前缀进行事件绑定时，要确保没有遗漏最后的连字符，否则将使用原生的事件绑定。
+[^6]: HTML 中 `<li>` 元素的 End Tag 是可选的，虽然一般项目中不会这么写，但还是有必要了解这么写仍然是正确的。
 
-[^7]: 对于事件绑定而言，可能不产生数据，仅仅进行事件通知，例如使用 `EventEmitter<void>` 类型。
+[^7]: 使用 `on-` 前缀进行事件绑定时，要确保没有遗漏最后的连字符，否则将使用原生的事件绑定。
+
+[^8]: 对于事件绑定而言，可能不产生数据，仅仅进行事件通知，例如使用 `EventEmitter<void>` 类型。
