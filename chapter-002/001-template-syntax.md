@@ -195,6 +195,28 @@ export class TemplateSyntaxComponent {
 
 需要注意的是，这里因为绑定的内容就是 HTML Attribute Value 的字面值，所以并没有使用方括号语法。
 
+如果使用方括号的话，就可以写成：
+
+```html
+<app-template-syntax [content]="'<ul><li>1<li>2<li>3</ul>'"></app-template-syntax>
+```
+
+因为这时的 HTML Attribute Value 是作为一个表达式，所以只有引号内的部分才是字符串。
+
+我们可以认为：
+
+```html
+<element attr="value"></element>
+```
+
+等价于：
+
+```html
+<elemtn [attr]="'value'"></element>
+```
+
+因此对于本身可接受字符串类型的输入属性，我们可以不使用方括号进行绑定，例如常见的 [`RouterLink`](https://angular.io/api/router/RouterLink) 等。
+
 ### 事件绑定／Event Binding
 
 除了属性绑定外，还有一个很方便的语法称为 **事件绑定（）**，使用圆括号 `()`或者 `on-` 前缀[^8]定义，我们可以为我们的图片绑定 `(click)` 事件：
