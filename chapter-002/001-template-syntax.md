@@ -114,8 +114,6 @@ export class TemplateSyntaxComponent {
 
 对于 **表达式属性绑定**，Angular 提供了两种方式，一种是使用方括号 `[]`，另一种是 `bind-` 前缀。通常来说，使用方括号要更加简洁美观[^5]，因此在没有特殊说明的情况下，我们的表达式属性绑定均使用方括号的语法来进行。
 
-除了 **表达式属性绑定**，我们也可以使用 **字面值属性绑定**，简单地说也就是不加方括号，看起来就类似于普通的 HTML Attribute，不过针对的不是 HTML Element，而仅限于 Angular Directive。
-
 这里也是和 AngularJS 有一定的区别的地方。在 AngularJS 中，一个属性值作为字面值还是表达式执行是由指令本身所预设的，通过 DDO 中的 `scope` 或 `bindToController` 属性中使用相应的符号[^5] 来决定。而在 Angular 中，使用了更为通用的模版设计，组件本身仅仅要求属性存在与否，而使用者可以根据需实际情况选择使用的方式。
 
 那么我们可能会好奇的是：
@@ -153,13 +151,13 @@ export class TemplateSyntaxComponent {
 为此我们也可以使用更强大的功能，例如直接绑定 HTML 文档。例如在 `template-syntax.component.html` 中使用：
 
 ```html
-<div [innerHTML]="htmlStr"></div>
+<div [innerHTML]="content"></div>
 ```
 
 以及在 `template-syntax.component.ts` 中定义相应的属性：
 
 ```typescript
-htmlStr = `
+content = `
   <ul>
     <li>1
     <li>2
@@ -170,9 +168,36 @@ htmlStr = `
 
 这样[^6]就能在组件视图中添加一个列表元素。
 
+除了 **表达式属性绑定**，我们也可以使用 **字面值属性绑定**，简单地说也就是不加方括号，看起来就类似于普通的 HTML Attribute，不过针对的不是 HTML Element，而仅限于 Angular Directive[^7]。
+
+为此我们将 `template-syntax.component.ts` 调整为：
+
+```typescript
+/* ... */
+export class TemplateSyntaxComponent {
+  @Input()
+  content: string
+  /* ... */
+}
+```
+
+其中 `Input` 是 `@angular/core` 中定义的一个 Decorator Factory，用于构造 Property Decorator。
+
+这样我们为 `TemplateSyntaxComponent` 定义了一个 **输入属性（Input Property）**，这时如果我们刷新浏览器，会发现我们并没有看到任何额外内容，因为没有任何地方真的传递了 `content` 的内容。
+
+为此我们修改 `app.component.html`，增加 `content` 这个实际上作为 Property 的 Attribute：
+
+```html
+<app-template-syntax content="<ul><li>1<li>2<li>3</ul>"></app-template-syntax>
+```
+
+接着就能在浏览器中重新观察到我们的列表了。
+
+需要注意的是，这里因为绑定的内容就是 HTML Attribute Value 的字面值，所以并没有使用方括号语法。
+
 ### 事件绑定／Event Binding
 
-除了属性绑定外，还有一个很方便的语法称为 **事件绑定（）**，使用圆括号 `()`或者 `on-` 前缀[^7]定义，我们可以为我们的图片绑定 `(click)` 事件：
+除了属性绑定外，还有一个很方便的语法称为 **事件绑定（）**，使用圆括号 `()`或者 `on-` 前缀[^8]定义，我们可以为我们的图片绑定 `(click)` 事件：
 
 ```html
 <img [src]="'https://avatars0.githubusercontent.com/u/' + avatarId + '?v=3&s=460'" (click)="avatarId = avatarId + 1">
@@ -190,7 +215,7 @@ htmlStr = `
 
 ### 双向绑定／Two-way Data Binding
 
-不论是属性绑定还是事件绑定，数据[^8]的传递都是单向的。而有时候，为了使用上的编译，我们会把两者使用语法糖来结合，而结合后的语法，就是两者的语法之和。我们可以在图片之前增加一个 `input` 元素：
+不论是属性绑定还是事件绑定，数据[^9]的传递都是单向的。而有时候，为了使用上的编译，我们会把两者使用语法糖来结合，而结合后的语法，就是两者的语法之和。我们可以在图片之前增加一个 `input` 元素：
 
 ```html
 <input type="number" [(ngModel)]="avatarId">
@@ -297,9 +322,11 @@ AngularJS 使用的是基于 DOM 的模版，也就是说，模版会先被浏�
 
 Angular Compiler 本身内部存有所有 HTML Element 可能的 Attribute 列表，对于已知的 HTML Element 的已知 Attribute Name 而言，绑定的 target 就是 HTML Attribute，虽然实现上也是通过自动翻译成对应的 DOM Property 完成的（在存在的情况下），因为直接修改 HTML Attribute 的性能较差。
 
-而对于 Angular Directive 的情况，一般使用场景下都会绑定到 Property 上（使用 `@Input()` 定义），但也可以设定为对 Attribute 的「绑定」（通过 `@Attribute()` 注入）。关于 Angular Directive 搭配 Attribute 的使用会在 **依赖注入** 部分覆盖。
+而对于 Angular Directive 的情况，默认情况下 Attribute Name 和 Property Name 完全相同，除非通过 `@Input()` 的参数定义额外的 Attribute Name，所以虽然概念上仍然是绑定到 Attribute，但看起来就像绑定到 Property 一样。除了通过 `@Input()` 修饰的属性获取之外，也可以通过 `@Attribute()` 修饰的参数注入，这时将始终使用 Attribute Name。关于 Angular Directive 搭配 Attribute 的使用会在 **依赖注入** 部分覆盖。
 
 对于其它的情况，例如 Web Components 等（默认不允许，需要手动设定 schema 开关），绑定的 target 都是 HTML Attribute，通过 DOM 的 Attribute API 设置。因为映射关系未知（甚至可能不存在），显然无法转化成对 DOM Property 的操作。
+
+综上，虽然不使用方括号始终都是绑定到 Attribute Name，但对于不同场景的实现方式略有不同。
 
 #### Angular 是如何确定事件绑定的事件源是 DOM 事件还是用户声明事件的？
 
@@ -327,6 +354,8 @@ Angular Compiler 本身内部存有所有 HTML Element 可能的 Attribute 列�
 
 [^6]: HTML 中 `<li>` 元素的 End Tag 是可选的，虽然一般项目中不会这么写，但还是有必要了解这么写仍然是正确的。
 
-[^7]: 使用 `on-` 前缀进行事件绑定时，要确保没有遗漏最后的连字符，否则将使用原生的事件绑定。
+[^7]: Angular 中，Component 视为一类特殊的 Directive。这点与 AngularJS 类似。
 
-[^8]: 对于事件绑定而言，可能不产生数据，仅仅进行事件通知，例如使用 `EventEmitter<void>` 类型。
+[^8]: 使用 `on-` 前缀进行事件绑定时，要确保没有遗漏最后的连字符，否则将使用原生的事件绑定。
+
+[^9]: 对于事件绑定而言，可能不产生数据，仅仅进行事件通知，例如使用 `EventEmitter<void>` 类型。
