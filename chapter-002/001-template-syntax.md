@@ -286,6 +286,24 @@ export class TemplateSyntaxComponent {
 
 在审查元素中我们能够看到 `<p>` 元素上的 class 为 `foo baz`。
 
+### 样式绑定／Style Binding
+
+与特性绑定类似，不过使用的前缀不再是 `attr.` 而是 `style.`，于是我们可以绑定某个特定 CSS Class 的存在与否，例如：
+
+```html
+<input type="number" [style.margin]="'5px'" [(ngModel)]="avatarId">
+```
+
+这样就能够得到 style 为 `margin: 5px;`。
+
+不过我们还可以进一步简化，直接将单位提前到 target 部分（如果有的情况下）：
+
+```html
+<input type="number" [style.margin.px]="5" [(ngModel)]="avatarId">
+```
+
+这样，我们就可以直接绑定数值而非字符串（如果本身是纯数值的情况下）。
+
 ### 事件绑定／Event Binding
 
 除了属性绑定外，还有一个很方便的语法称为 **事件绑定（）**，使用圆括号 `()`或者 `on-` 前缀[^8]定义，我们可以为我们的图片绑定 `(click)` 事件：
