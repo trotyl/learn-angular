@@ -6,7 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./template-syntax.component.css']
 })
 export class TemplateSyntaxComponent {
-  @Input()
+  @Input('foo-bar')
   content: string
 
   avatarId = 6059170

@@ -217,6 +217,25 @@ export class TemplateSyntaxComponent {
 
 因此对于本身可接受字符串类型的输入属性，我们可以不使用方括号进行绑定，例如常见的 [`RouterLink`](https://angular.io/api/router/RouterLink) 等。
 
+实际上，对于 Angular Directive 的输入属性，我们也能够自定义 Attribute Name。例如，如果将 `template-syntax.component.ts` 再次调整为：
+
+```typescript
+/* ... */
+export class TemplateSyntaxComponent {
+  @Input('foo-bar')
+  content: string
+  /* ... */
+}
+```
+
+那么 `content` 这个 Property 所对应的 Attribute 就是 `foo-bar` 了，所以我们同样需要修改 `app.component.html` 为：
+
+```html
+<app-template-syntax foo-bar="<ul><li>1<li>2<li>3</ul>"></app-template-syntax>
+```
+
+以保证名称相对应。
+
 ### 事件绑定／Event Binding
 
 除了属性绑定外，还有一个很方便的语法称为 **事件绑定（）**，使用圆括号 `()`或者 `on-` 前缀[^8]定义，我们可以为我们的图片绑定 `(click)` 事件：
