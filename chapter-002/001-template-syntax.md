@@ -250,7 +250,29 @@ export class TemplateSyntaxComponent {
 }
 ```
 
-我们可以发现应用仍然是正常工作的，不过我们这里用的是注入的 Attribute 而非绑定的 Property。另外，对于 Attribute 而言，只可能是字符串而不可能是别的类型。
+我们可以发现应用仍然是正常工作的，不过我们这里用的是注入的 Attribute 而非绑定的 Property，所以外部模版中也无法使用 `[foo-bar]="..."` 的形式。另外，对于 Attribute 而言，只可能是字符串而不可能是别的类型。
+
+### 特性绑定／Attribute Binding
+
+*翻译 Property 和 Attribute 是一件很麻烦的事情，这里参照微软（Microsoft）的规范，将 Property 译为「属性」，将 Attribute 译为「特性」。*
+
+上面我们介绍了属性（Property）的动态绑定方式，那如果我们需要动态绑定一个特性（Attribute）该怎么办呢？
+
+一种办法是直接使用插值语法，这一点在上面已经介绍过，不过很多时候并不直观（也不美观）。
+
+事实上，Angular 也允许我们直接将表达式绑定到特性上，仍然使用的方括号语法，不过需要一个额外的 `attr.` 前缀：
+
+所以，我们能够将之前的用来绑定 `img` 对应 URL 的 `[src]` 直接修改为 `[attr.src]`，之前已经提到过 `src` 的 Property Name 和 Attribute Name 相同，而且不仅如此，其接收的内容也依然相同。
+
+但如果我们妄图通过这样来的形式来绑定 `foo-bar` 的话，形如：
+
+```html
+<app-template-syntax [attr.foo-bar]="<ul><li>1<li>2<li>3</ul>"></app-template-syntax>
+```
+
+会发现这样并不能成功，这是由于依赖注入是一次性的，从而不受动态绑定内容的影响。
+
+如果我们需要获取动态绑定的 Attribute，只能够使用 `ElementRef` 来动态获取，并不方便。所以对于指令间的交互，应当尽可能使用 Property。
 
 ### 事件绑定／Event Binding
 
@@ -379,11 +401,9 @@ AngularJS 使用的是基于 DOM 的模版，也就是说，模版会先被浏�
 
 Angular Compiler 本身内部存有所有 HTML Element 可能的 Attribute 列表，对于已知的 HTML Element 的已知 Attribute Name 而言，绑定的 target 就是 HTML Attribute，虽然实现上也是通过自动翻译成对应的 DOM Property 完成的（在存在的情况下），因为直接修改 HTML Attribute 的性能较差。
 
-而对于 Angular Directive 的情况，如果使用的是输入属性，则始终绑定的是 Property。不过除了通过 `@Input()` 修饰的属性获取之外，也可以通过 `@Attribute()` 修饰的参数注入，这时外部 HTML 中使用的 Attribute 将不对应这个 Directive 到 Property 而是仅仅作为 Attribute。
+而对于 Angular Directive 的情况，则由其定义本身决定。如果使用的是输入属性，则始终绑定的是 Property。不过除了通过 `@Input()` 修饰的属性获取之外，也可以通过 `@Attribute()` 修饰的参数注入，这时外部 HTML 中使用的 Attribute 将不对应这个 Directive 到 Property 而是仅仅作为 Attribute。
 
 对于其它的情况，例如 Web Components 等（默认不允许，需要手动设定 schema 开关），绑定的 target 都是 HTML Attribute，通过 DOM 的 Attribute API 设置。因为映射关系未知（甚至可能不存在），显然无法转化成对 DOM Property 的操作。
-
-综上，虽然不使用方括号始终都是绑定到 Attribute Name，但对于不同场景的实现方式略有不同。
 
 #### Angular 是如何确定事件绑定的事件源是 DOM 事件还是用户声明事件的？
 
