@@ -274,6 +274,18 @@ export class TemplateSyntaxComponent {
 
 如果我们需要获取动态绑定的 Attribute，只能够使用 `ElementRef` 来动态获取，并不方便。所以对于指令间的交互，应当尽可能使用 Property。
 
+### 类绑定／Class Binding
+
+与特性绑定类似，不过使用的前缀不再是 `attr.` 而是 `class.`，于是我们可以绑定某个特定 CSS Class 的存在与否，例如：
+
+```html
+<p [class.foo]="true" [class.bar]="false" [class.baz]="true">
+  template-syntax works!
+</p>
+```
+
+在审查元素中我们能够看到 `<p>` 元素上的 class 为 `foo baz`。
+
 ### 事件绑定／Event Binding
 
 除了属性绑定外，还有一个很方便的语法称为 **事件绑定（）**，使用圆括号 `()`或者 `on-` 前缀[^8]定义，我们可以为我们的图片绑定 `(click)` 事件：
@@ -365,11 +377,6 @@ export class AppModule { }
 
 由于双向绑定只是一个普通的语法糖，我们随时可以新建一个支持双向绑定的指令，但是出于工程上的考虑，大部分情况下往往会让自定义指令来支持 `ngModel`，从而复用相应逻辑，这部分内容会在表单部分覆盖。
 
-上面我们已经提高过对于 **表达式属性绑定** 可以通过方括号语法（或 `bind-` 前缀）来完成，不过反过来并不成立，即使用方括号语法的绑定未必是 **表达式属性绑定**。
-
-例如，我们可以通过 `[attr.foo]` 来将数据（只能是字符串）绑定到 `foo` Attribute 而非 `foo` Property 上。以及 `[class.bar]`，用来动态调整 `bar` 这个 class 的存在与否（所以 Value 部分只能是 Boolean）。
-
-
 
 ## 可能的疑惑
 
@@ -401,7 +408,7 @@ AngularJS 使用的是基于 DOM 的模版，也就是说，模版会先被浏�
 
 Angular Compiler 本身内部存有所有 HTML Element 可能的 Attribute 列表，对于已知的 HTML Element 的已知 Attribute Name 而言，绑定的 target 就是 HTML Attribute，虽然实现上也是通过自动翻译成对应的 DOM Property 完成的（在存在的情况下），因为直接修改 HTML Attribute 的性能较差。
 
-而对于 Angular Directive 的情况，则由其定义本身决定。如果使用的是输入属性，则始终绑定的是 Property。不过除了通过 `@Input()` 修饰的属性获取之外，也可以通过 `@Attribute()` 修饰的参数注入，这时外部 HTML 中使用的 Attribute 将不对应这个 Directive 到 Property 而是仅仅作为 Attribute。
+而对于 Angular Directive 的情况，则由其定义本身决定。如果使用的是输入属性，则始终绑定的是 Property。不过除了通过 `@Input()` 修饰的属性获取之外，也可以通过 `@Attribute()` 修饰的参数注入，这时外部 HTML 中使用的 Attribute 也就是这个 Directive 的 Attribute。
 
 对于其它的情况，例如 Web Components 等（默认不允许，需要手动设定 schema 开关），绑定的 target 都是 HTML Attribute，通过 DOM 的 Attribute API 设置。因为映射关系未知（甚至可能不存在），显然无法转化成对 DOM Property 的操作。
 
