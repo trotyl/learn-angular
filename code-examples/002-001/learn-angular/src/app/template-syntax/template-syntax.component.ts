@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Attribute } from '@angular/core';
 
 @Component({
   selector: 'app-template-syntax',
@@ -6,8 +6,11 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./template-syntax.component.css']
 })
 export class TemplateSyntaxComponent {
-  @Input('foo-bar')
   content: string
+
+  constructor(@Attribute('foo-bar') fooBar: string) {
+    this.content = fooBar
+  }
 
   avatarId = 6059170
 }

@@ -217,7 +217,7 @@ export class TemplateSyntaxComponent {
 
 因此对于本身可接受字符串类型的输入属性，我们可以不使用方括号进行绑定，例如常见的 [`RouterLink`](https://angular.io/api/router/RouterLink) 等。
 
-实际上，对于 Angular Directive 的输入属性，我们也能够自定义 Attribute Name。例如，如果将 `template-syntax.component.ts` 再次调整为：
+实际上，对于 Angular Directive 的输入属性，我们也能够自定义外部使用时的 Property Name。例如，如果将 `template-syntax.component.ts` 再次调整为：
 
 ```typescript
 /* ... */
@@ -228,13 +228,29 @@ export class TemplateSyntaxComponent {
 }
 ```
 
-那么 `content` 这个 Property 所对应的 Attribute 就是 `foo-bar` 了，所以我们同样需要修改 `app.component.html` 为：
+那么 `content` 这个 Property 所对应的 HTML Attribute 就是 `foo-bar` 了，所以我们同样需要修改 `app.component.html` 为：
 
 ```html
 <app-template-syntax foo-bar="<ul><li>1<li>2<li>3</ul>"></app-template-syntax>
 ```
 
 以保证名称相对应。
+
+目前为止，在 `app.component.html` 中，使用的 `content` 和 `foo-bar` 这两个 HTML Attribute 都是作为 `TemplateSyntaxComponent` 这个 Directive 的 Property。不过，我们也可以仅仅作为 Attribute 使用，修改 `template-syntax.component.ts` 为：
+
+```typescript
+/* ... */
+export class TemplateSyntaxComponent {
+  content: string
+
+  constructor(@Attribute('foo-bar') fooBar: string) {
+    this.content = fooBar
+  }  
+  /* ... */
+}
+```
+
+我们可以发现应用仍然是正常工作的，不过我们这里用的是注入的 Attribute 而非绑定的 Property。另外，对于 Attribute 而言，只可能是字符串而不可能是别的类型。
 
 ### 事件绑定／Event Binding
 
@@ -363,7 +379,7 @@ AngularJS 使用的是基于 DOM 的模版，也就是说，模版会先被浏�
 
 Angular Compiler 本身内部存有所有 HTML Element 可能的 Attribute 列表，对于已知的 HTML Element 的已知 Attribute Name 而言，绑定的 target 就是 HTML Attribute，虽然实现上也是通过自动翻译成对应的 DOM Property 完成的（在存在的情况下），因为直接修改 HTML Attribute 的性能较差。
 
-而对于 Angular Directive 的情况，默认情况下 Attribute Name 和 Property Name 完全相同，除非通过 `@Input()` 的参数定义额外的 Attribute Name，所以虽然概念上仍然是绑定到 Attribute，但看起来就像绑定到 Property 一样。除了通过 `@Input()` 修饰的属性获取之外，也可以通过 `@Attribute()` 修饰的参数注入，这时将始终使用 Attribute Name。关于 Angular Directive 搭配 Attribute 的使用会在 **依赖注入** 部分覆盖。
+而对于 Angular Directive 的情况，如果使用的是输入属性，则始终绑定的是 Property。不过除了通过 `@Input()` 修饰的属性获取之外，也可以通过 `@Attribute()` 修饰的参数注入，这时外部 HTML 中使用的 Attribute 将不对应这个 Directive 到 Property 而是仅仅作为 Attribute。
 
 对于其它的情况，例如 Web Components 等（默认不允许，需要手动设定 schema 开关），绑定的 target 都是 HTML Attribute，通过 DOM 的 Attribute API 设置。因为映射关系未知（甚至可能不存在），显然无法转化成对 DOM Property 的操作。
 
