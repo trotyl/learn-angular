@@ -7,7 +7,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^8.0.3",
-    "anorexia": "^0.1.5"
+    "anorexia": "^0.2.0"
   },
   "dependencies": {}
 }

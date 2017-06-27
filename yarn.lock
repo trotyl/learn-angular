@@ -6,9 +6,9 @@
   version "8.0.3"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.3.tgz#fca61c26f83e5f453166114f57d53a47feb36d45"
 
-anorexia@^0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/anorexia/-/anorexia-0.1.5.tgz#8726e1acecf2e4569139fcbd0dbe222df664d5aa"
+anorexia@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/anorexia/-/anorexia-0.2.0.tgz#6539665d4f421a8e486c4cf6a8082412dec29680"
   dependencies:
     lodash "^4.17.4"
     shelljs "^0.7.8"
