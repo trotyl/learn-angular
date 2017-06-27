@@ -2,6 +2,7 @@ language: node_js
 node_js:
   - "7"
 env:
+  - PLAYBOOK=001-001/playbook.ts
   - PLAYBOOK=001-002/playbook.ts
   - PLAYBOOK=001-003/playbook.ts
 before_install:
