@@ -54,17 +54,18 @@ class Environment {
     })
     this.removeFiles(srcSet)
   }
+
+  assertFileExists(filepath: string): void {
+    const absoluteFilepath = path.join(this.workspace, filepath)
+    if (!fs.existsSync(absoluteFilepath)) {
+      throw new Error(`${filepath} not found!`)
+    }
+  }
 }
 
 function stage(name: string, task: () => void): void {
   shell.echo(name)
   task()
-}
-
-function checkFileExists(path: string): void {
-  if (!fs.existsSync(path)) {
-    throw new Error(`${path} not found!`)
-  }
 }
 
 function playbook(name: string, task: (env: Environment) => void, dirname: string): void {
@@ -103,7 +104,7 @@ playbook('learn-angular-001-002', (env) => {
   })
 
   stage('Checking webpack results', () => {
-    checkFileExists('./bundle-0.js')
+    env.assertFileExists('./bundle-0.js')
     shell.echo('Webpack bundle generated')
   })
 
@@ -112,7 +113,7 @@ playbook('learn-angular-001-002', (env) => {
   })
 
   stage('Checking tsc results for static properties', () => {
-    checkFileExists('./dist-0/app.component.js')
+    env.assertFileExists('./dist-0/app.component.js')
     shell.echo('TypeScript Compilation works')
   })
 
@@ -133,7 +134,7 @@ playbook('learn-angular-001-002', (env) => {
   })
 
   stage('Checking webpack results', () => {
-    checkFileExists('./bundle-1.js')
+    env.assertFileExists('./bundle-1.js')
     shell.echo('Webpack bundle generated')
   })
 
@@ -154,7 +155,7 @@ playbook('learn-angular-001-002', (env) => {
   })
 
   stage('Checking webpack results', () => {
-    checkFileExists('./bundle-2.js')
+    env.assertFileExists('./bundle-2.js')
     shell.echo('Webpack bundle generated')
   })
 }, __dirname)
