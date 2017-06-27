@@ -8,6 +8,7 @@
   <!--* [概念辨析 (In Progress)](chapter-002/000-conceptions.md)-->
   * [数据绑定](chapter-002/001-data-binding.md)
   * 依赖注入 (In Design)
+  * 结构型指令 (In Design)
   * 模块划分 (In Design)
 * 第三章：实现原理 (In Design)
   * Angular Compiler (In Design)
