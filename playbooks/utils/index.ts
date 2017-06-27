@@ -3,13 +3,19 @@ import * as path from 'path'
 import * as shell from 'shelljs'
 
 export class Environment {
+  prefix: string = ''
+
   constructor(private fixture: string, private workspace: string) { }
 
   assertFileExists(filepath: string): void {
-    const absoluteFilepath = path.join(this.workspace, filepath)
+    const absoluteFilepath = path.join(this.workspace, this.prefix, filepath)
     if (!fs.existsSync(absoluteFilepath)) {
       throw new Error(`${filepath} not found!`)
     }
+  }
+
+  cd(dir: string): void {
+    shell.cd(dir)
   }
 
   echo(...text: string[]): void {
@@ -30,7 +36,7 @@ export class Environment {
 
   removeFiles(list: string[]): void {
     list.forEach(filepath => {
-      const fullPath = path.join(this.workspace, filepath)
+      const fullPath = path.join(this.workspace, this.prefix, filepath)
       fs.unlinkSync(fullPath)
     })
   }
@@ -38,8 +44,8 @@ export class Environment {
   renameFiles(hash: { [src: string]: string }): void {
     const srcSet = Object.keys(hash)
     srcSet.forEach(src => {
-      const absoluteSrc = path.join(this.workspace, src)
-      const absoluteDist = path.join(this.workspace, hash[src])
+      const absoluteSrc = path.join(this.workspace, this.prefix, src)
+      const absoluteDist = path.join(this.workspace, this.prefix, hash[src])
       fs.writeFileSync(absoluteDist, fs.readFileSync(absoluteSrc, 'utf8'))
     })
     this.removeFiles(srcSet)
@@ -49,9 +55,13 @@ export class Environment {
     Object.keys(hash)
       .forEach(src => {
         const absoluteSrc = path.join(this.fixture, src)
-        const absoluteDist = path.join(this.workspace, hash[src])
+        const absoluteDist = path.join(this.workspace, this.prefix, hash[src])
         fs.writeFileSync(absoluteDist, fs.readFileSync(absoluteSrc))
       })
+  }
+
+  usePrefix(prefix: string): void {
+    this.prefix = prefix
   }
 }
 

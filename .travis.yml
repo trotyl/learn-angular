@@ -10,5 +10,4 @@ install:
   - yarn global add webpack
   - yarn install
 script:
-  - ts-node -P tsconfig.playbook.json playbooks/001-002/playbook.ts
-  - bash code-examples/001-003/ci.sh
+  - ts-node -P tsconfig.playbook.json playbooks/main.ts
