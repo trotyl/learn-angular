@@ -31,7 +31,7 @@ const html = `<h1>Welcome to ${title}!!</h1>`
 const element = createElement('h1', {}, `Welcome to ${title}!!`)
 ```
 
-所以，不论如何，`Welcome to {{title}}!!` 部分都将作为一个内容整体称为 `h1` 元素的内容，而 `{{title}}` 会被某个名为 `title` 的变量所替换。
+所以，不论如何，`Welcome to {{title}}!!` 部分都将作为一个内容整体称为 `<h1>` 元素的内容，而 `{{title}}` 会被某个名为 `title` 的变量所替换。
 
 不过，在 Angular 中，插值语法是一个可配置内容，双花括号（`{{ }}`，Double Curly Braces）仅仅是默认的选项。
 
@@ -146,7 +146,7 @@ export class DataBindingComponent {
 
 即 **使用插值的 Attribute Value 所对应的属性绑定结果一定是字符串**。而属性绑定本身（对于 Angular Directive 而言）可以是任何类型，并且 Angular 会对属性绑定进行类型检查，确保输入的类型相符。
 
-有一点需要注意的是，**属性绑定中使用的是 DOM Property 而非 HTML Attribute**，对于 `img` 的 `src` 来说，由于其 HTML Attribute 和 DOM Property 的形式完全相同，所以这里没有差异。
+有一点需要注意的是，**属性绑定中的 target 是 DOM Property 而非 HTML Attribute**，对于 `<img>` 的 `src` 来说，由于其 HTML Attribute 和 DOM Property 的形式完全相同，所以这里没有差异。
 
 为此我们也可以使用更强大的功能，例如直接绑定 HTML 文档。例如在 `data-binding.component.html` 中使用：
 
@@ -212,7 +212,7 @@ export class DataBindingComponent {
 等价于：
 
 ```html
-<elemtn [attr]="'value'"></element>
+<element [attr]="'value'"></element>
 ```
 
 因此对于本身可接受字符串类型的输入属性，我们可以不使用方括号进行绑定，例如常见的 [`RouterLink`](https://angular.io/api/router/RouterLink) 等。
@@ -262,7 +262,7 @@ export class DataBindingComponent {
 
 事实上，Angular 也允许我们直接将表达式绑定到特性上，仍然使用的方括号语法，不过需要一个额外的 `attr.` 前缀。
 
-所以，我们能够将之前的用来绑定 `img` 对应 URL 的 `[src]` 直接修改为 `[attr.src]`，之前已经提到过 `src` 的 Property Name 和 Attribute Name 相同，而且不仅如此，其接收的内容也依然相同。
+所以，我们能够将之前的用来绑定 `<img>` 对应 URL 的 `[src]` 直接修改为 `[attr.src]`，之前已经提到过 `src` 的 Property Name 和 Attribute Name 相同，而且不仅如此，其接收的内容也依然相同。
 
 但如果我们妄图通过这样来的形式来绑定 `foo-bar` 的话，形如：
 
@@ -308,7 +308,7 @@ export class DataBindingComponent {
 
 *事件监听是否算作 Binding 在不同的领域中略有差异，本文中为了简化概念将此作为一种绑定类型。*
 
-除了属性绑定外，还有一个很方便的语法称为 **事件绑定（）**，使用圆括号 `()`或者 `on-` 前缀[^8]定义，我们可以为我们的图片绑定 `(click)` 事件：
+除了属性绑定外，还有一个很方便的语法称为 **事件绑定（Event Binding）**，使用圆括号 `()`或者 `on-` 前缀[^8]定义，我们可以为我们的图片绑定 `click` 事件：
 
 ```html
 <img [src]="'https://avatars0.githubusercontent.com/u/' + avatarId + '?v=3&s=460'" (click)="avatarId = avatarId + 1">
