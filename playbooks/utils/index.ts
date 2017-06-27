@@ -1,6 +1,9 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import * as shell from 'shelljs'
+import * as _ from 'lodash'
+
+const ENCODING = 'utf8'
 
 export class Environment {
   prefix: string = ''
@@ -34,6 +37,14 @@ export class Environment {
     }
   }
 
+  modifyJson(filepath: string, partial: Object): void {
+    const json = this.getWorkspaceFile(filepath)
+    const originalObj = JSON.parse(json)
+    const modifiedObj = _.merge(originalObj, partial)
+    const modifiedJson = JSON.stringify(modifiedObj)
+    this.setWorkspaceFile(filepath, modifiedJson)
+  }
+
   removeFiles(list: string[]): void {
     list.forEach(filepath => {
       const fullPath = path.join(this.workspace, this.prefix, filepath)
@@ -46,7 +57,7 @@ export class Environment {
     srcSet.forEach(src => {
       const absoluteSrc = path.join(this.workspace, this.prefix, src)
       const absoluteDist = path.join(this.workspace, this.prefix, hash[src])
-      fs.writeFileSync(absoluteDist, fs.readFileSync(absoluteSrc, 'utf8'))
+      fs.writeFileSync(absoluteDist, fs.readFileSync(absoluteSrc, ENCODING))
     })
     this.removeFiles(srcSet)
   }
@@ -62,6 +73,16 @@ export class Environment {
 
   usePrefix(prefix: string): void {
     this.prefix = prefix
+  }
+
+  private getWorkspaceFile(filepath: string): string {
+    const absoluteFilepath = path.join(this.workspace, this.prefix, filepath)
+    return fs.readFileSync(absoluteFilepath, ENCODING)
+  }
+
+  private setWorkspaceFile(filepath: string, data: string): void {
+    const absoluteFilepath = path.join(this.workspace, this.prefix, filepath)
+    fs.writeFileSync(absoluteFilepath, data)
   }
 }
 

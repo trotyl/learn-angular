@@ -1,8 +1,8 @@
 import { playbook, stage } from '../utils'
 
 playbook('learn-angular-001-003', (env) => {
+  
   const PATH_PREFIX = 'learn-angular-ci'
-
   env.usePrefix(PATH_PREFIX)
   
   stage('Creating new Angular CLI project', () => {
@@ -36,8 +36,12 @@ playbook('learn-angular-001-003', (env) => {
   })
 
   stage('Modifying tsconfig.app.json for unified path', () => {
-    env.setUpFiles({
-      'unified/tsconfig.app.json': `src/tsconfig.app.json`
+    env.modifyJson('src/tsconfig.app.json', {
+      compilerOptions: {
+        outDir: '.',
+        target: 'es2015'
+      },
+      angularCompilerOptions: null,
     })
   })
 
