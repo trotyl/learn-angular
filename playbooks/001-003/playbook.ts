@@ -56,10 +56,12 @@ playbook('learn-angular-001-003', (env) => {
   })
 
   stage('Modifying main.js', () => {
-    env.removeFiles([`src/main.js`])
-    env.setUpFiles({
-      'unified/main.js': `src/main.js`
-    })
+    env.replaceInFile('src/main.js',
+      [/platformBrowserDynamic/g, 'platformBrowser'],
+      [/platform-browser-dynamic/g, 'platform-browser'],
+      [`import { environment } from './environments/environment'`, ''],
+      [`environment.production`, 'true']
+    )
   })
 
   stage('Bundling app using Webpack', () => {

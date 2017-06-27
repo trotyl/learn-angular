@@ -62,6 +62,15 @@ export class Environment {
     this.removeFiles(srcSet)
   }
 
+  replaceInFile(filepath: string, ...tuples: [string | RegExp, string][]): void {
+    const content = this.getWorkspaceFile(filepath)
+    let res = content
+    tuples.forEach(([from, to]) => {
+      res = res.replace(from as any, to)
+    })
+    this.setWorkspaceFile(filepath, res)
+  }
+
   setUpFiles(hash: { [src: string]: string }): void {
     Object.keys(hash)
       .forEach(src => {
