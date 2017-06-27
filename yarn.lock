@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@types/node@^8.0.3":
+  version "8.0.3"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.3.tgz#fca61c26f83e5f453166114f57d53a47feb36d45"
+
 anorexia@^0.1.5:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/anorexia/-/anorexia-0.1.5.tgz#8726e1acecf2e4569139fcbd0dbe222df664d5aa"
