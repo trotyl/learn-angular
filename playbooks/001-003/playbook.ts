@@ -21,7 +21,7 @@ playbook('learn-angular-001-003', (env) => {
 
   stage('Modifying tsconfig.app.json for separated path', () => {
     env.setUpFiles({
-      'separated/tsconfig.app.json': `src/tsconfig.app.json`
+      'tsconfig.app.json': `src/tsconfig.app.json`
     })
   })
 
