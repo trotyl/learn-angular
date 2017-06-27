@@ -12,6 +12,10 @@ export class Environment {
     }
   }
 
+  exec(command: string): void {
+    shell.exec(command)
+  }
+
   removeFiles(list: string[]): void {
     list.forEach(filepath => {
       const fullPath = path.join(this.workspace, filepath)

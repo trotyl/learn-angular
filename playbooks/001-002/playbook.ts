@@ -2,7 +2,7 @@ import * as shell from 'shelljs'
 import { playbook, stage } from '../utils'
 
 playbook('learn-angular-001-002', (env) => {
-  
+
   stage('Adding app files with static properties', () => {
     env.setUpFiles({
       'static-property/app.component.js': 'app.component.js',
@@ -12,11 +12,11 @@ playbook('learn-angular-001-002', (env) => {
   })
 
   stage('Installing dependencies by Yarn', () => {
-    shell.exec('yarn add @angular/core @angular/common @angular/compiler @angular/platform-browser @angular/platform-browser-dynamic rxjs')
+    env.exec('yarn add @angular/core @angular/common @angular/compiler @angular/platform-browser @angular/platform-browser-dynamic rxjs')
   })
 
   stage('Bundling app using Webpack', () => {
-    shell.exec('webpack main.js bundle-0.js')
+    env.exec('webpack main.js bundle-0.js')
   })
 
   stage('Checking webpack results', () => {
@@ -25,7 +25,7 @@ playbook('learn-angular-001-002', (env) => {
   })
 
   stage('Transpile JavaScripts using tsc for static properties', () => {
-    shell.exec('tsc --allowJs --outDir dist-0 --target es2015 main.js')
+    env.exec('tsc --allowJs --outDir dist-0 --target es2015 main.js')
   })
 
   stage('Checking tsc results for static properties', () => {
@@ -42,11 +42,11 @@ playbook('learn-angular-001-002', (env) => {
   })
 
   stage('Transpile JavaScripts using tsc for Decorators', () => {
-    shell.exec('tsc --allowJs --outDir dist-1 --target es2015 --experimentalDecorators main.js')
+    env.exec('tsc --allowJs --outDir dist-1 --target es2015 --experimentalDecorators main.js')
   })
 
   stage('Bundling app using Webpack', () => {
-    shell.exec('webpack dist-1/main.js bundle-1.js')
+    env.exec('webpack dist-1/main.js bundle-1.js')
   })
 
   stage('Checking webpack results', () => {
@@ -63,11 +63,11 @@ playbook('learn-angular-001-002', (env) => {
   })
 
   stage('Transpile TypeScripts using tsc', () => {
-    shell.exec('tsc --target es2015 --experimentalDecorators --moduleResolution node main.ts')
+    env.exec('tsc --target es2015 --experimentalDecorators --moduleResolution node main.ts')
   })
 
   stage('Bundling app using Webpack', () => {
-    shell.exec('webpack main.js bundle-2.js')
+    env.exec('webpack main.js bundle-2.js')
   })
 
   stage('Checking webpack results', () => {
