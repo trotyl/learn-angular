@@ -2,6 +2,7 @@ echo "Starting check for 001-003"
 cd code-examples/001-003
 
 echo "Creating new Angular CLI project"
+cd /tmp
 rm -rf learn-angular-ci
 ng new --skip-install learn-angular-ci
 cd learn-angular-ci
