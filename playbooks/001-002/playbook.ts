@@ -1,4 +1,3 @@
-import * as shell from 'shelljs'
 import { playbook, stage } from '../utils'
 
 playbook('learn-angular-001-002', (env) => {
