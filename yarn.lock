@@ -2,19 +2,13 @@
 # yarn lockfile v1
 
 
-"@types/lodash@^4.14.66":
-  version "4.14.66"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.66.tgz#3dbb83477becf130611f8fac82a8fdb199805981"
-
-"@types/node@*":
-  version "8.0.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.3.tgz#fca61c26f83e5f453166114f57d53a47feb36d45"
-
-"@types/shelljs@^0.7.2":
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/@types/shelljs/-/shelljs-0.7.2.tgz#c2bdb3fe80cd7a3da08750ca898ae44c589671f3"
+anorexia@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/anorexia/-/anorexia-0.1.5.tgz#8726e1acecf2e4569139fcbd0dbe222df664d5aa"
   dependencies:
-    "@types/node" "*"
+    lodash "^4.17.4"
+    shelljs "^0.7.8"
+    tslib "^1.7.1"
 
 balanced-match@^1.0.0:
   version "1.0.0"
@@ -104,6 +98,10 @@ shelljs@^0.7.8:
     glob "^7.0.0"
     interpret "^1.0.0"
     rechoir "^0.6.2"
+
+tslib@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.7.1.tgz#bc8004164691923a79fe8378bbeb3da2017538ec"
 
 wrappy@1:
   version "1.0.2"

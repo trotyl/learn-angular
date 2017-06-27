@@ -1,4 +1,4 @@
-import { playbook, stage } from '../utils'
+import { playbook, stage } from 'anorexia'
 
 playbook('learn-angular-001-002', (env) => {
 
@@ -40,7 +40,7 @@ playbook('learn-angular-001-002', (env) => {
   })
 
   stage('Modifying source files with Decorator', () => {
-    env.removeFiles(['app.component.js', 'app.module.js'])
+    env.removeFiles('app.component.js', 'app.module.js')
     env.setUpFiles({
       'decorators/app.component.js': 'app.component.js',
       'decorators/app.module.js': 'app.module.js',

@@ -1,8 +1,11 @@
 {
+  "name": "learn-angular",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "https://github.com/trotyl/learn-angular.git",
+  "author": "Trotyl <trotyl@qq.com>",
+  "license": "MIT",
   "devDependencies": {
-    "@types/lodash": "^4.14.66",
-    "@types/shelljs": "^0.7.2",
-    "lodash": "^4.17.4",
-    "shelljs": "^0.7.8"
+    "anorexia": "^0.1.5"
   }
 }

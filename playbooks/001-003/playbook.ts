@@ -1,4 +1,4 @@
-import { playbook, stage } from '../utils'
+import { playbook, stage } from 'anorexia'
 
 playbook('learn-angular-001-003', (env) => {
   
