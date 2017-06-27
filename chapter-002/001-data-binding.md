@@ -405,6 +405,17 @@ export class AppModule { }
 
 由于双向绑定只是一个普通的语法糖，我们随时可以新建一个支持双向绑定的指令，但是出于工程上的考虑，大部分情况下往往会让自定义指令来支持 `ngModel`，从而复用相应逻辑，这部分内容会在表单部分覆盖。
 
+事件绑定的模版语句中，永远会有一个 `$event` 变量可用。对于 DOM 事件而言，这就是事件本身；对于 `@Output()` 定义的事件绑定，则为相应 `EventEmitter` 或 `Subject` 的泛型类型的实例。
+
+因此，我们所使用的 `[(ngModel)]` 就被处理成：
+
+```html
+<input type="number" [ngModel]="avatarId" (ngModelChange)="avatarId = $event">
+```
+
+所以我们也可以仅仅使用 `[ngModel]` 而不是用 `(ngModelChange)` 来实现单向的属性绑定。
+
+`ngModelChange` 是由 [`NgModel`](https://angular.io/api/forms/NgModel) 这个 Directive 所定义的输出属性，对应的 `$event` 就是更新后的值[^10]。
 
 ## 可能的疑惑
 
@@ -471,3 +482,5 @@ Angular Compiler 本身内部存有所有 HTML Element 可能的 Attribute 列�
 [^8]: 使用 `on-` 前缀进行事件绑定时，要确保没有遗漏最后的连字符，否则将使用原生的事件绑定。
 
 [^9]: 对于事件绑定而言，可能不产生数据，仅仅进行事件通知，例如使用 `EventEmitter<void>` 类型。
+
+[^10]: 实际上，NgModel 本身并不决定绑定的目标以及更新的方式，而是委托给 [`ControlValueAccessor`](https://angular.io/api/forms/ControlValueAccessor) 来处理。
