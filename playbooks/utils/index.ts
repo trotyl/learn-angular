@@ -2,22 +2,6 @@ import * as fs from 'fs'
 import * as path from 'path'
 import * as shell from 'shelljs'
 
-function walk(dir: string): string[] {
-  const handles = fs.readdirSync(dir)
-
-  return handles.map(handle => {
-    const filepath = path.join(dir, handle)
-    const stat = fs.lstatSync(filepath)
-    if (stat.isFile()) {
-      return [filepath]
-    } else if (stat.isDirectory()) {
-      return walk(filepath)
-    } else {
-      return [] as string[]
-    }
-  }).reduce((allPaths, currentPaths) => [...allPaths, ...currentPaths], [])
-}
-
 export class Environment {
   constructor(private fixture: string, private workspace: string) { }
 
