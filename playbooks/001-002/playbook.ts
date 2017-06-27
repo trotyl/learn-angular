@@ -21,7 +21,7 @@ playbook('learn-angular-001-002', (env) => {
 
   stage('Checking webpack results', () => {
     env.assertFileExists('./bundle-0.js')
-    shell.echo('Webpack bundle generated')
+    env.echo('Webpack bundle generated')
   })
 
   stage('Transpile JavaScripts using tsc for static properties', () => {
@@ -30,7 +30,7 @@ playbook('learn-angular-001-002', (env) => {
 
   stage('Checking tsc results for static properties', () => {
     env.assertFileExists('./dist-0/app.component.js')
-    shell.echo('TypeScript Compilation works')
+    env.echo('TypeScript Compilation works')
   })
 
   stage('Modifying source files with Decorator', () => {
@@ -51,7 +51,7 @@ playbook('learn-angular-001-002', (env) => {
 
   stage('Checking webpack results', () => {
     env.assertFileExists('./bundle-1.js')
-    shell.echo('Webpack bundle generated')
+    env.echo('Webpack bundle generated')
   })
 
   stage('Upgrading source files to TypeScript', () => {
@@ -72,6 +72,6 @@ playbook('learn-angular-001-002', (env) => {
 
   stage('Checking webpack results', () => {
     env.assertFileExists('./bundle-2.js')
-    shell.echo('Webpack bundle generated')
+    env.echo('Webpack bundle generated')
   })
 }, __dirname)
