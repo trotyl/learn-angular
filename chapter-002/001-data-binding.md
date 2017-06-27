@@ -181,7 +181,7 @@ export class DataBindingComponent {
 }
 ```
 
-其中 `Input` 是 `@angular/core` 中定义的一个 Decorator Factory，其构造的 Property Decorator 用于标示输入属性的存在（及其属性名的配置）。
+其中 `Input` 是 `@angular/core` 中定义的一个 Decorator Factory，其构造的 Property Decorator 用于标示输入属性的存在（及其属性名的配置）。如无特殊说明，下文中的 Decorator Factory 均从 `@angular/core` 引入。
 
 这样我们为 `DataBindingComponent` 定义了一个 **输入属性（Input Property）**，这时如果我们刷新浏览器，会发现我们并没有看到任何额外内容，因为没有任何地方真的传递了 `content` 的内容。
 
@@ -306,6 +306,8 @@ export class DataBindingComponent {
 
 ### 事件绑定／Event Binding
 
+*事件监听是否算作 Binding 在不同的领域中略有差异，本文中为了简化概念将此作为一种绑定类型。*
+
 除了属性绑定外，还有一个很方便的语法称为 **事件绑定（）**，使用圆括号 `()`或者 `on-` 前缀[^8]定义，我们可以为我们的图片绑定 `(click)` 事件：
 
 ```html
@@ -416,6 +418,45 @@ export class AppModule { }
 所以我们也可以仅仅使用 `[ngModel]` 而不是用 `(ngModelChange)` 来实现单向的属性绑定。
 
 `ngModelChange` 是由 [`NgModel`](https://angular.io/api/forms/NgModel) 这个 Directive 所定义的输出属性，对应的 `$event` 就是更新后的值[^10]。
+
+### 宿主绑定／Host Binding
+
+这里的类别划分方式与之前的内容并不相同，准确地说，这里的 **宿主绑定（Host Binding）** 与之前所有绑定类型的总和相并列，因为之前的绑定都可以被列入 **模版绑定（Template Binding）**。也就是说，这里的绑定方式不借助于模版。
+
+在 `data-binding.component.ts` 中增加一个 `foo` 属性：
+
+```typescript
+/* ... */
+export class DataBindingComponent {
+  /* ... */
+  @HostBinding('class.foo')
+  foo = true
+}
+```
+
+接着在审查元素中，就能看到在 `<app-data-binding>` 元素上增加了 `foo` 这个 CSS Class。不过，这里并不是通过外部组件绑定的，而是通过该组件来绑定到自身的宿主元素上。
+
+能使用的绑定类型也与之前的方式相似：
+
++ 不使用前缀时绑定到 DOM Property；
++ 使用 `attr.` 前缀时绑定到 HTML Attribute；
++ 使用 `class.` 前缀时绑定到 CSS Class；
++ 使用 `style.` 前缀时绑定到 Inline CSS Style。
+
+除了绑定值外，当然也能够绑定事件，通过 `@HostListener()` 来实现。再次增加一个方法：
+
+```typescript
+/* ... */
+export class DataBindingComponent {
+  /* ... */
+  @HostListener('mouseover')
+  onMouseOver(): void {
+    this.avatarId = Math.floor(Math.random() * 1e6)
+  }
+}
+```
+
+这样就能监听宿主元素的 `mouseover` 事件了。类似的，我们也可以使用 `@HostListener()` 来监听全局事件。
 
 ## 可能的疑惑
 
