@@ -12,12 +12,20 @@ export class Environment {
     }
   }
 
+  echo(...text: string[]): void {
+    shell.echo(...text)
+  }
+
   exec(command: string): void {
     shell.exec(command)
   }
 
-  echo(...text: string[]): void {
-    shell.echo(...text)
+  install(...deps: string[]): void {
+    if (deps.length > 0) {
+      shell.exec(`yarn add ${deps.join(' ')}`)
+    } else {
+      shell.exec('yarn install')
+    }
   }
 
   removeFiles(list: string[]): void {

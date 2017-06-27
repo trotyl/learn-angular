@@ -11,7 +11,14 @@ playbook('learn-angular-001-002', (env) => {
   })
 
   stage('Installing dependencies by Yarn', () => {
-    env.exec('yarn add @angular/core @angular/common @angular/compiler @angular/platform-browser @angular/platform-browser-dynamic rxjs')
+    env.install(
+      '@angular/core',
+      '@angular/common',
+      '@angular/compiler',
+      '@angular/platform-browser',
+      '@angular/platform-browser-dynamic',
+      'rxjs',
+    )
   })
 
   stage('Bundling app using Webpack', () => {
