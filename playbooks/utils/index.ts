@@ -30,12 +30,11 @@ export class Environment {
       .forEach(({ key, value }) => this.map.set(key, value))
   }
 
-  setUpFiles(hash: { [fixture: string]: string }): void {
-    Object.keys(hash)
-      .forEach(fixture => {
-        const outFile = path.join(this.workspace, hash[fixture])
-        fs.writeFileSync(outFile, this.map.get(fixture))
-      })
+  assertFileExists(filepath: string): void {
+    const absoluteFilepath = path.join(this.workspace, filepath)
+    if (!fs.existsSync(absoluteFilepath)) {
+      throw new Error(`${filepath} not found!`)
+    }
   }
 
   removeFiles(list: string[]): void {
@@ -55,11 +54,12 @@ export class Environment {
     this.removeFiles(srcSet)
   }
 
-  assertFileExists(filepath: string): void {
-    const absoluteFilepath = path.join(this.workspace, filepath)
-    if (!fs.existsSync(absoluteFilepath)) {
-      throw new Error(`${filepath} not found!`)
-    }
+  setUpFiles(hash: { [fixture: string]: string }): void {
+    Object.keys(hash)
+      .forEach(fixture => {
+        const outFile = path.join(this.workspace, hash[fixture])
+        fs.writeFileSync(outFile, this.map.get(fixture))
+      })
   }
 }
 
