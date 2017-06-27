@@ -1,5 +1,50 @@
 import * as fs from 'fs'
+import * as path from 'path'
 import * as shell from 'shelljs'
+
+function walk(dir: string): string[] {
+  const handles = fs.readdirSync(dir)
+
+  return handles.map(handle => {
+    const filepath = path.join(dir, handle)
+    const stat = fs.lstatSync(filepath)
+    if (stat.isFile()) {
+      return [filepath]
+    } else if (stat.isDirectory()) {
+      return walk(filepath)
+    } else {
+      return [] as string[]
+    }
+  }).reduce((allPaths, currentPaths) => [...allPaths, ...currentPaths], [])
+}
+
+class Environment {
+  private map = new Map<string, string>()
+
+  constructor(private source: string, private workspace: string) {
+
+    const fixturesPath = path.join(source, 'fixtures')
+    walk(fixturesPath)
+      .map(filename => ({ filename, content: fs.readFileSync(filename, 'utf8') }))
+      .map(({ filename, content: value }) => ({ key: path.relative(fixturesPath, filename), value }))
+      .forEach(({ key, value }) => this.map.set(key, value))
+  }
+
+  setUpFiles(hash: { [fixture: string]: string }) {
+    Object.keys(hash)
+      .forEach(fixture => {
+        const outFile = path.join(this.workspace, hash[fixture])
+        fs.writeFileSync(outFile, this.map.get(fixture))
+      })
+  }
+
+  removeFiles(list: string[]) {
+    list.forEach(filepath => {
+      const fullPath = path.join(this.workspace, filepath)
+      fs.unlinkSync(fullPath)
+    })
+  }
+}
 
 function stage(name: string, task: () => void): void {
   shell.echo(name)
@@ -12,72 +57,31 @@ function checkFileExists(path: string): void {
   }
 }
 
-function playbook(name: string, path: string, task: () => void): void {
-  const pwd = shell.pwd()
-
+function playbook(name: string, task: (env: Environment) => void, dirname: string): void {
   shell.echo(`Starting playbook for ${name}`)
-  shell.cd(path)
 
-  task()
-  shell.echo('Playbook passed')
+  const WORKSPACE_ROOT = '/tmp/workspaces'
+  const WORKSPACE_DIR = path.join(WORKSPACE_ROOT, name)
 
-  shell.cd(pwd)
-}
-
-function initWorkspace(name: string): void {
   shell.echo(`Creating workspace ${name}`)
-  shell.rm('-rf', name)
-  shell.mkdir(name)
-  shell.cd(name)
+  shell.mkdir('-p', WORKSPACE_DIR)
+  shell.rm('-rf', WORKSPACE_DIR)
+  shell.mkdir(WORKSPACE_DIR)
+  shell.cd(WORKSPACE_DIR)
+
+  task(new Environment(dirname, WORKSPACE_DIR))
+  shell.echo('Playbook passed')
 }
 
-playbook('001-002', 'code-examples/001-002', () => {
-  initWorkspace('learn-angular-ci')
+
+playbook('learn-angular-001-002', (env) => {
 
   stage('Adding app files with static properties', () => {
-    const appComponentJs = `\
-import { Component } from '@angular/core'
-
-export class AppComponent { }
-
-AppComponent.annotations = [
-  new Component({
-    selector: 'main',
-    template: '<h1>Hello Angular</h1>',
-  })
-]
-`
-    const appModuleJs = `\
-import { NgModule } from '@angular/core'
-import { BrowserModule } from '@angular/platform-browser'
-import { AppComponent } from './app.component'
-
-export class AppModule { }
-
-AppModule.annotations = [
-  new NgModule({
-    imports: [
-      BrowserModule,
-    ],
-    declarations: [
-      AppComponent,
-    ],
-    bootstrap: [
-      AppComponent,
-    ],
-  })
-]
-`
-    const mainJs = `\
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'
-import { AppModule } from './app.module'
-
-platformBrowserDynamic().bootstrapModule(AppModule)
-`
-
-    fs.writeFileSync('app.component.js', appComponentJs)
-    fs.writeFileSync('app.module.js', appModuleJs)
-    fs.writeFileSync('main.js', mainJs)
+    env.setUpFiles({
+      'static-property/app.component.js': 'app.component.js',
+      'static-property/app.module.js': 'app.module.js',
+      'static-property/main.js': 'main.js',
+    })
   })
 
   stage('Installing dependencies by Yarn', () => {
@@ -103,35 +107,11 @@ platformBrowserDynamic().bootstrapModule(AppModule)
   })
 
   stage('Modifying source files with Decorator', () => {
-    const appComponentJs = `\
-import { Component } from '@angular/core'
-
-@Component({
-  selector: 'main',
-  template: '<h1>Hello Angular</h1>',
-})
-export class AppComponent { }
-`
-    const appModuleJs = `\
-import { NgModule } from '@angular/core'
-import { BrowserModule } from '@angular/platform-browser'
-import { AppComponent } from './app.component'
-
-@NgModule({
-  imports: [
-    BrowserModule,
-  ],
-  declarations: [
-    AppComponent,
-  ],
-  bootstrap: [
-    AppComponent,
-  ],
-})
-export class AppModule { }
-`
-    fs.writeFileSync('app.component.js', appComponentJs)
-    fs.writeFileSync('app.module.js', appModuleJs)
+    env.removeFiles(['app.component.js', 'app.module.js'])
+    env.setUpFiles({
+      'decorators/app.component.js': 'app.component.js',
+      'decorators/app.module.js': 'app.module.js',
+    })
   })
 
   stage('Transpile JavaScripts using tsc for Decorators', () => {
@@ -165,4 +145,4 @@ export class AppModule { }
     checkFileExists('./bundle-2.js')
     shell.echo('Webpack bundle generated')
   })
-})
+}, __dirname)
