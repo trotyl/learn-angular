@@ -30,7 +30,7 @@ class Environment {
       .forEach(({ key, value }) => this.map.set(key, value))
   }
 
-  setUpFiles(hash: { [fixture: string]: string }) {
+  setUpFiles(hash: { [fixture: string]: string }): void {
     Object.keys(hash)
       .forEach(fixture => {
         const outFile = path.join(this.workspace, hash[fixture])
@@ -38,11 +38,21 @@ class Environment {
       })
   }
 
-  removeFiles(list: string[]) {
+  removeFiles(list: string[]): void {
     list.forEach(filepath => {
       const fullPath = path.join(this.workspace, filepath)
       fs.unlinkSync(fullPath)
     })
+  }
+
+  renameFiles(hash: { [src: string]: string }): void {
+    const srcSet = Object.keys(hash)
+    srcSet.forEach(src => {
+      const absoluteSrc = path.join(this.workspace, src)
+      const absoluteDist = path.join(this.workspace, hash[src])
+      fs.writeFileSync(absoluteDist, fs.readFileSync(absoluteSrc, 'utf8'))
+    })
+    this.removeFiles(srcSet)
   }
 }
 
@@ -128,9 +138,11 @@ playbook('learn-angular-001-002', (env) => {
   })
 
   stage('Upgrading source files to TypeScript', () => {
-    shell.mv('app.component.js', 'app.component.ts')
-    shell.mv('app.module.js', 'app.module.ts')
-    shell.mv('main.js', 'main.ts')
+    env.renameFiles({
+      'app.component.js': 'app.component.ts',
+      'app.module.js': 'app.module.ts',
+      'main.js': 'main.ts',
+    })
   })
 
   stage('Transpile TypeScripts using tsc', () => {
