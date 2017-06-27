@@ -8,6 +8,7 @@ install:
   - yarn global add ts-node
   - yarn global add typescript
   - yarn global add webpack
+  - yarn install
 script:
   - ts-node code-examples/001-002/playbook.ts
   - bash code-examples/001-003/ci.sh
