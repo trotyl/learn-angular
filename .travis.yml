@@ -1,6 +1,9 @@
 language: node_js
 node_js:
   - "7"
+env:
+  - PLAYBOOK=001-002/playbook.ts
+  - PLAYBOOK=001-003/playbook.ts
 before_install:
   - npm install --global yarn
 install:
@@ -10,4 +13,4 @@ install:
   - yarn global add webpack
   - yarn install
 script:
-  - ts-node -P tsconfig.playbook.json playbooks/main.ts
+  - "ts-node -P tsconfig.playbook.json playbooks/$PLAYBOOK"
