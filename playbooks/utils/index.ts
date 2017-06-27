@@ -19,16 +19,7 @@ function walk(dir: string): string[] {
 }
 
 export class Environment {
-  private map = new Map<string, string>()
-
-  constructor(private source: string, private workspace: string) {
-
-    const fixturesPath = path.join(source, 'fixtures')
-    walk(fixturesPath)
-      .map(filename => ({ filename, content: fs.readFileSync(filename, 'utf8') }))
-      .map(({ filename, content: value }) => ({ key: path.relative(fixturesPath, filename), value }))
-      .forEach(({ key, value }) => this.map.set(key, value))
-  }
+  constructor(private fixture: string, private workspace: string) { }
 
   assertFileExists(filepath: string): void {
     const absoluteFilepath = path.join(this.workspace, filepath)
@@ -54,11 +45,12 @@ export class Environment {
     this.removeFiles(srcSet)
   }
 
-  setUpFiles(hash: { [fixture: string]: string }): void {
+  setUpFiles(hash: { [src: string]: string }): void {
     Object.keys(hash)
-      .forEach(fixture => {
-        const outFile = path.join(this.workspace, hash[fixture])
-        fs.writeFileSync(outFile, this.map.get(fixture))
+      .forEach(src => {
+        const absoluteSrc = path.join(this.fixture, src)
+        const absoluteDist = path.join(this.workspace, hash[src])
+        fs.writeFileSync(absoluteDist, fs.readFileSync(absoluteSrc))
       })
   }
 }
@@ -80,6 +72,8 @@ export function playbook(name: string, task: (env: Environment) => void, dirname
   shell.mkdir(WORKSPACE_DIR)
   shell.cd(WORKSPACE_DIR)
 
-  task(new Environment(dirname, WORKSPACE_DIR))
+  const FIXTURE_DIR= path.join(dirname, 'fixtures')
+
+  task(new Environment(FIXTURE_DIR, WORKSPACE_DIR))
   shell.echo('Playbook passed')
 }
