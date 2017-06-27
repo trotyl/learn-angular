@@ -415,7 +415,7 @@ export class AppModule { }
 <input type="number" [ngModel]="avatarId" (ngModelChange)="avatarId = $event">
 ```
 
-所以我们也可以仅仅使用 `[ngModel]` 而不是用 `(ngModelChange)` 来实现单向的属性绑定。
+所以我们也可以仅仅使用 `[ngModel]` 而不带 `(ngModelChange)` 来实现单向的属性绑定。
 
 `ngModelChange` 是由 [`NgModel`](https://angular.io/api/forms/NgModel) 这个 Directive 所定义的输出属性，对应的 `$event` 就是更新后的值[^10]。
 
