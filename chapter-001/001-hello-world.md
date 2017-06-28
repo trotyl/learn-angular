@@ -65,7 +65,7 @@ Uncaught ReferenceError: ng is not defined
 <!DOCTYPE html>
 <title>Hello Angular</title>
 <main>TODO</main>
-<script src="https://unpkg.com/@angular/core@4.1.3/bundles/core.umd.js"></script>
+<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
 <script>
 // Original scripts here ...
 </script>
@@ -76,7 +76,6 @@ Uncaught ReferenceError: ng is not defined
 + `https` 是一个 URI Scheme，废话不多说；
 + `unpkg.com` 是一个提供在线 NPM 包访问的 CDN 站点，也就是说，只要是 NPM public registry 里面的内容，都能通过该站点在线访问；
 + `@angular/core` 是 NPM 里一个 Scoped Package[^7]，Angular 采用模块化的方式发布，这里是 Angular 的核心运行时（平台无关）部分对应的 Package；
-+ `4.1.3` 是本文写作时 Angular 的最新稳定版本；
 + `bundles` 是发布内容中 UMD 文件所在的文件夹，用于适配不同的模块系统（以及不使用模块系统）的情况；
 + `core.umd.js` 是该模块中唯一的 umd 文件。
 
@@ -103,8 +102,8 @@ global.Rx.Observable
 <!DOCTYPE html>
 <title>Hello Angular</title>
 <main>TODO</main>
-<script src="https://unpkg.com/rxjs@5.4.0/bundles/Rx.js"></script>
-<script src="https://unpkg.com/@angular/core@4.1.3/bundles/core.umd.js"></script>
+<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
 <script>
 // Original scripts here ...
 </script>
@@ -127,8 +126,8 @@ Uncaught reflect-metadata shim is required when using class decorators
 <script>
 Reflect.getOwnMetadata = () => {}
 </script>
-<script src="https://unpkg.com/rxjs@5.4.0/bundles/Rx.js"></script>
-<script src="https://unpkg.com/@angular/core@4.1.3/bundles/core.umd.js"></script>
+<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
 <script>
 // Original scripts here ...
 </script>
@@ -201,9 +200,9 @@ Uncaught TypeError: Cannot read property 'BrowserModule' of undefined
 <script>
 Reflect.getOwnMetadata = () => {}
 </script>
-<script src="https://unpkg.com/rxjs@5.4.0/bundles/Rx.js"></script>
-<script src="https://unpkg.com/@angular/core@4.1.3/bundles/core.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser@4.1.3/bundles/platform-browser.umd.js"></script>
+<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
+<script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
 <script>
 // Original scripts here ...
 </script>
@@ -244,10 +243,10 @@ _angular_common.PlatformLocation
 <script>
 Reflect.getOwnMetadata = () => {}
 </script>
-<script src="https://unpkg.com/rxjs@5.4.0/bundles/Rx.js"></script>
-<script src="https://unpkg.com/@angular/core@4.1.3/bundles/core.umd.js"></script>
-<script src="https://unpkg.com/@angular/common@4.1.3/bundles/common.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser@4.1.3/bundles/platform-browser.umd.js"></script>
+<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
+<script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
+<script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
 <script>
 // Original scripts here ...
 </script>
@@ -316,11 +315,11 @@ Uncaught Error: No provider for CompilerFactory!
 <script>
 Reflect.getOwnMetadata = () => {}
 </script>
-<script src="https://unpkg.com/rxjs@5.4.0/bundles/Rx.js"></script>
-<script src="https://unpkg.com/@angular/core@4.1.3/bundles/core.umd.js"></script>
-<script src="https://unpkg.com/@angular/common@4.1.3/bundles/common.umd.js"></script>
-<script src="https://unpkg.com/@angular/compiler@4.1.3/bundles/compiler.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser@4.1.3/bundles/platform-browser.umd.js"></script>
+<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
+<script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
+<script src="https://unpkg.com/@angular/compiler/bundles/compiler.umd.js"></script>
+<script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
 <script>
 // Original scripts here ...
 </script>
@@ -335,12 +334,12 @@ Reflect.getOwnMetadata = () => {}
 <script>
 Reflect.getOwnMetadata = () => {}
 </script>
-<script src="https://unpkg.com/rxjs@5.4.0/bundles/Rx.js"></script>
-<script src="https://unpkg.com/@angular/core@4.1.3/bundles/core.umd.js"></script>
-<script src="https://unpkg.com/@angular/common@4.1.3/bundles/common.umd.js"></script>
-<script src="https://unpkg.com/@angular/compiler@4.1.3/bundles/compiler.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser@4.1.3/bundles/platform-browser.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser-dynamic@4.1.3/bundles/platform-browser-dynamic.umd.js"></script>
+<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
+<script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
+<script src="https://unpkg.com/@angular/compiler/bundles/compiler.umd.js"></script>
+<script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
+<script src="https://unpkg.com/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js"></script>
 <script>
 // Original scripts here ...
 </script>
@@ -379,13 +378,13 @@ Error: Angular requires Zone.js prolyfill[^11].
 <script>
 Reflect.getOwnMetadata = () => {}
 </script>
-<script src="https://unpkg.com/zone.js@0.8.10/dist/zone.js"></script>
-<script src="https://unpkg.com/rxjs@5.4.0/bundles/Rx.js"></script>
-<script src="https://unpkg.com/@angular/core@4.1.3/bundles/core.umd.js"></script>
-<script src="https://unpkg.com/@angular/common@4.1.3/bundles/common.umd.js"></script>
-<script src="https://unpkg.com/@angular/compiler@4.1.3/bundles/compiler.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser@4.1.3/bundles/platform-browser.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser-dynamic@4.1.3/bundles/platform-browser-dynamic.umd.js"></script>
+<script src="https://unpkg.com/zone.js/dist/zone.js"></script>
+<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
+<script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
+<script src="https://unpkg.com/@angular/compiler/bundles/compiler.umd.js"></script>
+<script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
+<script src="https://unpkg.com/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js"></script>
 <script>
 // Original scripts here ...
 </script>
@@ -406,13 +405,13 @@ Hello Angular
 <script>
 Reflect.getOwnMetadata = () => {}
 </script>
-<script src="https://unpkg.com/zone.js@0.8.10/dist/zone.js"></script>
-<script src="https://unpkg.com/rxjs@5.4.0/bundles/Rx.js"></script>
-<script src="https://unpkg.com/@angular/core@4.1.3/bundles/core.umd.js"></script>
-<script src="https://unpkg.com/@angular/common@4.1.3/bundles/common.umd.js"></script>
-<script src="https://unpkg.com/@angular/compiler@4.1.3/bundles/compiler.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser@4.1.3/bundles/platform-browser.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser-dynamic@4.1.3/bundles/platform-browser-dynamic.umd.js"></script>
+<script src="https://unpkg.com/zone.js/dist/zone.js"></script>
+<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
+<script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
+<script src="https://unpkg.com/@angular/compiler/bundles/compiler.umd.js"></script>
+<script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
+<script src="https://unpkg.com/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js"></script>
 <script>
 class AppComponent { }
 
