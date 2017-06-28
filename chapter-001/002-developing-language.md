@@ -512,7 +512,7 @@ Uncaught TypeError: Reflect.defineMetadata is not a function
 <!DOCTYPE html>
 <title>Hello Angular</title>
 <main>TODO</main>
-<script src="https://unpkg.com/core-js@2.4.1/client/shim.js"></script>
+<script src="https://unpkg.com/core-js/client/shim.js"></script>
 <script src="https://unpkg.com/zone.js/dist/zone.js"></script>
 <script src="./bundle.js"></script>
 ```
