@@ -1,4 +1,5 @@
 import { playbook, stage } from 'anorexia'
+import { assert } from 'chai'
 
 playbook('learn-angular-001-001', async (env) => {
 
@@ -52,7 +53,7 @@ playbook('learn-angular-001-001', async (env) => {
 
   await stage('Check render result', async () => {
     const html = await env.renderToHtml()
-    env.assertPatternInText(html, /Hello Angular/)
+    assert.match(html, /Hello Angular/)
     env.echo('App works')
   })
 }, __dirname)

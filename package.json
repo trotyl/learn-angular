@@ -6,8 +6,10 @@
   "author": "Trotyl <trotyl@qq.com>",
   "license": "MIT",
   "devDependencies": {
+    "@types/chai": "^4.0.1",
     "@types/node": "^8.0.3",
-    "anorexia": "^0.2.0"
+    "anorexia": "^0.2.1",
+    "chai": "^4.0.2"
   },
   "dependencies": {}
 }

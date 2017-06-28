@@ -1,4 +1,5 @@
 import { playbook, stage } from 'anorexia'
+import { assert } from 'chai'
 
 playbook('learn-angular-001-003', (env) => {
   
@@ -30,8 +31,8 @@ playbook('learn-angular-001-003', (env) => {
   })
 
   stage('Checking ngc results for separated path', () => {
-    env.assertFileExists(`out-aot/app/app.component.ngfactory.ts`)
-    env.assertFileExists(`out-tsc/app/app/app.component.js`)
+    assert.isTrue(env.fileExists(`out-aot/app/app.component.ngfactory.ts`))
+    assert.isTrue(env.fileExists(`out-tsc/app/app/app.component.js`))
     env.echo('AOT Compilation works')
   })
 
@@ -51,7 +52,7 @@ playbook('learn-angular-001-003', (env) => {
   })
 
   stage('Checking ngc results for separated path', () => {
-    env.assertFileExists(`src/app/app.component.ngfactory.js`)
+    assert.isTrue(env.fileExists(`src/app/app.component.ngfactory.js`))
     env.echo('AOT Compilation works')
   })
 
@@ -69,7 +70,7 @@ playbook('learn-angular-001-003', (env) => {
   })
 
   stage('Checking webpack results', () => {
-    env.assertFileExists(`out-webpack/bundle.js`)
+    assert.isTrue(env.fileExists(`out-webpack/bundle.js`))
     env.echo('Webpack bundle generated')
   })
 }, __dirname)

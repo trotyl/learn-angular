@@ -1,4 +1,5 @@
 import { playbook, stage } from 'anorexia'
+import { assert } from 'chai'
 
 playbook('learn-angular-001-002', (env) => {
 
@@ -35,7 +36,7 @@ playbook('learn-angular-001-002', (env) => {
   })
 
   stage('Checking tsc results for static properties', () => {
-    env.assertFileExists('./dist-0/app.component.js')
+    assert.isTrue(env.fileExists('./dist-0/app.component.js'))
     env.echo('TypeScript Compilation works')
   })
 
@@ -56,7 +57,7 @@ playbook('learn-angular-001-002', (env) => {
   })
 
   stage('Checking webpack results', () => {
-    env.assertFileExists('./bundle-1.js')
+    assert.isTrue(env.fileExists('./bundle-1.js'))
     env.echo('Webpack bundle generated')
   })
 
@@ -77,7 +78,7 @@ playbook('learn-angular-001-002', (env) => {
   })
 
   stage('Checking webpack results', () => {
-    env.assertFileExists('./bundle-2.js')
+    assert.isTrue(env.fileExists('./bundle-2.js'))
     env.echo('Webpack bundle generated')
   })
 }, __dirname)
