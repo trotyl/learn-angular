@@ -123,13 +123,13 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 <script>
 Reflect.getOwnMetadata = () => {}
 </script>
-<script src="https://unpkg.com/zone.js@0.8.10/dist/zone.js"></script>
-<script src="https://unpkg.com/rxjs@5.4.0/bundles/Rx.js"></script>
-<script src="https://unpkg.com/@angular/core@4.1.3/bundles/core.umd.js"></script>
-<script src="https://unpkg.com/@angular/common@4.1.3/bundles/common.umd.js"></script>
-<script src="https://unpkg.com/@angular/compiler@4.1.3/bundles/compiler.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser@4.1.3/bundles/platform-browser.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser-dynamic@4.1.3/bundles/platform-browser-dynamic.umd.js"></script>
+<script src="https://unpkg.com/zone.js/dist/zone.js"></script>
+<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
+<script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
+<script src="https://unpkg.com/@angular/compiler/bundles/compiler.umd.js"></script>
+<script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
+<script src="https://unpkg.com/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js"></script>
 <script src="./main.js"></script>
 ```
 
@@ -188,13 +188,13 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 <script>
 Reflect.getOwnMetadata = () => {}
 </script>
-<script src="https://unpkg.com/zone.js@0.8.10/dist/zone.js"></script>
-<script src="https://unpkg.com/rxjs@5.4.0/bundles/Rx.js"></script>
-<script src="https://unpkg.com/@angular/core@4.1.3/bundles/core.umd.js"></script>
-<script src="https://unpkg.com/@angular/common@4.1.3/bundles/common.umd.js"></script>
-<script src="https://unpkg.com/@angular/compiler@4.1.3/bundles/compiler.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser@4.1.3/bundles/platform-browser.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser-dynamic@4.1.3/bundles/platform-browser-dynamic.umd.js"></script>
+<script src="https://unpkg.com/zone.js/dist/zone.js"></script>
+<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
+<script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
+<script src="https://unpkg.com/@angular/compiler/bundles/compiler.umd.js"></script>
+<script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
+<script src="https://unpkg.com/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js"></script>
 <script src="./main.js" type="module"></script>
 ```
 
@@ -353,7 +353,7 @@ webpack main.js bundle.js
 <script>
 Reflect.getOwnMetadata = () => {}
 </script>
-<script src="https://unpkg.com/zone.js@0.8.10/dist/zone.js"></script>
+<script src="https://unpkg.com/zone.js/dist/zone.js"></script>
 <script src="./bundle.js"></script>
 ```
 
@@ -513,7 +513,7 @@ Uncaught TypeError: Reflect.defineMetadata is not a function
 <title>Hello Angular</title>
 <main>TODO</main>
 <script src="https://unpkg.com/core-js@2.4.1/client/shim.js"></script>
-<script src="https://unpkg.com/zone.js@0.8.10/dist/zone.js"></script>
+<script src="https://unpkg.com/zone.js/dist/zone.js"></script>
 <script src="./bundle.js"></script>
 ```
 
