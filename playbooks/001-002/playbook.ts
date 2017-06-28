@@ -27,7 +27,7 @@ playbook('learn-angular-001-002', (env) => {
   })
 
   stage('Checking webpack results', () => {
-    env.assertFileExists('./bundle-0.js')
+    assert.isTrue(env.fileExists('./bundle-0.js'))
     env.echo('Webpack bundle generated')
   })
 
