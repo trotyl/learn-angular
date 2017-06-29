@@ -3,7 +3,9 @@ import { assert } from 'chai'
 
 playbook('learn-angular-001-001', async (env) => {
 
-  env.usePlatformServer({
+  const { angular: ng } = env.extensions
+
+  ng.usePlatformServer({
     modulePath: 'inline.js',
     moduleName: 'AppModule',
     componentPath: 'inline.js',
@@ -52,7 +54,7 @@ playbook('learn-angular-001-001', async (env) => {
   })
 
   await stage('Check render result', async () => {
-    const html = await env.renderToHtml()
+    const html = await ng.renderToHtml()
     assert.match(html, /Hello Angular/)
     env.echo('App works')
   })
