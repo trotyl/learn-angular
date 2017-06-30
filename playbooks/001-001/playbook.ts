@@ -22,14 +22,14 @@ playbook('learn-angular-001-001', async (env) => {
 
   stage('Installing dependencies', () => {
     env.install(
-      '@angular/animations',
-      '@angular/core',
-      '@angular/common',
-      '@angular/compiler',
-      '@angular/http',
-      '@angular/platform-browser',
-      '@angular/platform-browser-dynamic',
-      '@angular/platform-server',
+      ng.packages.animations,
+      ng.packages.core,
+      ng.packages.common,
+      ng.packages.compiler,
+      ng.packages.http,
+      ng.packages.platformBrowser,
+      ng.packages.platformBrowserDynamic,
+      ng.packages.platformServer,
       'core-js',
       'rxjs',
       'zone.js',
