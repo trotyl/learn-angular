@@ -43,16 +43,9 @@ playbook('learn-angular-001-001', async (env) => {
     })
   })
 
-  stage('Remove bootstrap code', () => {
-    env.replaceInFile(mainFile, 
-      [`ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)`, '']
-    )
-  })
-
   stage('Prepare for server-side rendering', () => {
-    env.replaceInFile(mainFile, 
-      [`ng.platformBrowser.BrowserModule`, `ng.platformBrowser.BrowserModule.withServerTransition({appId: 'none'})`]
-    )
+    ng.disableBootstrap(mainFile)
+    ng.enableServerTransition(mainFile)
   })
 
   stage('Add export', () => {
