@@ -3,15 +3,22 @@ import { assert } from 'chai'
 
 playbook('learn-angular-001-001', async (env) => {
 
-  const { angular: ng } = env.extensions
+  const moduleName = 'AppModule'
+  const componentName = 'AppComponent'
+  const mainFile = 'inline.js'
+  const entryHtmlFile = 'index.html'
+
+  const { angular: ng, javascript: js } = env.extensions
 
   ng.usePlatformServer({
-    modulePath: 'inline.js',
-    moduleName: 'AppModule',
-    componentPath: 'inline.js',
-    componentName: 'AppComponent',
-    htmlPath: 'index.html'
+    modulePath: mainFile,
+    moduleName,
+    componentPath: mainFile,
+    componentName,
+    htmlPath: entryHtmlFile,
   })
+
+  js.useModule('commonjs')
 
   stage('Installing dependencies', () => {
     env.install(
@@ -31,26 +38,25 @@ playbook('learn-angular-001-001', async (env) => {
 
   stage('Add JavaScript file', () => {
     env.setUpFiles({
-      'inline.js': 'inline.js',
-      'index.html': 'index.html',
+      [mainFile]: mainFile,
+      [entryHtmlFile]: entryHtmlFile,
     })
   })
 
   stage('Remove bootstrap code', () => {
-    env.replaceInFile('inline.js', 
+    env.replaceInFile(mainFile, 
       [`ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)`, '']
     )
   })
 
   stage('Prepare for server-side rendering', () => {
-    env.replaceInFile('inline.js', 
+    env.replaceInFile(mainFile, 
       [`ng.platformBrowser.BrowserModule`, `ng.platformBrowser.BrowserModule.withServerTransition({appId: 'none'})`]
     )
   })
 
   stage('Add export', () => {
-    env.appendFile('inline.js', `\nexports.AppModule = AppModule\n`)
-    env.appendFile('inline.js', `\nexports.AppComponent = AppComponent\n`)
+    js.addModuleExports(mainFile, moduleName, componentName)
   })
 
   await stage('Check render result', async () => {
