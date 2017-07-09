@@ -486,7 +486,7 @@ AngularJS 使用的是基于 DOM 的模版，也就是说，模版会先被浏�
 
 #### 不使用方括号绑定的 target 是 Property 还是 Attribute？
 
-Angular Compiler 本身内部存有所有 HTML Element 可能的 Attribute 列表，对于已知的 HTML Element 的已知 Attribute Name 而言，绑定的 target 就是 HTML Attribute，虽然实现上也是通过自动翻译成对应的 DOM Property 完成的（如果存在的情况下），因为直接修改 Attribute 的性能较差。
+Angular Compiler 本身内部存有所有 HTML Element 可能的 Attribute 列表，对于已知的 HTML Element 的已知 Attribute Name 而言，如果绑定的 value 为常量（不含插值部分），则绑定的 target 就是 HTML Attribute，虽然实现上也是通过自动翻译成对应的 DOM Property 完成的（如果存在的情况下），因为直接修改 Attribute 的性能较差；但如果绑定的 value 中带有插值，则 target 为 DOM Property，不会进行自动映射。
 
 而对于 Angular Directive 的情况，则由其定义本身决定。如果使用的是输入属性，则始终绑定的是 Property。不过除了通过 `@Input()` 修饰的属性获取之外，也可以通过 `@Attribute()` 修饰的参数注入，这时外部 HTML 中使用的 Attribute 也就是这个 Directive 的 Attribute。
 
