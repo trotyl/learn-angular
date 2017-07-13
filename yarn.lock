@@ -7,8 +7,8 @@
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.0.1.tgz#37fea779617cfec3fd2b19a0247e8bbdd5133bf6"
 
 "@types/node@^8.0.3":
-  version "8.0.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.3.tgz#fca61c26f83e5f453166114f57d53a47feb36d45"
+  version "8.0.11"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.11.tgz#3cf80de7185292c6dab156ece696dffed0cc3502"
 
 anorexia@^0.3.2:
   version "0.3.2"
@@ -34,8 +34,8 @@ brace-expansion@^1.1.7:
     concat-map "0.0.1"
 
 chai@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/chai/-/chai-4.0.2.tgz#2f7327c4de6f385dd7787999e2ab02697a32b83b"
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/chai/-/chai-4.1.0.tgz#331a0391b55c3af8740ae9c3b7458bc1c3805e6d"
   dependencies:
     assertion-error "^1.0.1"
     check-error "^1.0.1"
