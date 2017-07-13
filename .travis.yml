@@ -13,5 +13,6 @@ install:
   - yarn global add typescript
   - yarn global add webpack
   - yarn install
+  - yarn upgrade
 script:
   - "ts-node -P tsconfig.playbook.json playbooks/$PLAYBOOK"
