@@ -2,17 +2,17 @@ language: node_js
 node_js:
   - "7"
 env:
-  - PLAYBOOK=001-001/playbook.ts
-  - PLAYBOOK=001-002/playbook.ts
-  - PLAYBOOK=001-003/playbook.ts
+  - PLAYBOOK=001-001/playbook
+  - PLAYBOOK=001-002/playbook
+  - PLAYBOOK=001-003/playbook
 before_install:
   - npm install --global yarn
 install:
   - yarn global add @angular/cli
-  - yarn global add ts-node
   - yarn global add typescript
   - yarn global add webpack
   - yarn install
   - yarn upgrade
 script:
-  - "ts-node -P tsconfig.playbook.json playbooks/$PLAYBOOK"
+  - tsc -p tsconfig.playbook.json
+  - "node playbooks/$PLAYBOOK"

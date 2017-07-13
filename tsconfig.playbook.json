@@ -4,5 +4,8 @@
     "module": "commonjs",
     "skipLibCheck": true,
     "moduleResolution": "node"
-  }
+  },
+  "files": [
+    "playbooks/main.ts"
+  ]
 }
