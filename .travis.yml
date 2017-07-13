@@ -13,6 +13,7 @@ install:
   - yarn global add webpack
   - yarn install
   - yarn upgrade
-script:
+before_script:
   - tsc -p tsconfig.playbook.json
+script:
   - "node playbooks/$PLAYBOOK"
