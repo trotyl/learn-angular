@@ -47,56 +47,46 @@ playbook('learn-angular-002-001', (host) => {
     system.exec('ng g c data-binding')
   })
 
-  stage('Checking ng build result', () => {
+  stage('Checking ng generate result', () => {
     assert.isTrue(file.exists(`src/app/data-binding/data-binding.component.ts`))
     system.echo('AOT Compilation works')
   })
 
-  stage('Generating component', () => {
-    text.appendEnd(`src/app/app.component.html`, `<img src="https://avatars0.githubusercontent.com/u/{{ avatarId }}?v=3&s=460">`)
+  stage('Add element in template', () => {
+    text.appendEnd(`src/app/data-binding/data-binding.component.html`, `<img src="https://avatars0.githubusercontent.com/u/{{ avatarId }}?v=3&s=460">`)
   })
 
-  // stage('Compiling project using ngc for separated path', () => {
-  //   env.exec('./node_modules/.bin/ngc -p src/tsconfig.app.json')
-  // })
+  stage('Add property in component', () => {
+    text.appendBefore(`src/app/data-binding/data-binding.component.ts`, `constructor()`, `avatarId = 6059170\n  `)
+  })
 
+  stage('Add component usage in parent', () => {
+    text.appendEnd(`src/app/app.component.html`, `<app-data-binding></app-data-binding>`)
+  })
 
+  stage('Building project using AOT', () => {
+    file.remove(`dist/main.bundle.js`)
+    system.exec('ng build --aot')
+  })
 
-  // stage('Modifying tsconfig.app.json for unified path', () => {
-  //   env.modifyJson('src/tsconfig.app.json', {
-  //     compilerOptions: {
-  //       outDir: '.',
-  //       target: 'es2015'
-  //     },
-  //     angularCompilerOptions: null,
-  //   })
-  // })
+  stage('Checking ng build result', () => {
+    assert.isTrue(file.exists(`dist/main.bundle.js`))
+    system.echo('AOT Compilation works')
+  })
 
-  // stage('Compiling project using ngc for unified path', () => {
-  //   env.exec('./node_modules/.bin/ngc -p src/tsconfig.app.json')
-  //   env.exec('./node_modules/.bin/ngc -p src/tsconfig.app.json')
-  // })
+  stage('Add element in template', () => {
+    text.appendEnd(`src/app/data-binding/data-binding.component.html`, `<img [src]="'https://avatars0.githubusercontent.com/u/' + avatarId + '?v=3&s=460'">`)
+    text.appendEnd(`src/app/data-binding/data-binding.component.html`, `<img bind-src="'https://avatars0.githubusercontent.com/u/' + avatarId + '?v=3&s=460'">`)
+  })
 
-  // stage('Checking ngc results for separated path', () => {
-  //   assert.isTrue(env.fileExists(`src/app/app.component.ngfactory.js`))
-  //   env.echo('AOT Compilation works')
-  // })
+  stage('Building project using AOT', () => {
+    file.remove(`dist/main.bundle.js`)
+    system.exec('ng build --aot')
+  })
 
-  // stage('Modifying main.js', () => {
-  //   env.replaceInFile('src/main.js',
-  //     [/platformBrowserDynamic/g, 'platformBrowser'],
-  //     [/platform-browser-dynamic/g, 'platform-browser'],
-  //     [`import { environment } from './environments/environment'`, ''],
-  //     [`environment.production`, 'true']
-  //   )
-  // })
-
-  // stage('Bundling app using Webpack', () => {
-  //   env.exec('webpack src/main.js out-webpack/bundle.js')
-  // })
-
-  // stage('Checking webpack results', () => {
-  //   assert.isTrue(env.fileExists(`out-webpack/bundle.js`))
-  //   env.echo('Webpack bundle generated')
-  // })
+  stage('Checking ng build result', () => {
+    assert.isTrue(file.exists(`dist/main.bundle.js`))
+    system.echo('AOT Compilation works')
+  })
+  
 }, __dirname)

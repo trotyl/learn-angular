@@ -5,6 +5,7 @@ env:
   - PLAYBOOK=001-001/playbook
   - PLAYBOOK=001-002/playbook
   - PLAYBOOK=001-003/playbook
+  - PLAYBOOK=002-001/playbook
 before_install:
   - npm install --global yarn
 install:
