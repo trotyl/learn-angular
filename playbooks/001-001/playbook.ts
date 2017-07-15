@@ -1,14 +1,14 @@
 import { playbook, stage } from 'anorexia'
 import { assert } from 'chai'
 
-playbook('learn-angular-001-001', async (env) => {
+playbook('learn-angular-001-001', async (host) => {
+  
+  const { angular: ng, javascript: js, yarn, system } = host.extensions
 
   const moduleName = 'AppModule'
   const componentName = 'AppComponent'
   const mainFile = 'inline.js'
   const entryHtmlFile = 'index.html'
-
-  const { angular: ng, javascript: js } = env.extensions
 
   ng.usePlatformServer({
     modulePath: mainFile,
@@ -21,7 +21,7 @@ playbook('learn-angular-001-001', async (env) => {
   js.useModule('commonjs')
 
   stage('Installing dependencies', () => {
-    env.install(
+    yarn.install(
       ng.packages.animations,
       ng.packages.core,
       ng.packages.common,
@@ -37,9 +37,9 @@ playbook('learn-angular-001-001', async (env) => {
   })
 
   stage('Add JavaScript file', () => {
-    env.setUpFiles({
-      [mainFile]: mainFile,
-      [entryHtmlFile]: entryHtmlFile,
+    host.setUpFiles({
+      [`./fixtures/${mainFile}`]: mainFile,
+      [`./fixtures/${entryHtmlFile}`]: entryHtmlFile,
     })
   })
 
@@ -55,6 +55,6 @@ playbook('learn-angular-001-001', async (env) => {
   await stage('Check render result', async () => {
     const html = await ng.renderToHtml()
     assert.match(html, /Hello Angular/)
-    env.echo('App works')
+    system.echo('App works')
   })
 }, __dirname)
