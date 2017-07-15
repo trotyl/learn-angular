@@ -14,6 +14,6 @@ install:
   - yarn install
   - yarn upgrade
 before_script:
-  - tsc -p tsconfig.playbook.json
+  - tsc -p tsconfig.json
 script:
   - "node playbooks/$PLAYBOOK"
