@@ -44,16 +44,18 @@ playbook('learn-angular-001-003', (host) => {
         outDir: '.',
         target: 'es2015'
       },
-      angularCompilerOptions: null,
+      angularCompilerOptions: {
+        alwaysCompileGeneratedCode: true,
+        genDir: null
+      },
     })
   })
 
   stage('Compiling project using ngc for unified path', () => {
     system.exec('./node_modules/.bin/ngc -p src/tsconfig.app.json')
-    system.exec('./node_modules/.bin/ngc -p src/tsconfig.app.json')
   })
 
-  stage('Checking ngc results for separated path', () => {
+  stage('Checking ngc results for unified path', () => {
     assert.isTrue(file.exists(`src/app/app.component.ngfactory.js`))
     system.echo('AOT Compilation works')
   })

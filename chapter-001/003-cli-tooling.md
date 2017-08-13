@@ -153,6 +153,22 @@ ng eject
 
 是的，没有看错，这里执行了两次，目的是为了把第一次构建时才生成的 `.ngfactory.ts` 文件等编译为 JavaScript 文件，所以说第二次命令原理上也可以用 `tsc` 替代。这个额外的步骤在当前 Angular Compiler 的工作机制下是需要的，不过在自动化构建方式时，不会产生可观测的影响。
 
+不过，这样同一个过程做两次难免带来不便（其实自动化之后没什么区别），为此 Angular 的 Offline Compiler 也提供了一步完成的支持，为此需要在 `tsconfig.app.json` 中增加一个配置项：
+
+```json
+{
+  "angularCompilerOptions": {
+    "alwaysCompileGeneratedCode": true
+  }
+}
+```
+
+这样，Offline Compiler 就会同时将新生成的 `.ngfactory.ts` 文件也编译为相应的 `.ngfactory.js` 文件：
+
+```bash
+./node_modules/.bin/ngc -p src/tsconfig.app.json
+```
+
 接着修改 `src/main.js` 文件为：
 
 ```javascript
