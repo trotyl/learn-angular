@@ -6,14 +6,11 @@ env:
   - PLAYBOOK=001-002/playbook
   - PLAYBOOK=001-003/playbook
   - PLAYBOOK=002-001/playbook
-before_install:
-  - npm install --global yarn
 install:
-  - yarn global add @angular/cli
-  - yarn global add typescript
-  - yarn global add webpack
-  - yarn install
-  - yarn upgrade
+  - npm install --global @angular/cli
+  - npm install --global typescript
+  - npm install --global webpack
+  - npm install
 before_script:
   - tsc -p tsconfig.json
 script:
