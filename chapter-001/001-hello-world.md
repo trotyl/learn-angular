@@ -480,7 +480,7 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 
 #### Angular 是否需要用到 Metadata Reflection API？
 
-只有在同时使用 **Decorator 语法** 和 **JIT 编译** 方式的情况下才会用到。
+只有在同时使用 **Decorator 语法** 和基于 TypeScript 的 **JIT 编译** 方式的情况下才会用到。
 
 #### Angular 的元数据有几种提供方式？
 
