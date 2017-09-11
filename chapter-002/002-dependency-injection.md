@@ -38,7 +38,7 @@
 
 **因此，当该类不需要构造函数的参数信息，即该类型不依赖于其它类型时，`Injectable()` 是不需要的。**
 
-即便存在构造函数的参数信息，我们也仍然可以像 AngularJS 那样主动提供的话，例如：
+即便存在构造函数的参数信息，我们也仍然可以像 AngularJS 那样主动提供依赖声明，例如：
 
 ```typescript
 class Foo {
@@ -68,7 +68,11 @@ class Foo {
 
 #### 第二个误解：被注入的内容一定要是类（的实例）
 
-这里涉及到两个部分，
+这里涉及到两个部分，**Consumer 中的声明方式** 和 **Provider 中的提供方式**。
+
+之前提到过，Angular 中的依赖注入是一个查表过程，为此需要一个 Token 来作为 Key。
+
+Angular 中，Provider 的职责就通过 [`Provider`](https://angular.io/api/core/Provider) 这个类型来承担[^6]，不过 `Provider` 并不是一直都叫做 `Provider`，最初叫做 `Binding`，之后才 [被重命名成 `Provider`](https://github.com/angular/angular/issues/4416)。
 
 
 
@@ -83,3 +87,5 @@ class Foo {
 [^4]: 直接使用 TypeScript 编译只能实现 JIT，但使用 JIT 并不一定非要直接使用 TypeScript 编译。所有（合格）的 Angular 库都是经过 Angular Compiler 编译后发布的，但发布过程中并不编译模版。发布后的 JavaScript 代码不会具备任何 Decorator 的实现内容（即不会出现 `__decorate`），但仍可用于 JIT 开发中。
 
 [^5]: 在 [早期版本中](https://github.com/angular/angular/blob/cb83f1678acc345eb712ab0e87cb52e8bf573b35/modules/angular2/src/core/annotations/annotations.js#L14) 实现上真的就是 `Injectable` 的子类，而不仅仅是语义上的行为。
+
+[^6]: 从 v5 版本开始，由于 [移除了对 Metadata Reflection API 的依赖](https://github.com/angular/angular/commit/cac130eff9b9cb608f2308ae40c42c9cd1850c4d)，[Provider](https://angular.io/api/core/Provider) 中的 [ClassProvider](https://angular.io/api/core/ClassProvider) 不再适用于运行时动态创建，更为推荐的版本是 [StaticProvider](https://next.angular.io/api/core/StaticProvider)。
