@@ -33,7 +33,7 @@
 > ... 
 > There is nothing specifically Angular about services. **Angular has no definition of a service**. There is no service base class, and no place to register a service.
 
-简单地说，只要是在依赖注入过程中被注入的内容，都叫做 **服务**。可能是 `1`、`true`、`undefined`、函数或任何可以作为右值的东西。这个概念对于 Spring 背景的 Java 开发人员可能有点陌生，在 Spring 的概念中 Service 就是包含 `@Service` 注解的类（注入的内容为其实例）。本文中会尽可能地使用 **注入项** 而非 **服务** 来表示被注入的内容。
+简单地说，只要是在依赖注入过程中被注入的内容，都叫做 **服务**。可能是 `1`、`true`、`undefined`、函数或任何可以作为右值的东西，甚至于 **指令**、**管道** 都可以是 **服务**。这个概念对于 Spring 背景的 Java 开发人员可能有点陌生，在 Spring 的概念中 Service 就是包含 `@Service` 注解的类（注入的内容为其实例）。本文中会尽可能地使用 **注入项** 而非 **服务** 来表示被注入的内容。
 
 所有经由 Angular 托管的内容都可以使用依赖注入，更确切地说，既可以依赖于其它内容，**也可以作为其它内容的依赖**。
 
