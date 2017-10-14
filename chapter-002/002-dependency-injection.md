@@ -26,6 +26,15 @@
 
 ## 适用范围
 
+在 Angular 的 [官方文档](https://angular.io/guide/architecture#services) 中强调了 **服务（Service）** 的定义————**那就是没有定义！！！**
+
+> Service is a broad category encompassing any value, function, or feature that your application needs. 
+> Almost anything can be a service. A service is typically a class with a narrow, well-defined purpose. It should do something specific and do it well. 
+> ... 
+> There is nothing specifically Angular about services. **Angular has no definition of a service**. There is no service base class, and no place to register a service.
+
+简单地说，只要是在依赖注入过程中被注入的内容，都叫做 **服务**。可能是 `1`、`true`、`undefined`、函数或任何可以作为右值的东西。这个概念对于 Spring 背景的 Java 开发人员可能有点陌生，在 Spring 的概念中 Service 就是包含 `@Service` 注解的类（注入的内容为其实例）。本文中会尽可能地使用 **注入项** 而非 **服务** 来表示被注入的内容。
+
 所有经由 Angular 托管的内容都可以使用依赖注入，更确切地说，既可以依赖于其它内容，**也可以作为其它内容的依赖**。
 
 许多的 Angular 用户都有一个明显的误解，认为：*被注入的内容 == 使用 `@Injectable()` 标注的类*。这种理解是完全错误的。
@@ -74,6 +83,23 @@ class Foo {
 
 Angular 中，Provider 的职责就通过 [`Provider`](https://angular.io/api/core/Provider) 这个类型来承担[^6]，不过 `Provider` 并不是一直都叫做 `Provider`，最初叫做 `Binding`，之后才 [被重命名成 `Provider`](https://github.com/angular/angular/issues/4416)。
 
+而在依赖注入这个过程中，`useClass` 并没有什么特殊的地方，除了可以不使用包装对象：
+
+```typescript
+providers: [
+  SomeClass
+]
+```
+
+等价于：
+
+```typescript
+providers: [
+  { provide: SomeClass, useClass: SomeClass }
+]
+```
+
+事实上，我们可以换成其它的任何方式提供，或者仍然使用 `useClass` 但提供另一个 Class[^7]。
 
 
 ---
@@ -89,3 +115,5 @@ Angular 中，Provider 的职责就通过 [`Provider`](https://angular.io/api/co
 [^5]: 在 [早期版本中](https://github.com/angular/angular/blob/cb83f1678acc345eb712ab0e87cb52e8bf573b35/modules/angular2/src/core/annotations/annotations.js#L14) 实现上真的就是 `Injectable` 的子类，而不仅仅是语义上的行为。
 
 [^6]: 从 v5 版本开始，由于 [移除了对 Metadata Reflection API 的依赖](https://github.com/angular/angular/commit/cac130eff9b9cb608f2308ae40c42c9cd1850c4d)，[Provider](https://angular.io/api/core/Provider) 中的 [ClassProvider](https://angular.io/api/core/ClassProvider) 不再适用于运行时动态创建，更为推荐的版本是 [StaticProvider](https://next.angular.io/api/core/StaticProvider)。
+
+[^7]: 从 API 设计的角度来说，当对一个 Class Token 提供不同的内容时，应该保证 Public Interface 的一致性。
