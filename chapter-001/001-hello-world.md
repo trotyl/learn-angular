@@ -26,9 +26,11 @@ class AppComponent { }
 <!DOCTYPE html>
 <title>Hello Angular</title>
 <main>TODO</main>
+<!-- Begin -->
 <script>
 class AppComponent { }
 </script>
+<!-- End -->
 ```
 
 如果我们现在刷新浏览器的话，就会发现——什么也没有发生（昨晚是一个平安夜）。
@@ -44,11 +46,13 @@ class AppComponent { }
 ```javascript
 class AppComponent { }
 
+/* Begin */
 AppComponent.annotations = [
   new ng.core.Component({
     template: '<h1>Hello Angular</h1>'
   })
 ]
+/* End */
 ```
 
 上面我们 `AppComponent` 的 `annotations` 静态属性初始化为一个数组，显然，既然是复数名词，那么显然不止一个内容，而且从逻辑上也很容易知道，一个类型自然应该能够附加多组 **Metadata**。目前我们的数组中只有一个元素，是一个 `ng.core.Component` 类型的实例，带有一个匿名对象作为参数。该匿名对象具备一个 `template` 属性，其值即为我们所要定义的组件模版。
@@ -65,7 +69,9 @@ Uncaught ReferenceError: ng is not defined
 <!DOCTYPE html>
 <title>Hello Angular</title>
 <main>TODO</main>
+<!-- Begin -->
 <script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
+<!-- End -->
 <script>
 // Original scripts here ...
 </script>
@@ -82,7 +88,7 @@ Uncaught ReferenceError: ng is not defined
 可能需要注意的是，这里 `<script>` 标签的顺序很重要。不过现在我们会发现，控制台出现了另一个错误：
 
 ```text
-Uncaught TypeError: Cannot read property 'Observable' of undefined
+Uncaught TypeError: Cannot read property 'operators' of undefined
 Uncaught TypeError: ng.core.Component is not a constructor
 ```
 
@@ -91,10 +97,10 @@ Uncaught TypeError: ng.core.Component is not a constructor
 造成第一项报错的代码为：
 
 ```javascript
-global.Rx.Observable
+global.rxjs.operators
 ```
 
-这里我们看到一个新的全局变量，叫做 `Rx`。那么这里的 `Rx` 是什么东西呢？Rx 是 Reactive Extentions 的缩写，为微软研究院开发的基于 .Net Framework 的 Reactive Programming（响应式编程）类库，我们这里使用的是 JavaScript 语言的移植版本，因此也叫 RxJS。
+这里我们看到一个新的全局变量，叫做 `rxjs`。那么这里的 `rxjs` 是什么东西呢？Rx 是 Reactive Extentions 的缩写，为微软研究院开发的基于 .Net Framework 的 Reactive Programming（响应式编程）类库，我们这里使用的是 JavaScript 语言的移植版本，因此也叫 RxJS。
 
 而这里 RxJS 是 Angular 的一个重要的第三方依赖，所以我们也需要一个额外的标签来引入 RxJS：
 
@@ -102,38 +108,16 @@ global.Rx.Observable
 <!DOCTYPE html>
 <title>Hello Angular</title>
 <main>TODO</main>
-<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<!-- Begin -->
+<script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
+<!-- End -->
 <script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
 <script>
 // Original scripts here ...
 </script>
 ```
 
-在这之后，我们就可以继续期待新的错误了。正如我们所期望的那样，新的错误为：
-
-```text
-Uncaught reflect-metadata shim is required when using class decorators
-```
-
-这里说的是我们需要使用一个 Polyfill。然而事实上并不需要，因为 Angular 不是人工智能，只是机械地检查预设条件，所以只要在浏览器编译的情况下，Angular 就会检测当前环境是否具备 **Metadata Reflection API**[^8] 相关的功能。
-
-因为我们比 Angular 聪明很多，所以并不需要真的引入这个 Polyfill，简单地骗一骗 Angular 就好了，为此我们增加一个 `<script>` 标签，提供一个假的 `Reflect.getOwnMetadata` 定义：
-
-```html
-<!DOCTYPE html>
-<title>Hello Angular</title>
-<main>TODO</main>
-<script>
-Reflect.getOwnMetadata = () => {}
-</script>
-<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
-<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
-<script>
-// Original scripts here ...
-</script>
-```
-
-然后继续。
+在这之后，我们就可以继续期待新的错误了。
 
 然而遗憾的是，并没有新的错误出现，为什么呢？因为并没有任何代码来启动我们的应用，我们仅仅完成了一个组件定义而已。等等，组件定义真的完成了么？
 
@@ -148,7 +132,9 @@ class AppComponent { }
 
 AppComponent.annotations = [
   new ng.core.Component({
+    /* Begin */
     selector: 'main',
+    /* End */
     template: '<h1>Hello Angular</h1>',
   })
 ]
@@ -167,6 +153,7 @@ AppComponent.annotations = [
   //...
 ]
 
+/* Begin */
 class AppModule { }
 
 AppModule.annotations = [
@@ -179,6 +166,7 @@ AppModule.annotations = [
     ],
   })
 ]
+/* End */
 ```
 
 这里我们提供的 **Metadata** 与之前的不同，是一个 `ng.core.NgModule` 类型的实例，其参数中用到了 `imports` 属性和 `declarations` 属性。`imports` 属性是一个数组，用于指定这个 **NgModule** 所依赖的其它 **NgModule**，例如所有面向 Web 的 Angular App 都需要在 **Root NgModule** 中依赖 `BrowserModule`，其中包含了浏览器平台的相关基础设施（如操作 DOM 的工具等）；`declarations` 属性还是一个数组，用于声明所有该模块的视图层相关内容，包括 **Components**、**Directives** 以及 **Pipes**。
@@ -197,56 +185,11 @@ Uncaught TypeError: Cannot read property 'BrowserModule' of undefined
 <!DOCTYPE html>
 <title>Hello Angular</title>
 <main>TODO</main>
-<script>
-Reflect.getOwnMetadata = () => {}
-</script>
-<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
 <script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
+<!-- Begin -->
 <script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
-<script>
-// Original scripts here ...
-</script>
-```
-
-这样我们上面的错误就解决了，现在又是一个新的错误：
-
-```text
-Uncaught TypeError: Cannot read property 'PlatformLocation' of undefined
-```
-
-错误来源是：
-
-```javascript
-_angular_common.PlatformLocation
-```
-
-结合 UMD 文件头：
-
-```javascript
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.platformBrowser = global.ng.platformBrowser || {}),global.ng.common,global.ng.core));
-}(this, (function (exports,_angular_common,_angular_core)
-```
-
-`_angular_common` 就指的是 `@angular/common` 这个 **Package**，这个是包含了 Angular 的通用类库代码的部分。
-
-如果我们具备 AngularJS 基础的话，应该知道 `PlatformLocation` 是一个 **Service（服务）**，而这些 Angular 内置的基础 **Service** 等内容就包含在 `@angular/common` 这个 **Package** 当中。除了 **Service** 内容外，`@angular/common` 还包含有基本的 **Directive（指令）**、**Pipe（管道）** 等。
-
-继续添加一个 `<script>` 标签：
-
-```html
-<!DOCTYPE html>
-<title>Hello Angular</title>
-<main>TODO</main>
-<script>
-Reflect.getOwnMetadata = () => {}
-</script>
-<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
-<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
-<script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
+<!-- End -->
 <script>
 // Original scripts here ...
 </script>
@@ -271,9 +214,11 @@ AppModule.annotations = [
     declarations: [
       AppComponent,
     ],
+    /* Begin */
     bootstrap: [
       AppComponent,
     ],
+    /* End */
   })
 ]
 ```
@@ -295,13 +240,41 @@ AppModule.annotations = [
   //...
 ]
 
+/* Begin */
 ng.platformBrowser.platformBrowser().bootstrapModule(AppModule)
+/* End */
 ```
 
 这时会出现错误：
 
 ```text
-Uncaught Error: No provider for CompilerFactory!
+ng.platformBrowser.platformBrowser is not a function
+```
+
+这个错误不是很方便调试，因此直接公布答案，因为没有引入 `@angular/common` 导致初始化失败。
+
+继续添加一个 `<script>` 标签：
+
+```html
+<!DOCTYPE html>
+<title>Hello Angular</title>
+<main>TODO</main>
+<script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
+<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
+<!-- Begin -->
+<script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
+<!-- End -->
+<script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
+<script>
+// Original scripts here ...
+</script>
+```
+
+正如我们所期望的那样，新的错误为：
+
+```text
+StaticInjectorError(Platform: core)[CompilerFactory]: 
+  NullInjectorError: No provider for CompilerFactory!
 ```
 
 很明显，我们缺少 `CompilerFactory` 这个内容。事实上，Angular 和 AngularJS 很大的一点不同是，AngularJS 的模版是基于 DOM 的，HTML 内容会被交给浏览器解析，随后 AngularJS 遍历 DOM 节点来实现自己的功能扩展；而 Angular 中的模版是平台无关的，HTML 内容会被事先编译成视图相关的 JavaScript 代码，而浏览器永远也见不到模版的 HTML 内容。
@@ -312,13 +285,12 @@ Uncaught Error: No provider for CompilerFactory!
 <!DOCTYPE html>
 <title>Hello Angular</title>
 <main>TODO</main>
-<script>
-Reflect.getOwnMetadata = () => {}
-</script>
-<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
 <script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
 <script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
+<!-- Begin -->
 <script src="https://unpkg.com/@angular/compiler/bundles/compiler.umd.js"></script>
+<!-- End -->
 <script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
 <script>
 // Original scripts here ...
@@ -331,15 +303,14 @@ Reflect.getOwnMetadata = () => {}
 <!DOCTYPE html>
 <title>Hello Angular</title>
 <main>TODO</main>
-<script>
-Reflect.getOwnMetadata = () => {}
-</script>
-<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
 <script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
 <script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
 <script src="https://unpkg.com/@angular/compiler/bundles/compiler.umd.js"></script>
 <script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
+<!-- Begin -->
 <script src="https://unpkg.com/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js"></script>
+<!-- End -->
 <script>
 // Original scripts here ...
 </script>
@@ -360,13 +331,15 @@ AppModule.annotations = [
   //...
 ]
 
+/* Begin */
 ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
+/* End */
 ```
 
 在此之后，我们得到了最后一个错误（八年抗战到最后一年了？）：
 
 ```text
-Error: Angular requires Zone.js prolyfill[^11].
+Error: In this configuration Angular requires Zone.js
 ```
 
 这里就十分浅显易懂了，而且解决方案就是如其所述，添加一个 Zone.js 的 `<script>` 标签：
@@ -375,11 +348,10 @@ Error: Angular requires Zone.js prolyfill[^11].
 <!DOCTYPE html>
 <title>Hello Angular</title>
 <main>TODO</main>
-<script>
-Reflect.getOwnMetadata = () => {}
-</script>
+<!-- Begin -->
 <script src="https://unpkg.com/zone.js/dist/zone.js"></script>
-<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<!-- End -->
+<script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
 <script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
 <script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
 <script src="https://unpkg.com/@angular/compiler/bundles/compiler.umd.js"></script>
@@ -402,16 +374,14 @@ Hello Angular
 <!DOCTYPE html>
 <title>Hello Angular</title>
 <main>TODO</main>
-<script>
-Reflect.getOwnMetadata = () => {}
-</script>
 <script src="https://unpkg.com/zone.js/dist/zone.js"></script>
-<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
 <script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
 <script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
 <script src="https://unpkg.com/@angular/compiler/bundles/compiler.umd.js"></script>
 <script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
 <script src="https://unpkg.com/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js"></script>
+
 <script>
 class AppComponent { }
 
@@ -444,6 +414,10 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 
 至此，我们在没有使用任何开发工具或语言扩展的情况下，完成了一个最为传统的（只使用 `<script>` 标签引入内容）的 Hello World for Angular 的版本。
 
+在线示例：
+
+<iframe src="https://stackblitz.com/edit/learn-angular-001-001?embed=1&file=index.html"></iframe>
+
 ## 可能的疑惑
 
 #### Angular 是否能够使用 JavaScript 开发？
@@ -452,7 +426,7 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 
 #### Angular 是否不推荐使用 JavaScript 开发？
 
-是的。
+是的，强烈不推荐。
 
 #### 为什么 AppComponent 和 AppModule 类内部没有内容？
 
