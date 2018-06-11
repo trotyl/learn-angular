@@ -1,91 +1,141 @@
 # Hello World
 
+
+<details>
+  <summary>必要的 HTML 标签</summary>
+  <p></p>
+</details>
+
 从示例来学习是一种很有效的方式，毕竟人类的学习过程就是基于大规模的模式匹配。这里，我们将 *不使用任何开发工具和语言扩展*，从零开始打造一个 Angular 的 Hello World 应用。
 
-既然说了不使用任何开发工具，这里当然也就没法推荐编辑器了，读者可以自己选择任何具备文本编辑功能的程序。
+既然承诺不使用任何开发工具，因此也就无法推荐编辑器，读者可以自己选择任何具备文本编辑功能的程序。
 
-现在，我们需要建立一个 **HTML** 文件，为了简单起见，我们只使用必要的 HTML 标签[^1]：
+现在，我们需要建立一个 **HTML** 文件，为了简单起见，我们只使用必要的 HTML 标签<sup>*</sup>：
+
+<details>
+  <summary>必要的 HTML 标签</summary>
+  <p>在 HTML 中，`<html>`、`<head>` 和 `<body>` 等都是可选标签，但是大部分情况下为了保持页面的结构清晰我们仍然会使用这些标签。详见：[HTML 5.1: 8. The HTML syntax](https://www.w3.org/TR/html/syntax.html#optional-tags)。</p>
+</details>
 
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>Loading...</main>
+<ng-component>Loading...</ng-component>
 ```
 
-用浏览器[^2]打开这个 HTML 文件，我们能够看到一行（一点也不好看的）`Loading...` 字样。
+用浏览器<sup>*</sup>打开这个 HTML 文件，我们能够看到一行（并不怎么好看的）`Loading...` 字样。
 
-我们知道（如果不知道那现在就知道了），Angular 使用 **组件化** 的方式来组织应用，所以一个应用里面必须要有 **Component（组件）**。相比于 AngularJS 而言，Angular 的设计更加面向现代 JavaScript 语言，每一样组件就是一个 **JavaScript Class（类）**，这里我们新建一个叫做定义一个叫做 `AppComponent`[^3] 的 **Class** 作为我们应用的 **Root Component（根组件）**[^4]（也是唯一组件）：
+<details>
+  <summary>浏览器</summary>
+  <p>浏览器并不属于开发工具，只是普通的日常 App，所以并不违反上面不使用开发工具的承诺。当然，这里要求浏览器能够支持 ES2015。</p>
+</details>
+
+我们知道（如果不知道那现在就知道了）Angular 使用 **组件化** 的方式来组织应用内容<sup>*</sup>，所以一个应用里面必须要有 **组件(Component)**。相比于 AngularJS 而言，Angular 的设计更加面向现代化的 JavaScript 语言特性，每个组件就是一个 **类(class)**，这里我们定义一个名为 `AppComponent`<sup>*</sup> 的类作为我们应用的 **根组件(Root Component)**<sup>*</sup>（也是唯一组件）：
+
+<details>
+  <summary>组件化</summary>
+  <p>从技术角度而言 Angular 可用于视图无关应用（例如纯服务端应用或者命令行工具），这种情况下将不会用到组件。不过将 Angular 纯粹当作 DI 支持库来使用有过度浪费的嫌疑，一般并不推荐，本节暂不考虑这种情况。</p>
+</details>
+
+<details>
+  <summary>AppComponent</summary>
+  <p>在 Angular 项目中，对于 Component 类型的 class 而言，其命名通常以 `Component` 结尾（不适用于组件库）。此外，对于应用的根元素，通常采用 `AppComponent` 作为其名称。不过这些都只是 Angular 团队推荐的代码风格，对功能不会产生任何影响。</p>
+</details>
+
+<details>
+  <summary>根组件</summary>
+  <p>组件本身并不会有任何「作为根组件」的标记，任何作为根组件的组件也都可以同时作为内嵌组件使用，因此从技术角度而言将一个组件称为「根组件」是不严谨的。但在某个组件仅用作应用入口的情况下，通常会使用根组件指代。</p>
+</details>
 
 ```javascript
 class AppComponent { }
 ```
 
-于是整个 HTML[^5] 现在变为：
+于是 HTML 文件将新增一个 inline `<script>` 标签：
 
 ```html
-<!DOCTYPE html>
-<title>Hello Angular</title>
-<main>Loading...</main>
-<!-- Begin -->
+<!-- ... -->
+<ng-component>Loading...</ng-component>
+<!-- change start -->
 <script>
 class AppComponent { }
 </script>
-<!-- End -->
+<!-- change end -->
 ```
 
-如果我们现在刷新浏览器的话，就会发现——什么也没有发生（昨晚是一个平安夜）。
+如果我们现在刷新浏览器的话，就会发现 &mdash; 什么也没有发生（昨晚是一个平安夜）。
 
-接下来我们使用 **Error-Driven Development** 的方式来进行开发，即先写代码，跑起来，看出了什么问题再来修。
+接下来我们使用 **Error-Driven Development** 的方式来进行开发，即：**写代码，运行，出了问题再修**。
 
-这里我们可以简单思考一下，既然我们希望 `AppComponent` 作为一个组件（可复用的视图单元），那么就需要定义它应该 *有什么样的视图*，以及要 *如何复用*。像 AngularJS 一样，Angular 仍然采用基于 **Template（模【mú】版）** 的方式来定义视图，为此，我们需要为我们的 **Component** 提供 **Template** 内容。
+这里我们可以简单思考一下，既然我们希望 `AppComponent` 作为一个组件（可复用的视图单元<sup>*</sup>），那么就需要定义它应该 *有什么样的视图*，以及要 *如何复用*。像 AngularJS 一样，Angular 仍然基于 **模【mú】版(Template)** 定义视图，为此，我们需要为我们的组件提供模板内容。
 
-与 AngularJS 所不同的是，Angular 并不提供相应的全局注册 API。提供 **Template** 的方式很简单，直接把相应的 **Metadata（元数据）** 附加到 **Class** 中即可。
+<details>
+  <summary>视图单元</summary>
+  <p>组件中可能包含自治的「视图逻辑」，由于本节内容尚未涉及「逻辑」，因此组件仅包含纯视图内容。</p>
+</details>
 
-如果我们要为一个类添加实例无关的固定内容，显然一个最简单的方式就是添加 **Static Property（静态属性）**，为此我们为 `AppComponent` 添加一个叫做 `annotations` 的静态属性[^6]：
+与 AngularJS 所不同的是，Angular 并不使用全局注册的 API，从而保证对 Tree-Shaking 的绝对友好。提供模板的方式很简单，直接把相应的 **元数据(Metadata)** 附加到类上即可。
+
+如果我们要为一个类添加实例无关的固定内容，显然一个最简单的方式就是添加 **静态属性(Static Property)**，为此我们为 `AppComponent` 添加一个叫做 `annotations` 的静态属性<sup>*</sup>：
+
+<details>
+  <summary>静态属性</summary>
+  <p>ES2015 中并没有提供值属性的语法，只有访问器属性和方法的声明语法。目前有一个 Stage 3 的 ES Proposal 中给出了类的值属性语法的相应提案，详情参见：[tc39/proposal-class-fields](https://github.com/tc39/proposal-class-fields)。静态属性支持被分离至[独立提案](https://github.com/tc39/proposal-static-class-features)中，目前仍然处于 Stage 3。</p>
+</details>
 
 ```javascript
+/* change start */
+const { Component } = ng.core
+/* change end */
+
 class AppComponent { }
 
-/* Begin */
+/* change start */
 AppComponent.annotations = [
-  new ng.core.Component({
+  new Component({
     template: '<h1>Hello Angular</h1>'
   })
 ]
-/* End */
+/* change end */
 ```
 
-上面我们 `AppComponent` 的 `annotations` 静态属性初始化为一个数组，显然，既然是复数名词，那么显然不止一个内容，而且从逻辑上也很容易知道，一个类型自然应该能够附加多组 **Metadata**。目前我们的数组中只有一个元素，是一个 `ng.core.Component` 类型的实例，带有一个匿名对象作为参数。该匿名对象具备一个 `template` 属性，其值即为我们所要定义的组件模版。
+上面 `AppComponent` 的 `annotations` 静态属性被初始化为一个数组。显然，既然是复数名词，那么应当可以不止一项内容，而且从逻辑上也很容易知道，一个类型自然应该能够附加多项元数据<sup>*</sup>。目前我们的数组中只有一个元素，是一个 `ng.core.Component` 类型的实例，带有一个对象字面量作为参数。该对象具备一个 `template` 属性，其值即为我们所要定义的组件模版。
 
-不过，当我们再次刷新浏览器，我们会看到控制台出现了报错：
+<details>
+  <summary>多项元数据</summary>
+  <p>由于实现上的限制，同一个类型无法在同一份 Angular 实现中承担不同职责，例如一个应用中不能有既是组件又是 NgModule 的类。</p>
+</details>
+
+不过，当我们再次刷新浏览器，会看到控制台中出现了报错：
 
 ```text
 Uncaught ReferenceError: ng is not defined
 ```
 
-是的，我们并没有任何地方定义了 `ng` 这个全局变量，这时候我们就需要引入 Angular 本身的库代码了，我们在 HTML 中添加一个新的 `<script>` 标签：
+是的，我们并没有任何地方定义了 `ng` 这个全局变量。这时候我们就需要引入 Angular 本身的库代码了，在 HTML 中添加一个新的 `<script>` 标签：
 
 ```html
-<!DOCTYPE html>
-<title>Hello Angular</title>
-<main>Loading...</main>
-<!-- Begin -->
-<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
-<!-- End -->
-<script>
-// Original scripts here ...
-</script>
+<!-- ... -->
+<ng-component>Loading...</ng-component>
+<!-- change start -->
+<script src="https://unpkg.com/@angular/core"></script>
+<!-- change end -->
+<!-- ... -->
 ```
 
-那么这里的 `core.umd.js` 是什么呢？分段解释就是：
+这里的 `unpkg.com` 是一个提供在线 NPM 包访问的 CDN 站点，也就是说，只要是 NPM public registry 里面的内容，都能通过该站点在线访问。因此无需使用 `npm install` 就能获取到 `@angular/core` 这个 scoped package<sup>*</sup> 中的内容，其 `main` 入口<sup>*</sup>设定为 UMD bundle，因此可以直接省略文件路径。完整的文件路径为 `https://unpkg.com/@angular/core/bundles/core.umd.js`。
 
-+ `https` 是一个 URI Scheme，废话不多说；
-+ `unpkg.com` 是一个提供在线 NPM 包访问的 CDN 站点，也就是说，只要是 NPM public registry 里面的内容，都能通过该站点在线访问；
-+ `@angular/core` 是 NPM 里一个 Scoped Package[^7]，Angular 采用模块化的方式发布，这里是 Angular 的核心运行时（平台无关）部分对应的 Package；
-+ `bundles` 是发布内容中 UMD 文件所在的文件夹，用于适配不同的模块系统（以及不使用模块系统）的情况；
-+ `core.umd.js` 是该模块中唯一的 umd 文件。
+<details>
+  <summary>scoped package</summary>
+  <p>[Scoped Packages](https://docs.npmjs.com/getting-started/scoped-packages) 是 NPM 提供的服务，用于提供自定义的命名空间从而解决全局名称冲突的问题。</p>
+</details>
 
-可能需要注意的是，这里 `<script>` 标签的顺序很重要。不过现在我们会发现，控制台出现了另一个错误：
+<details>
+  <summary>main 入口</summary>
+  <p>位于 `package.json` 中的字段，[Node.js 的 Module Resolution 过程](https://nodejs.org/dist/latest-v10.x/docs/api/modules.html#modules_all_together)会自动根据其内容确定需要引入的实际文件，也被一些静态构建工具所支持。</p>
+</details>
+
+可能需要注意的是，这里 `<script>` 标签的顺序很重要（先定义，后使用）。不过现在我们会发现，控制台出现了另一个错误：
 
 ```text
 Uncaught TypeError: Cannot read property 'operators' of undefined
@@ -100,21 +150,28 @@ Uncaught TypeError: ng.core.Component is not a constructor
 global.rxjs.operators
 ```
 
-这里我们看到一个新的全局变量，叫做 `rxjs`。那么这里的 `rxjs` 是什么东西呢？Rx 是 Reactive Extentions 的缩写，为微软研究院开发的基于 .Net Framework 的 Reactive Programming（响应式编程）类库，我们这里使用的是 JavaScript 语言的移植版本，因此也叫 RxJS。
+这里我们看到一个新的全局变量，叫做 `rxjs`。Rx 是 Reactive Extentions 的缩写，为微软研究院开发的基于 .Net Framework 的响应式编程(Reactive Programming)类库，我们这里使用的是相应的 JavaScript 语言移植版本<sup>*</sup>，因此也叫 RxJS。
 
-而这里 RxJS 是 Angular 的一个重要的第三方依赖，所以我们也需要一个额外的标签来引入 RxJS：
+<details>
+  <summary>Rx 的 JavaScript 语言移植版本</summary>
+  <p>由于并不存在官方，因此 RxJS 实际上存在不同实现。最初的主流实现位于 [Reactive-Extensions](https://github.com/Reactive-Extensions/rxjs/)，曾在 2.0 早期 Alpha 版本的 Angular 中使用；当前的主流实现位于 [ReactiveX](https://github.com/ReactiveX/rxjs/)，为当前版本的 Angular 所使用。由于维护者之间进行了合理交接，因此可以将两者视作新旧版本关系。</p>
+</details>
+
+而这里 RxJS 是 Angular 的一个重要的第三方依赖，所以我们也需要一个额外的标签来引入 RxJS<sup>*</sup>：
+
+<details>
+  <summary>引入 RxJS</summary>
+  <p>由于 `rxjs` 的 `main` 入口被设定为 CMD 的模块文件，无法在浏览器中使用，因此必须手动指定 UMD 文件路径。</p>
+</details>
 
 ```html
-<!DOCTYPE html>
-<title>Hello Angular</title>
-<main>Loading...</main>
-<!-- Begin -->
+<!-- ... -->
+<ng-component>Loading...</ng-component>
+<!-- change start -->
 <script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
-<!-- End -->
-<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
-<script>
-// Original scripts here ...
-</script>
+<!-- change end -->
+<script src="https://unpkg.com/@angular/core"></script>
+<!-- ... -->
 ```
 
 在这之后，我们就可以继续期待新的错误了。
@@ -123,18 +180,27 @@ global.rxjs.operators
 
 前面说到，对于组件我们需要考虑两个问题：*有什么样的视图* 和 *如何复用*。*有什么样的视图* 这个问题我们已经解决了，那么要如何进行复用，或者说，如何确定什么时候使用这个组件呢？
 
-为了保持和 Web Components 的一致性[^9]，Angular 采用了自定义 **Selector（选择器）** 的方式来配置何时应用该组件，这里的 **Selector** 和之前的 **Template** 一样都是 **Component** 的 **Metadata**。
+为了保持和 Web Components 的一致性<sup>*</sup>，Angular 采用了自定义 **选择器(selector)** 的方式来配置何时应用该组件<sup>*</sup>，这里的选择器和之前的模板一样都是组件的元数据。
+
+<details>
+  <summary>Web Components 一致性</summary>
+  <p>早期的 Angular 设计方案中也有过基于 Web Components 实现的方案，类似于现在的 Polymer。详情参见：[Angular 2: Emulated Components](https://docs.google.com/document/d/1NFmp2ptjFfzTEYf0OPcpkacRV2_7LgTIrP5nWfJQL0o/edit#heading=h.z2blzd2pdtwt)。</p>
+</details>
 
 我们继续添加 `selector` 属性：
 
 ```javascript
+/* change start */
+const { Component } = ng.core
+/* change end */
+
 class AppComponent { }
 
 AppComponent.annotations = [
-  new ng.core.Component({
-    /* Begin */
-    selector: 'main',
-    /* End */
+  new Component({
+    /* change start */
+    selector: 'ng-component',
+    /* change end */
     template: '<h1>Hello Angular</h1>',
   })
 ]
@@ -142,34 +208,66 @@ AppComponent.annotations = [
 
 现在组件的定义已经完成了，接着来考虑如何启动应用。
 
-从 2.0.0-rc.5 版本开始，Angular 中新引入了一个 **NgModule** 的概念[^10]，用于充当应用的基本可分割单元。每个 **Component** 都必须所属于某个 **NgModule**。
+从 `2.0.0-rc.5` 版本开始，Angular 中新引入了一个 **NgModule** 的概念<sup>*</sup>，用于作为应用的基本可分割单元。每个组件都必须从属于某个 NgModule。
 
-和 **Component** 类似，每一样 **NgModule** 也是一个 **JavaScript Class**，这里我们定义一个叫 `AppModule` 的 **NgModule**：
+<details>
+  <summary>引入 NgModule</summary>
+  <p>实际上，只有 TypeScript 版本的 Angular 才引入了 NgModule 的概念，而 Dart 版本的 Angular 并不具备 NgModule 概念，仍然使用类似于 2.0.0-rc.4 及之前的方式进行开发。详情参考：[About AngularDart](https://webdev.dartlang.org/angular)。不过绝大多数情况下我们默认说的都是 Angular 的 TypeScript 实现。</p>
+</details>
+
+与组件类似，NgModule 也是类，这里我们定义一个叫 `AppModule` 的 NgModule：
 
 ```javascript
-class AppComponent { }
+const { Component/* change start */, NgModule/* change end */ } = ng.core
 
-AppComponent.annotations = [
-  //...
-]
+/* ... */
 
-/* Begin */
+/* change start */
 class AppModule { }
 
 AppModule.annotations = [
-  new ng.core.NgModule({
-    imports: [
-      ng.platformBrowser.BrowserModule,
-    ],
+  new NgModule({
     declarations: [
       AppComponent,
     ],
   })
 ]
-/* End */
+/* change end */
 ```
 
-这里我们提供的 **Metadata** 与之前的不同，是一个 `ng.core.NgModule` 类型的实例，其参数中用到了 `imports` 属性和 `declarations` 属性。`imports` 属性是一个数组，用于指定这个 **NgModule** 所依赖的其它 **NgModule**，例如所有面向 Web 的 Angular App 都需要在 **Root NgModule** 中依赖 `BrowserModule`，其中包含了浏览器平台的相关基础设施（如操作 DOM 的工具等）；`declarations` 属性还是一个数组，用于声明所有该模块的视图层相关内容，包括 **Components**、**Directives** 以及 **Pipes**。
+这里我们提供的元数据与之前的不同，是一个 `ng.core.NgModule` 的实例。而其中的 `declarations` 属性用于声明从属于这个 NgModule 的类型<sup>*</sup>。
+
+<details>
+  <summary>从属于 NgModule 的类型</summary>
+  <p>包括 **指令(Directive)** 和 **管道(Pipe)**，本节中用到的组件是一类特殊的指令。</p>
+  <p>需要注意的依赖注入是完全不同的机制，与此无关，本节中暂不涉及。</p>
+</details>
+
+由于 Angular 平台无关的设计理念，因此平台相关支持也以 NgModule 的方式提供。例如对于浏览器应用，需要引入 `BrowserModule`：
+
+```javascript
+const { Component, NgModule } = ng.core
+/* change start */
+const { BrowserModule } = ng.platformBrowser
+/* change end */
+
+/* ... */
+
+AppModule.annotations = [
+  new NgModule({
+    /* change start */
+    imports: [
+      BrowserModule,
+    ],
+    /* change end */
+    declarations: [
+      AppComponent,
+    ],
+  })
+]
+```
+
+其中 `imports` 属性是一个数组，用于指定这个 NgModule 所依赖的其它 NgModule，例如这里的 `BrowserModule`，其中包含了浏览器平台的相关基础设施（如 DOM 操作逻辑等）。
 
 再次刷新浏览器，我们终于得到了新的错误：
 
@@ -177,78 +275,60 @@ AppModule.annotations = [
 Uncaught TypeError: Cannot read property 'BrowserModule' of undefined
 ```
 
-很容易就能知道，既然 `ng.core` 是通过 `@angular/core` 引入的，很显然 `ng.platformBrowser` 也需要通过单独的 **Package** 来引入，也就是 `@angular/platform-browser`。
+很容易就能知道，既然 `ng.core` 是通过 `@angular/core` 引入的，很显然 `ng.platformBrowser` 也需要通过单独的 **包(package)** 来引入，也就是 `@angular/platform-browser`。
 
 为此我们添加一个新的 `<script>` 标签：
 
 ```html
-<!DOCTYPE html>
-<title>Hello Angular</title>
-<main>Loading...</main>
-<script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
-<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
-<!-- Begin -->
-<script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
-<!-- End -->
-<script>
-// Original scripts here ...
-</script>
+<!-- ... -->
+<script src="https://unpkg.com/@angular/core"></script>
+<!-- change start -->
+<script src="https://unpkg.com/@angular/platform-browser"></script>
+<!-- change end -->
+<!-- ... -->
 ```
 
-又进入到了没有错误的状态，不过仍然什么也没有发生。现在已经有了 **NgModule**，我们可以考虑来启动我们的 Angular 应用。启动一个 Angular 应用有很多种方式，其中最简单的方式就是通过 **NgModule** 的 **Metadata** 中的 `bootstrap` 属性来设置：
+又进入到了没有错误的状态，不过仍然什么也没有发生。现在已经有了 NgModule，我们可以考虑来启动我们的 Angular 应用。启动一个 Angular 应用有很多种方式，其中最简单的方式就是通过 NgModule 元数据中的 `bootstrap` 属性来设置自启动：
 
 ```javascript
-class AppComponent { }
-
-AppComponent.annotations = [
-  //...
-]
-
-class AppModule { }
+/* ... */
 
 AppModule.annotations = [
-  new ng.core.NgModule({
+  new NgModule({
     imports: [
-      ng.platformBrowser.BrowserModule,
+      BrowserModule,
     ],
     declarations: [
       AppComponent,
     ],
-    /* Begin */
+    /* change start */
     bootstrap: [
       AppComponent,
     ],
-    /* End */
+    /* change end */
   })
 ]
 ```
 
-这样就将 `AppComponent` 设置为 `AppModule` 的自启动组件。那么又要如何启动 `AppModule` 这个 **NgModule** 呢？
+这样就将 `AppComponent` 设置为 `AppModule` 的自启动组件。那么又要如何启动 `AppModule` 这个 NgModule 呢？
 
 我们首先尝试使用 `platformBrowser` 提供的 API：
 
 ```javascript
-class AppComponent { }
+const { Component, NgModule } = ng.core
+const { BrowserModule/* change start */, platformBrowser/* change end */ } = ng.platformBrowser
 
-AppComponent.annotations = [
-  //...
-]
+/* ... */
 
-class AppModule { }
-
-AppModule.annotations = [
-  //...
-]
-
-/* Begin */
-ng.platformBrowser.platformBrowser().bootstrapModule(AppModule)
-/* End */
+/* change start */
+platformBrowser().bootstrapModule(AppModule)
+/* change end */
 ```
 
 这时会出现错误：
 
 ```text
-ng.platformBrowser.platformBrowser is not a function
+Uncaught TypeError: ng.platformBrowser.platformBrowser is not a function
 ```
 
 这个错误不是很方便调试，因此直接公布答案，因为没有引入 `@angular/common` 导致初始化失败。
@@ -256,18 +336,12 @@ ng.platformBrowser.platformBrowser is not a function
 继续添加一个 `<script>` 标签：
 
 ```html
-<!DOCTYPE html>
-<title>Hello Angular</title>
-<main>Loading...</main>
-<script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
-<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
-<!-- Begin -->
-<script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
-<!-- End -->
-<script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
-<script>
-// Original scripts here ...
-</script>
+<!-- ... -->
+<script src="https://unpkg.com/@angular/core"></script>
+<!-- change start -->
+<script src="https://unpkg.com/@angular/common"></script>
+<!-- change end -->
+<script src="https://unpkg.com/@angular/platform-browser"></script>
 ```
 
 正如我们所期望的那样，新的错误为：
@@ -277,63 +351,56 @@ StaticInjectorError(Platform: core)[CompilerFactory]:
   NullInjectorError: No provider for CompilerFactory!
 ```
 
-很明显，我们缺少 `CompilerFactory` 这个内容。事实上，Angular 和 AngularJS 很大的一点不同是，AngularJS 的模版是基于 DOM 的，HTML 内容会被交给浏览器解析，随后 AngularJS 遍历 DOM 节点来实现自己的功能扩展；而 Angular 中的模版是平台无关的，HTML 内容会被事先编译成视图相关的 JavaScript 代码，而浏览器永远也见不到模版的 HTML 内容。
+很明显，我们缺少 `CompilerFactory` 这个内容。事实上，Angular 和 AngularJS 很大的一点不同是，AngularJS 的模版是基于 DOM 的，HTML 内容会被交给浏览器解析，随后 AngularJS 遍历 DOM 节点来实现自己的功能扩展；而 Angular 中的模版是平台无关的，HTML 内容会被事先编译成视图相关的 JavaScript 代码<sup>*</sup>，而浏览器永远也见不到模版的 HTML 内容。
 
-因此，Angular 使用了一个功能强大的模版编译器，在不依靠预处理工具的情况下，我们只能在浏览器里引入这个编译器，位于 `@angular/compiler`：
+<details>
+  <summary>Angular 的模版编译</summary>
+  <p>2.0 的早期 Alpha 版本中采用过基于浏览器的 Parser 实现，之后被废弃。此后均使用平台无关的自有实现。</p>
+</details>
+
+
+因此，Angular 使用了一个功能强大的模版编译器，在不依靠预处理工具的情况下，便需要在浏览器中引入这个编译器，位于 `@angular/compiler`：
 
 ```html
-<!DOCTYPE html>
-<title>Hello Angular</title>
-<main>Loading...</main>
-<script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
-<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
-<script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
-<!-- Begin -->
-<script src="https://unpkg.com/@angular/compiler/bundles/compiler.umd.js"></script>
-<!-- End -->
-<script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
-<script>
-// Original scripts here ...
-</script>
+<!-- ... -->
+<script src="https://unpkg.com/@angular/common"></script>
+<!-- change start -->
+<script src="https://unpkg.com/@angular/compiler"></script>
+<!-- change end -->
+<script src="https://unpkg.com/@angular/platform-browser"></script>
+<!-- ... -->
 ```
 
-不过，很遗憾的是，这次错误并没有消失也没有变化。事实上，`@angular/platform-browser` 的 API 仅仅适用于对已经预编译过的 **NgModule**，而对于无构建工具的在线运行，我们需要使用另一个 API，位于 `@angular/platform-browser-dynamic`。`PlatformBrowserDynamic` 能够在运行时融合 `PlatformBrowser` 和 `Compiler`，提供运行时动态编译的功能。因此，继续添加一个 `<script>` 标签：
+不过，很遗憾的是，这次错误并没有消失也没有变化。事实上，`@angular/platform-browser` 的 API 仅仅适用于对已经预编译过的 NgModule<sup>*</sup>，而对于无构建工具的在线运行，我们需要使用另一个 API，位于 `@angular/platform-browser-dynamic`。其中的 `PlatformBrowserDynamic` 能够在运行时融合 `PlatformBrowser` 和 `Compiler`，提供运行时动态编译的功能。因此，继续添加一个 `<script>` 标签：
+
+<details>
+  <summary>@angular/platform-browser 的适用范围</summary>
+  <p>从技术上而言不同平台仅仅是包含 Provider 的多寡，因此只要能够自行提供 Compiler 实现，仍然可以在 @angular/platform-browser 中使用 JIT 编译方式。</p>
+</details>
 
 ```html
-<!DOCTYPE html>
-<title>Hello Angular</title>
-<main>Loading...</main>
-<script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
-<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
-<script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
-<script src="https://unpkg.com/@angular/compiler/bundles/compiler.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
-<!-- Begin -->
-<script src="https://unpkg.com/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js"></script>
-<!-- End -->
-<script>
-// Original scripts here ...
-</script>
+<!-- ... -->
+<script src="https://unpkg.com/@angular/platform-browser"></script>
+<!-- change start -->
+<script src="https://unpkg.com/@angular/platform-browser-dynamic"></script>
+<!-- change end -->
+<!-- ... -->
 ```
 
 并将我们的启动代码修改为：
 
 ```javascript
-class AppComponent { }
+/* ... */
 
-AppComponent.annotations = [
-  //...
-]
+/* change start */
+const { platformBrowserDynamic } = ng.platformBrowserDynamic
+/* change end */
 
-class AppModule { }
+/* ... */
 
-AppModule.annotations = [
-  //...
-]
-
-/* Begin */
-ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
-/* End */
+/* change start */
+platformBrowserDynamic().bootstrapModule(AppModule)
+/* change end */
 ```
 
 在此之后，我们得到了最后一个错误（八年抗战到最后一年了？）：
@@ -342,24 +409,16 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 Error: In this configuration Angular requires Zone.js
 ```
 
-这里就十分浅显易懂了，而且解决方案就是如其所述，添加一个 Zone.js 的 `<script>` 标签：
+这里就十分浅显易懂了，而且解决方案就是如其所述<sup>*</sup>，修改启动配置为：
 
-```html
-<!DOCTYPE html>
-<title>Hello Angular</title>
-<main>Loading...</main>
-<!-- Begin -->
-<script src="https://unpkg.com/zone.js/dist/zone.js"></script>
-<!-- End -->
-<script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
-<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
-<script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
-<script src="https://unpkg.com/@angular/compiler/bundles/compiler.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js"></script>
-<script>
-// Original scripts here ...
-</script>
+<details>
+  <summary>In this configuration Angular requires Zone.js</summary>
+  <p>实际上显然还有另一种方案，就是引入 Zone.js。此处出于教学目的暂不使用以便于理解 Zone.js 的作用。</p>
+  <p>当前实现中不使用 Zone.js 的方式[仍然存在 BUG](https://github.com/angular/angular/issues/23428)，会产生额外报错。</p>
+</details>
+
+```javascript
+platformBrowserDynamic().bootstrapModule(AppModule/* change start */, { ngZone: 'noop' }/* change end */)
 ```
 
 之后，我们就能看到我们想要的内容：
@@ -368,26 +427,42 @@ Error: In this configuration Angular requires Zone.js
 Hello Angular
 ```
 
+最后，我们可以尝试移除 `AppComponent` 的 `selector`：
+
+```javascript
+AppComponent.annotations = [
+  new Component({
+    /* change start */
+    /* change end */
+    template: '<h1>Hello Angular</h1>',
+  })
+]
+```
+
+发现应用仍然能够继续工作，这是因为组件默认的 `selector` 即为 `ng-component`，实际应用中并不推荐使用默认选择器。
+
 完整的 HTML 文件内容如下：
 
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>Loading...</main>
-<script src="https://unpkg.com/zone.js/dist/zone.js"></script>
+<ng-component>Loading...</ng-component>
 <script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
-<script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
-<script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
-<script src="https://unpkg.com/@angular/compiler/bundles/compiler.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
-<script src="https://unpkg.com/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js"></script>
+<script src="https://unpkg.com/@angular/core"></script>
+<script src="https://unpkg.com/@angular/common"></script>
+<script src="https://unpkg.com/@angular/compiler"></script>
+<script src="https://unpkg.com/@angular/platform-browser"></script>
+<script src="https://unpkg.com/@angular/platform-browser-dynamic"></script>
 
 <script>
+const { Component, NgModule } = ng.core
+const { BrowserModule } = ng.platformBrowser
+const { platformBrowserDynamic } = ng.platformBrowserDynamic
+
 class AppComponent { }
 
 AppComponent.annotations = [
-  new ng.core.Component({
-    selector: 'main',
+  new Component({
     template: '<h1>Hello Angular</h1>',
   })
 ]
@@ -395,9 +470,9 @@ AppComponent.annotations = [
 class AppModule { }
 
 AppModule.annotations = [
-  new ng.core.NgModule({
+  new NgModule({
     imports: [
-      ng.platformBrowser.BrowserModule,
+      BrowserModule,
     ],
     declarations: [
       AppComponent,
@@ -408,7 +483,7 @@ AppModule.annotations = [
   })
 ]
 
-ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
+platformBrowserDynamic().bootstrapModule(AppModule, { ngZone: 'noop' })
 </script>
 ```
 
@@ -423,7 +498,7 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 
 #### Angular 是否能够使用 JavaScript 开发？
 
-你有没有动手？
+要不要再看一遍呢？
 
 #### Angular 是否不推荐使用 JavaScript 开发？
 
@@ -439,23 +514,15 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 
 #### Angular 是否能够使用 CDN 引入？
 
-你有没有动手？
+要不要再看一遍呢？
 
 #### Angular 是否提供官方 CDN 站点？
 
-不提供，而且也不推荐运行时引入的方式。
-
-#### @angular 的 Scope 里有多少 Packages？
-
-目前仍在维护的有 22 个，不同平台不同需求下需要用到的内容不同，另外很大一部分为工具，不属于运行时依赖，详见：[@angular](https://www.npmjs.com/~angular)。
+不提供，而且也不推荐运行时引入的方式。Angular 的设计理念就是对构建友好，为此具备极佳的 Tree-Shaking 支持，构建后大小与构建前差异很大。
 
 #### Angular 需要多少外部依赖？
 
-1 个或 2 个，取决于是否把 Zone.js 当作 Angular 的一部分。
-
-#### Angular 是否需要用到 Metadata Reflection API？
-
-只有在同时使用 **Decorator 语法** 和基于 TypeScript 的 **JIT 编译** 方式的情况下才会用到。
+1 个或 2 个，取决于是否使用 Zone.js，这里在没有使用 Zone.js 的情况下仅需要 RxJS 一个依赖。
 
 #### Angular 的元数据有几种提供方式？
 
@@ -468,31 +535,3 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 #### Angular 有哪些启动方式？
 
 后文中会提及。
-
-#### 如果不给 Component 设定 selector 会怎样？
-
-对于 Bootstrap Component 而言，默认的 `selector` 为 `ng-component`，可以不手动设定。
-
----
-
-[^1]: 在 HTML 中，`<html>`、`<head>` 和 `<body>` 等都是可选标签，但是大部分情况下为了保持页面的结构清晰我们仍然会使用这些标签。详见：[HTML 5.1: 8. The HTML syntax](https://www.w3.org/TR/html/syntax.html#optional-tags)。
-
-[^2]: 浏览器并不属于开发工具，只是普通的日常 App，所以并不违反我们上面不使用开发工具的承诺。当然，这里要求浏览器能够支持 ES2015。
-
-[^3]: 在 Angular 项目中，对于 Component 类型的 JavaScript class 而言，其命名通常以 Component 结尾。此外，对于应用的根元素，通常采用 AppComponent 作为其名称。不过这些都 Angular 团队推荐的代码风格，对实现并不会造成任何影响。
-
-[^4]: 组件本身并不会有任何「作为根组件」的标记，而设计根组件的一个常用方式是通过 NgModule 的相关 Metadata，其它设置方式会在之后的部分覆盖。
-
-[^5]: 之后我们所有自己写的 JavaScript 代码都在这个 `<script>` 标签中，如无特殊情况不再特别说明。
-
-[^6]: ES2015 中并没有提供值属性的语法，只有访问器属性和方法的声明语法。目前有一个 Stage 2 的 ES Proposal 中给出了类的值属性语法的相应提案，详情参见：[tc39/proposal-class-public-fields](https://github.com/tc39/proposal-class-public-fields)。
-
-[^7]: Scope Packages 是 NPM 提供的服务，用于提供自定义的命名空间从而解决全局名称冲突的问题。详情参见：[scope | npm Documentation](https://docs.npmjs.com/misc/scope)。
-
-[^8]: Metadata Reflection API 所在 Repo 为：[rbuckton/reflect-metadata](https://github.com/rbuckton/reflect-metadata)，文档在：[Metadata Proposal - ECMAScript](https://rbuckton.github.io/reflect-metadata/)。目前并未提交给 TC39，所以不属于任何 Stage。
-
-[^9]: 早期的 Angular 设计方案中也有过基于 Web Components 实现的方案，类似于现在的 Polymer。详情参见：[Angular 2: Emulated Components](https://docs.google.com/document/d/1NFmp2ptjFfzTEYf0OPcpkacRV2_7LgTIrP5nWfJQL0o/edit#heading=h.z2blzd2pdtwt)。
-
-[^10]: 实际上，只有 TypeScript 实现的 Angular 才引入了 NgModule 的概念，而 Dart 版本的 Angular 并没有 NgModule，仍然使用类似于 2.0.0-rc.4 及之前的方式进行开发。详情参考：[About AngularDart](https://webdev.dartlang.org/angular)。不过绝大多数情况下我们默认说的都是 Angular 的 TypeScript 实现。
-
-[^11]: Prolifill = Probably a polyfill，由于 Zone API 仍然处于 Stage 0，也就是说仅仅在 tc39 留档。而 Stage 1 开始才属于语言提案，Stage 4 之后才进入语言规范中。所以 Zone API 仅仅是可能作为未来标准的 Polyfill。关于 Polyfill、Ponyfill 和 Prolifill 的辨析可以参考：[Polyfill, Ponyfill & Prollyfill](https://kikobeats.com/polyfill-ponyfill-and-prollyfill/)。
