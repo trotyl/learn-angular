@@ -120,17 +120,13 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 <!DOCTYPE html>
 <title>Hello Angular</title>
 <main>TODO</main>
-<script>
-Reflect.getOwnMetadata = () => {}
-</script>
 <script src="https://unpkg.com/zone.js/dist/zone.js"></script>
-<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
 <script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
 <script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
 <script src="https://unpkg.com/@angular/compiler/bundles/compiler.umd.js"></script>
 <script src="https://unpkg.com/@angular/platform-browser/bundles/platform-browser.umd.js"></script>
 <script src="https://unpkg.com/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js"></script>
-<script src="./main.js"></script>
 ```
 
 现在，我们有了单独的 JavaScript 文件。不过，将所有代码放在一个 JavaScript 文件中显然不利于后期维护，为此我们借助自 ES2015 开始引入的 Module 特性，将 `main.js` 拆分为多个 Module 形式的 JavaScript 文件：
@@ -181,15 +177,14 @@ import { AppModule } from './app.module.js'
 ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 ```
 
+以及：
+
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
 <main>TODO</main>
-<script>
-Reflect.getOwnMetadata = () => {}
-</script>
 <script src="https://unpkg.com/zone.js/dist/zone.js"></script>
-<script src="https://unpkg.com/rxjs/bundles/Rx.js"></script>
+<script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
 <script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
 <script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
 <script src="https://unpkg.com/@angular/compiler/bundles/compiler.umd.js"></script>
@@ -207,10 +202,10 @@ Reflect.getOwnMetadata = () => {}
 然后再次用刚刚准备好的浏览器打开我们的 `index.html` 文件，发现出现了一条报错（以 Chrome 为例）：
 
 ```text
-Access to Script at 'file:///Users/zjyu/GitBook/Library/Import/learn-angular/code-examples/001-002/step-002/main.js' from origin 'null' has been blocked by CORS policy: Invalid response. Origin 'null' is therefore not allowed access.
+Access to Script at 'file:///.../main.js' from origin 'null' has been blocked by CORS policy: Invalid response. Origin 'null' is therefore not allowed access.
 ```
 
-这是因为使用 `file://` 协议的时候对于 **Origin（源）** 的判断上会有些问题，任何一个 Web 前端工程师都应该知道相应的解决方案 —— 开一个 Server。
+这是因为使用 `file://` 协议的时候对于 **Origin（源）** 的判断上会有些问题，任何一个 Web 前端工程师都应该知道相应的解决方案 —— 启动一个服务器。
 
 我们可以使用 `yarn global add http-server`[^17] 来快速安装一个静态文件服务器（如果有其它的 Server 或者其它的包管理器，自行调整即可，对结果没有影响）。
 
@@ -310,21 +305,21 @@ platformBrowserDynamic().bootstrapModule(AppModule)
 
 ```text
 ERROR in ./main.js
-Module not found: Error: Can't resolve '@angular/platform-browser-dynamic' in '/Users/zjyu/GitBook/Library/Import/learn-angular/code-examples/001-002/step-004'
+Module not found: Error: Can't resolve '@angular/platform-browser-dynamic' in '...'
  @ ./main.js 1:0-74
 
 ERROR in ./app.module.js
-Module not found: Error: Can't resolve '@angular/core' in '/Users/zjyu/GitBook/Library/Import/learn-angular/code-examples/001-002/step-004'
+Module not found: Error: Can't resolve '@angular/core' in '...'
  @ ./app.module.js 1:0-40
  @ ./main.js
 
 ERROR in ./app.module.js
-Module not found: Error: Can't resolve '@angular/platform-browser' in '/Users/zjyu/GitBook/Library/Import/learn-angular/code-examples/001-002/step-004'
+Module not found: Error: Can't resolve '@angular/platform-browser' in '...'
  @ ./app.module.js 2:0-57
  @ ./main.js
 
 ERROR in ./app.component.js
-Module not found: Error: Can't resolve '@angular/core' in '/Users/zjyu/GitBook/Library/Import/learn-angular/code-examples/001-002/step-004'
+Module not found: Error: Can't resolve '@angular/core' in '...'
  @ ./app.component.js 1:0-41
  @ ./app.module.js
  @ ./main.js
@@ -350,9 +345,6 @@ webpack main.js bundle.js
 <!DOCTYPE html>
 <title>Hello Angular</title>
 <main>TODO</main>
-<script>
-Reflect.getOwnMetadata = () => {}
-</script>
 <script src="https://unpkg.com/zone.js/dist/zone.js"></script>
 <script src="./bundle.js"></script>
 ```
@@ -388,9 +380,9 @@ tsc --allowJs main.js
 现在错误变了，为：
 
 ```text
-error TS5055: Cannot write file '/Users/zjyu/GitBook/Library/Import/learn-angular/code-examples/001-002/step-005/app.component.js' because it would overwrite input file.
+error TS5055: Cannot write file '.../app.component.js' because it would overwrite input file.
   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
-error TS5055: Cannot write file '/Users/zjyu/GitBook/Library/Import/learn-angular/code-examples/001-002/step-005/app.module.js' because it would overwrite input file.
+error TS5055: Cannot write file '.../app.module.js' because it would overwrite input file.
   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
 error TS5055: Cannot write file 'main.js' because it would overwrite input file.
   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
@@ -409,25 +401,7 @@ tsc --allowJs --outDir dist main.js
 ```text
 node_modules/@angular/common/src/directives/ng_class.d.ts(48,34): error TS2304: Cannot find name 'Set'.
 node_modules/@angular/compiler/src/aot/compiler.d.ts(48,32): error TS2304: Cannot find name 'Map'.
-node_modules/@angular/compiler/src/compile_metadata.d.ts(369,20): error TS2304: Cannot find name 'Set'.
-node_modules/@angular/compiler/src/compile_metadata.d.ts(371,28): error TS2304: Cannot find name 'Set'.
-node_modules/@angular/compiler/src/compile_metadata.d.ts(373,15): error TS2304: Cannot find name 'Set'.
-node_modules/@angular/compiler/src/compile_metadata.d.ts(375,23): error TS2304: Cannot find name 'Set'.
-node_modules/@angular/compiler/src/compile_metadata.d.ts(377,17): error TS2304: Cannot find name 'Set'.
-node_modules/@angular/compiler/src/compile_metadata.d.ts(379,25): error TS2304: Cannot find name 'Set'.
-node_modules/@angular/compiler/src/output/output_ast.d.ts(444,63): error TS2304: Cannot find name 'Set'.
-node_modules/@angular/core/src/change_detection/differs/default_iterable_differ.d.ts(28,32): error TS2304: Cannot find name 'Iterable'.
-node_modules/@angular/core/src/change_detection/differs/default_keyvalue_differ.d.ts(24,16): error TS2304: Cannot find name 'Map'.
-node_modules/@angular/core/src/change_detection/differs/default_keyvalue_differ.d.ts(32,16): error TS2304: Cannot find name 'Map'.
-node_modules/@angular/core/src/change_detection/differs/iterable_differs.d.ts(15,48): error TS2304: Cannot find name 'Iterable'.
-node_modules/@angular/core/src/change_detection/differs/keyvalue_differs.d.ts(23,18): error TS2304: Cannot find name 'Map'.
-node_modules/@angular/core/src/di/reflective_provider.d.ts(87,123): error TS2304: Cannot find name 'Map'.
-node_modules/@angular/core/src/di/reflective_provider.d.ts(87,165): error TS2304: Cannot find name 'Map'.
-node_modules/@angular/platform-browser/src/browser/browser_adapter.d.ts(79,33): error TS2304: Cannot find name 'Map'.
-node_modules/@angular/platform-browser/src/dom/dom_adapter.d.ts(97,42): error TS2304: Cannot find name 'Map'.
-node_modules/@angular/platform-browser/src/dom/shared_styles_host.d.ts(11,30): error TS2304: Cannot find name 'Set'.
-node_modules/@angular/platform-browser/src/dom/shared_styles_host.d.ts(22,30): error TS2304: Cannot find name 'Set'.
-node_modules/rxjs/Observable.d.ts(69,60): error TS2693: 'Promise' only refers to a type, but is being used as a value here.
+...
 ```
 
 虽然看着很长，其实信息只有一点，就是缺少一些 ES2015 中新增内容的类型定义。事实上，TypeScript 不仅支持编译到 JavaScript，还能设定不同的 JavaScript 级别，默认为 ES5。然后，在输出 ES5 的情况下，TypeScript 会发现我们使用了 ES2015 的内容，由于这些内容不是语法，只是 API，所以是不会通过转译实现的，而是要自行添加相应的 Polyfill。
@@ -446,7 +420,7 @@ tsc --allowJs --outDir dist --target es2015 main.js
 
 我们这里选择后者，因为仅仅是作为教学目的。
 
-由于 TypeScript 自带了对最新（以及比最新还要更新）的 JavaScript 语言特性，我们现在可以直接在 JavaScript 文件中使用更多的语法糖，例如 Decorator。
+由于 TypeScript 自带了对最新（以及部分比最新还要更新）的 JavaScript 语言特性，我们现在可以直接在 JavaScript 文件中使用更多的语法糖，例如 Decorator。
 
 我们将 JavaScript 文件修改为使用 Decorator 的版本[^21]：
 
@@ -519,6 +493,8 @@ Uncaught TypeError: Reflect.defineMetadata is not a function
 
 重新看到了我们的 `Hello Angular`。
 
+不过需要注意，目前我们的文件仍然是 `.js` 后缀，即 JavaScript 语言文件。
+
 最后，我们将 JavaScript 文件改成 TypeScript 文件，并不需要改动内容，仅仅是修改后缀名为 `.ts`：
 
 ```typescript
@@ -571,7 +547,7 @@ app.module.ts(2,31): error TS2307: Cannot find module '@angular/platform-browser
 main.ts(1,40): error TS2307: Cannot find module '@angular/platform-browser-dynamic'.
 ```
 
-为什么明明没有动 `node_modules` 目录，就找不到相应的模块了呢？这其实是 TypeScript 一个历史遗留问题，我们简单增加一个参数即可解决：
+为什么明明没有动 `node_modules` 目录，就找不到相应的模块了呢？这其实是 TypeScript 一个历史遗留问题（不展开讨论），我们简单增加一个 `moduleResolution` 参数即可解决：
 
 ```bash
 tsc --target es2015 --experimentalDecorators --moduleResolution node main.ts
@@ -584,6 +560,12 @@ webpack main.js bundle.js
 ```
 
 刷新浏览器，发现一切正常。现在我们就成功地将整个项目 Script 形式的单文件 JavaScript 逐步迁移成了 Module 形式的多文件 TypeScript。不过目前我们 **并没有用到任何 TypeScript 语言** 的内容，仅仅是将 JavaScript 文件改了后缀名而已。
+
+在线示例：
+
+<iframe width="800" height="600"
+        src="https://stackblitz.com/edit/learn-angular-001-002?embed=1&file=main.ts"></iframe>
+
 
 ## 可能的疑惑
 
