@@ -195,7 +195,7 @@ webpack src/main.js out-webpack/bundle.js
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<app-root>TODO</app-root>
+<app-root>Loading...</app-root>
 <script src="https://unpkg.com/zone.js/dist/zone.js"></script>
 <script src="./bundle.js"></script>
 ```

@@ -9,10 +9,10 @@
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>TODO</main>
+<main>Loading...</main>
 ```
 
-用浏览器[^2]打开这个 HTML 文件，我们能够看到一行（一点也不好看的）`TODO` 字样。
+用浏览器[^2]打开这个 HTML 文件，我们能够看到一行（一点也不好看的）`Loading...` 字样。
 
 我们知道（如果不知道那现在就知道了），Angular 使用 **组件化** 的方式来组织应用，所以一个应用里面必须要有 **Component（组件）**。相比于 AngularJS 而言，Angular 的设计更加面向现代 JavaScript 语言，每一样组件就是一个 **JavaScript Class（类）**，这里我们新建一个叫做定义一个叫做 `AppComponent`[^3] 的 **Class** 作为我们应用的 **Root Component（根组件）**[^4]（也是唯一组件）：
 
@@ -25,7 +25,7 @@ class AppComponent { }
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>TODO</main>
+<main>Loading...</main>
 <!-- Begin -->
 <script>
 class AppComponent { }
@@ -68,7 +68,7 @@ Uncaught ReferenceError: ng is not defined
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>TODO</main>
+<main>Loading...</main>
 <!-- Begin -->
 <script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
 <!-- End -->
@@ -107,7 +107,7 @@ global.rxjs.operators
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>TODO</main>
+<main>Loading...</main>
 <!-- Begin -->
 <script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
 <!-- End -->
@@ -184,7 +184,7 @@ Uncaught TypeError: Cannot read property 'BrowserModule' of undefined
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>TODO</main>
+<main>Loading...</main>
 <script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
 <script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
 <!-- Begin -->
@@ -258,7 +258,7 @@ ng.platformBrowser.platformBrowser is not a function
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>TODO</main>
+<main>Loading...</main>
 <script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
 <script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
 <!-- Begin -->
@@ -284,7 +284,7 @@ StaticInjectorError(Platform: core)[CompilerFactory]:
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>TODO</main>
+<main>Loading...</main>
 <script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
 <script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
 <script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
@@ -302,7 +302,7 @@ StaticInjectorError(Platform: core)[CompilerFactory]:
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>TODO</main>
+<main>Loading...</main>
 <script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
 <script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
 <script src="https://unpkg.com/@angular/common/bundles/common.umd.js"></script>
@@ -347,7 +347,7 @@ Error: In this configuration Angular requires Zone.js
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>TODO</main>
+<main>Loading...</main>
 <!-- Begin -->
 <script src="https://unpkg.com/zone.js/dist/zone.js"></script>
 <!-- End -->
@@ -373,7 +373,7 @@ Hello Angular
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>TODO</main>
+<main>Loading...</main>
 <script src="https://unpkg.com/zone.js/dist/zone.js"></script>
 <script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
 <script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>

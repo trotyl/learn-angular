@@ -119,7 +119,7 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>TODO</main>
+<main>Loading...</main>
 <script src="https://unpkg.com/zone.js/dist/zone.js"></script>
 <script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
 <script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
@@ -182,7 +182,7 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>TODO</main>
+<main>Loading...</main>
 <script src="https://unpkg.com/zone.js/dist/zone.js"></script>
 <script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
 <script src="https://unpkg.com/@angular/core/bundles/core.umd.js"></script>
@@ -344,7 +344,7 @@ webpack main.js bundle.js
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>TODO</main>
+<main>Loading...</main>
 <script src="https://unpkg.com/zone.js/dist/zone.js"></script>
 <script src="./bundle.js"></script>
 ```
@@ -485,7 +485,7 @@ Uncaught TypeError: Reflect.defineMetadata is not a function
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>TODO</main>
+<main>Loading...</main>
 <script src="https://unpkg.com/core-js/client/shim.js"></script>
 <script src="https://unpkg.com/zone.js/dist/zone.js"></script>
 <script src="./bundle.js"></script>
