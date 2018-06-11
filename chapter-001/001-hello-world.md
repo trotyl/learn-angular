@@ -416,7 +416,8 @@ ng.platformBrowserDynamic.platformBrowserDynamic().bootstrapModule(AppModule)
 
 在线示例：
 
-<iframe src="https://stackblitz.com/edit/learn-angular-001-001?embed=1&file=index.html"></iframe>
+<iframe width="800" height="600"
+        src="https://stackblitz.com/edit/learn-angular-001-001?embed=1&file=index.html"></iframe>
 
 ## 可能的疑惑
 
