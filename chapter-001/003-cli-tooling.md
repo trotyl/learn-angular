@@ -1,5 +1,7 @@
 # 命令行工具
 
+// TODO: 内容待更新
+
 在本章前面的内容中，我们已经体验了纯粹的手写 JavaScript 代码的方式[^1]，也介绍了使用 TypeScript 编译并通过 Webpack 打包的简单构建步骤。随着项目规模的不断增大、性能要求的不断增高，传统的手写 JavaScript 方式已经很难满足现代工程项目的需要。
 
 为此，我们需要使用大量的工具，以及使用工具来管理用到的工具。
@@ -59,20 +61,18 @@ yarn install
 安装完成之后（并且安装成功的情况下），我们可以使用 Angular CLI 内置的调试服务器来启动服务：
 
 ```bash
-ng serve --aot
+ng serve
 ```
 
-Angular 使用将 HTML 模版编译成 JavaScript 代码的方式来实现视图层的相关操作，而 AOT（Ahead-of-Time）编译是指在开发时就进行该编译步骤，而后直接将编译后的代码打包到最终发行文件中，避免了运行时引入编译器影响传输文件大小和启动时间。
-
-而在之后的版本中[^10]，Angular CLI 将会把 AOT 设定为默认的调试启动方式，从而避免某些情况下 JIT 和 AOT 编译行为的不一致性影响开发体验。
+Angular 使用将 HTML 模版编译成 JavaScript 代码的方式来实现视图层的相关操作。
 
 不过，现在我们所生成的代码都在内存当中。不过对于生产环境，我们并不会使用 Webpack Dev Server 作为应用服务器，为此我们需要把生成的静态文件取出。为此我们可以使用另一个命令：
 
 ```bash
-ng build -prod
+ng build --prod
 ```
 
-注意这里 `-prod` 正确的写法是单横杠[^11]，作为 `--target=production` 的 Alias。
+这里 `--prod` 正确是作为 `--configuration=prodution` 的简写，并不是一个独立选项。
 
 然后我们可以在 `dist` 目录中得到全部的静态文件内容，拷贝到服务器相应的静态文件目录中即可正常工作。
 
@@ -281,10 +281,6 @@ Webpack 在打包过程中会引入额外的内容，增加不必要的运行时
 [^8]: 目前已有引入 Bazel 的 PR：[build: Introduce Bazel build rules by alexeagle · Pull Request #16972 · angular/angular](https://github.com/angular/angular/pull/16972)。概念上而言该工具的功能与当前使用的编译及打包工具相正交，并不会发生取代的情况。
 
 [^9]: 这里并没有给出 `cd` 的步骤，如果没有能力自行切换工作路径的话，那可能不是特别适合当前的练习。
-
-[^10]: 目前将 AOT 设定为默认选项的方案仅仅在路线图中，可能于 2.x 的版本中正式引入。当前几乎唯一的 Blocker 就是 Angular Compiler 还不具备增量编译模式，使得每次改动所需要的重新编译时间较长。
-
-[^11]: 不过目前使用 `--prod` 的形式也能正常工作，官方文档中也对此存在不一致的地方，相关 Tracker 在 [ng build prod confusion: --prod vs -prod (one vs two dashes)](https://github.com/angular/angular-cli/issues/6383)。
 
 [^12]: 不过需要注意的是，`ng eject` 只能够根据参数生成某个特定方式的 Webpack 配置，如果需要得到一个通用的 Webpack 项目，可能需要多次进行 `ng eject` 然后提取 Webpack 配置中的通用部分。
 
