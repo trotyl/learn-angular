@@ -276,10 +276,42 @@ platformBrowser().bootstrapModule(AppModule)
 这时会出现错误：
 
 ```text
+Uncaught TypeError: Cannot read property 'DOCUMENT' of undefined
+Uncaught TypeError: Cannot read property 'ɵPLATFORM_BROWSER_ID' of undefined
 Uncaught TypeError: ng.platformBrowser.platformBrowser is not a function
 ```
 
-这个错误不是很方便调试，因此直接公布答案，因为没有引入 `@angular/common` 导致初始化失败。
+第三个错误其实是前两个错误引发的结果，并不需要关心。检查报错位置：
+
+```javascript
+var DOCUMENT$1 = /* here */common.DOCUMENT;
+
+/* and */
+
+var INTERNAL_BROWSER_DYNAMIC_PLATFORM_PROVIDERS = [
+    platformBrowser.ɵINTERNAL_BROWSER_PLATFORM_PROVIDERS,
+    {
+        provide: core.COMPILER_OPTIONS,
+        useValue: { providers: [{ provide: compiler.ResourceLoader, useClass: ResourceLoaderImpl, deps: [] }] },
+        multi: true
+    },
+    { provide: core.PLATFORM_ID, useValue: /* here */common.ɵPLATFORM_BROWSER_ID },
+];
+```
+
+所以问题在于 `common` 的缺失。检查 UMD 文件头：
+
+```javascript
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/compiler'), require('@angular/core'), require('@angular/common'), require('@angular/platform-browser')) :
+	typeof define === 'function' && define.amd ? define('@angular/platform-browser-dynamic', ['exports', '@angular/compiler', '@angular/core', '@angular/common', '@angular/platform-browser'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.platformBrowserDynamic = {}),global.ng.compiler,global.ng.core,global.ng.common,global.ng.platformBrowser));
+}(this, (function (exports,compiler,core,common,platformBrowser) { /* ... */ }
+```
+
+可以快速确定 `common` 在 Global fallback 模式<sup>*</sup>下即为 `ng.common`，由 `@angular/common` 这个 package 提供。
+
+> **Global fallback 模式**：UMD 格式提供 CommonJS、AMD 和全局变量三种模块化方案的支持，由于全局变量仅仅在不支持 CommonJS 以及 AMD 的情况下使用，因此可以视作 fallback。
 
 继续添加一个 `<script>` 标签：
 

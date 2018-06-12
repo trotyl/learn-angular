@@ -109,7 +109,7 @@ MyApp.prototype.greet.returns = String
 
 所以说，就目前的客观事实下，如果想用 Angular 开发实际项目，那么就应该使用 TypeScript。
 
-为此，我们现在就开始将我们上一节中完成 的 Hello World 项目迁移到使用 TypeScript 的方式。
+为此，我们现在就开始将我们上一节中完成的 Hello World 项目迁移到更加现代化的 JavaScript 语言特性，为之后使用 TypeScript 做铺垫。
 
 首先，我们将 JavaScript 文件从 HTML 文件中分离，命名为 `main.js`，内容为：
 
@@ -212,36 +212,34 @@ import { AppModule } from './app.module.js'
 
 const { platformBrowserDynamic } = ng.platformBrowserDynamic
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+platformBrowserDynamic().bootstrapModule(AppModule, { ngZone: 'noop' })
 ```
 
-以及：
+同时修改 HTML 中 `main.js` 的 `type`：
 
 ```html
-<!DOCTYPE html>
-<title>Hello Angular</title>
-<ng-component>Loading...</ng-component>
-<script src="https://unpkg.com/rxjs/bundles/rxjs.umd.js"></script>
-<script src="https://unpkg.com/@angular/core"></script>
-<script src="https://unpkg.com/@angular/common"></script>
-<script src="https://unpkg.com/@angular/compiler"></script>
-<script src="https://unpkg.com/@angular/platform-browser"></script>
-<script src="https://unpkg.com/@angular/platform-browser-dynamic"></script>
-<script src="./main.js"></script>
+<!-- ... -->
+<!-- change start -->
+<script src="./main.js" type="module"></script>
+<!-- change end -->
 ```
 
-和上一节中不同，现在我们确实需要使用到 **开发工具** 级别的浏览器了，选项有：
+这时候需要进一步确认浏览器支持，选项有：
 
-1. 安装最新版本的 Chrome[^14] (>= 61.0)；
-2. 安装最新版本的 Firefox Beta / Firefox Developer / Firefox Nightly[^15] (>= 54.0)，进入 `about:config`，开启 `dom.moduleScripts.enabled` 这个开关；
-3. 安装最新版本的 Safari[^16] (>= 10.1)，什么准备操作也不用做。
+1. 安装最新版本的 Chrome<sup>*</sup> (>= 61.0)；
+2. 安装最新版本的 Firefox<sup>*</sup> (>= 60.0)；
+3. 安装最新版本的 Safari<sup>*</sup> (>= 10.1)；
+4. 安装最新版本的 Edge<sup>*</sup> (>= 16)。
 
-[^14]: Chome Canary 的下载地址：[Chrome Browser](https://www.google.com/chrome/browser/canary.html)。
+> **Chome**：的下载地址 [Chrome Web Browser](https://www.google.com/chrome/)。
 
-[^15]: Firefox Nightly 的下载地址：[Try New Browser Features in Pre-Release Versions | Firefox](https://www.mozilla.org/en-US/firefox/channel/desktop/)。
+> **Firefox**：下载地址 [Download Firefox — Free Web Browser](https://www.mozilla.org/en-US/firefox/new/)。
 
-[^16]: Safari 的下载地址：[Apple - Support - Downloads](https://support.apple.com/downloads/safari)。
+> **Safari**：下载地址 [Apple - Support - Downloads](https://support.apple.com/downloads/safari)。
 
+> **Edge**：下载地址 [Web Browser for Desktop & Mobile | Microsoft Edge](https://www.microsoft.com/en-us/windows/microsoft-edge)。
+
+这里可以看出的好消息是四大主流浏览器都提供了 ES Module 的原生支持，坏消息是仍然有大量用户使用的不是最新版本。
 
 然后再次用刚刚准备好的浏览器打开我们的 `index.html` 文件，发现出现了一条报错（以 Chrome 为例）：
 
@@ -249,9 +247,17 @@ platformBrowserDynamic().bootstrapModule(AppModule)
 Access to Script at 'file:///.../main.js' from origin 'null' has been blocked by CORS policy: Invalid response. Origin 'null' is therefore not allowed access.
 ```
 
-这是因为使用 `file://` 协议的时候对于 **Origin（源）** 的判断上会有些问题，任何一个 Web 前端工程师都应该知道相应的解决方案 —— 启动一个服务器。
+这是因为使用 `file://` 协议的时候对于 **Origin（源）** 的判断上会有些问题（当然从安全层面而言是完全正确的处理），任何一个 Web 前端工程师都应该知道相应的解决方案 —— 启动服务器。
 
-我们可以使用 `yarn global add http-server`[^17] 来快速安装一个静态文件服务器（如果有其它的 Server 或者其它的包管理器，自行调整即可，对结果没有影响）。
+我们可以使用：
+
+```bash
+yarn global add http-server
+```
+
+来快速安装<sup>*</sup>一个静态文件服务器（如果有其它的 Server 或者其它的包管理器，自行调整即可，对结果没有影响）。
+
+> **Yarn**：一款 Facebook 推出的包管理器，基于 NPM Registry，相比 NPM 而言对功能和性能进行了一些增强。官网为 [Yarn](https://yarnpkg.com/)。
 
 这时我们在 `index.html` 所在的路径使用 `http-server` 启动一个服务器，然后在浏览器中访问 `http://localhost:8080/`（以自己的实际端口为准），又一次得到了同样的内容：
 
@@ -259,230 +265,226 @@ Access to Script at 'file:///.../main.js' from origin 'null' has been blocked by
 Hello Angular
 ```
 
-这样就完成了 **模块化** 的过程，不过需要注意的是，**目前为止我们使用的都是能够直接在浏览器中运行的没有使用任何预处理的普通的 JavaScript**。
-
-如果我们熟悉 ES Module 的话，为了美观，我们可以把 `export` 部分[^18] inline 化，得到：
+目前为止我们使用的都是能够直接在浏览器中运行的没有使用任何预处理的普通 JavaScript。之后，我们更进一步，借助预处理工具，把外部依赖也改用 Module 的形式引入，不再使用 `ng` 全局变量：
 
 ```javascript
 /* app.component.js */
-export class AppComponent { }
 
-AppComponent.annotations = [
-  new ng.core.Component({
-    selector: 'main',
-    template: '<h1>Hello Angular</h1>',
-  })
-]
+/* change start */
+import { Component } from '@angular/core'
+/* change end */
+
+class AppComponent { }
+/* ... */
 
 /* app.module.js */
 import { AppComponent } from './app.component.js'
-
-export class AppModule { }
-
-AppModule.annotations = [
-  new ng.core.NgModule({
-    imports: [
-      ng.platformBrowser.BrowserModule,
-    ],
-    declarations: [
-      AppComponent,
-    ],
-    bootstrap: [
-      AppComponent,
-    ],
-  })
-]
-```
-
-这样代码组织上会显得更加简洁。
-
-之后，我们更进一步，借助预处理工具，把外部依赖也改用 Module 的形式引入，并且最后只引入一个 JavaScript 文件。首先将 JavaScript 文件修改为：
-
-```javascript
-/* app.component.js */
-import { Component } from '@angular/core'
-
-export class AppComponent { }
-
-AppComponent.annotations = [
-  new Component({
-    selector: 'main',
-    template: '<h1>Hello Angular</h1>',
-  })
-]
-
-/* app.module.js */
+/* change start */
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
-import { AppComponent } from './app.component'
+/* change end */
 
-export class AppModule { }
-
-AppModule.annotations = [
-  new NgModule({
-    imports: [
-      BrowserModule,
-    ],
-    declarations: [
-      AppComponent,
-    ],
-    bootstrap: [
-      AppComponent,
-    ],
-  })
-]
+class AppModule { }
+/* ... */
 
 /* main.js */
+import { AppModule } from './app.module.js'
+/* change start */
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'
-import { AppModule } from './app.module'
+/* change end */
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+platformBrowserDynamic().bootstrapModule(AppModule, { ngZone: 'noop' })
 ```
 
-这样，我们就可以告别冗长的 `ng.moduleName.localName` 全局访问形式了，代码更为直观。
+这里能够很清晰地看出 **模块(Module)** 的组成方式，分为：
 
-接下来我们还需要进行打包，为了和之后的内容接轨，我们使用 Webpack[^19] 来作为打包工具。
++ 导入；
++ 内容；
++ 导出。
 
-我们可以使用 `yarn global add webpack` 在全局安装 Webpack 的命令行工具。
+三个部分<sup>*</sup>，实际项目中不一定按照顺序书写。
 
-然后使用 `webpack main.js bundle.js`，即指定 `main.js` 为入口文件，`bundle.js` 为打包后的输出文件。这是我们会看到一些错误：
+> **模块组成部分**：按照规范，一个 Module 可以既没有 `import`，也没有 `export`，但这种情况下仍然和 Script 有本质区别。由于规范并未指定区分 Module 和 Script 的方式，而是由实现自行决定，最终 Web 使用 `<script>` 标签的 `type` 属性进行区分，而 Node.js 中通过 `.mjs` 与 `.js` 的扩展名区分。
 
-```text
-ERROR in ./main.js
-Module not found: Error: Can't resolve '@angular/platform-browser-dynamic' in '...'
- @ ./main.js 1:0-74
-
-ERROR in ./app.module.js
-Module not found: Error: Can't resolve '@angular/core' in '...'
- @ ./app.module.js 1:0-40
- @ ./main.js
-
-ERROR in ./app.module.js
-Module not found: Error: Can't resolve '@angular/platform-browser' in '...'
- @ ./app.module.js 2:0-57
- @ ./main.js
-
-ERROR in ./app.component.js
-Module not found: Error: Can't resolve '@angular/core' in '...'
- @ ./app.component.js 1:0-41
- @ ./app.module.js
- @ ./main.js
-```
-
-简单地说，就是我们缺少了 `@angular/core`、`@angular/platform-browser` 和 `@angular/platform-browser-dynamic` 这几个包，虽然我们在 `index.html` 中手动引入了，但是 Webpack 仅仅根据 JavaScript 文件进行处理，是无法知晓的。事实上，这三个仅仅是我们所直接引用的，还有很多背后所依赖的 Packages。
-
-为了简单起见，我们直接给出完整的安装列表：
-
-```bash
-yarn add @angular/core @angular/common @angular/compiler @angular/platform-browser @angular/platform-browser-dynamic rxjs
-```
-
-然后重新使用打包命令：
-
-```bash
-webpack main.js bundle.js
-```
-
-成功得到打包后的 `bundle.js` 文件，随后我们将 `index.html` 中的内容改为：
+为了能够运行，去除 HTML 中的所有 `<script>` 标签，并添加：
 
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>Loading...</main>
-<script src="https://unpkg.com/zone.js/dist/zone.js"></script>
-<script src="./bundle.js"></script>
+<ng-component>Loading...</ng-component>
+<!-- change start -->
+<script src="https://unpkg.com/systemjs"></script>
+<script>
+  SystemJS.import('./main.js')
+</script>
+<!-- change end -->
 ```
 
-启动服务器，刷新浏览器，又能重新见到我们的 `Hello Angular` 内容。
-
-剩下的内容还有什么呢？对了，迁移到 TypeScript 版本。
-
-首先，我们先迁移到 TypeScript 的工具链上，不过要注意，在更改后缀名之前，我们仍然使用的是 JavaScript 语言。全局安装 TypeScript CLI 工具的命令为：
-
-```bash
-yarn global add typescript
-```
-
-接着在不改动 JavaScript 文件的前提下，先试试 `tsc` 命令的效果：
-
-```bash
-tsc main.js
-```
-
-当然，我们还是继续秉承 EDD 的开发方式，我们现在出现的错误是：
+这时候会得到：
 
 ```text
-error TS6054: File 'main.js' has unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts'.
+Error: Unable to dynamically transpile ES module
+   A loader plugin needs to be configured via `SystemJS.config({ transpiler: 'transpiler-module' })`.
 ```
 
-这里是说，`main.js` 并不符合 TypeScript 的后缀要求。不过，我们本来也就用的不是 TypeScript 文件，所以加上 `allowJs` 选项：
+这里的错误内容浅显易懂，但在处理这个错误之前，我们首先可能会有疑问，为什么在浏览器已经原生支持了 ES Module 的情况下，会需要使用预处理工具？
 
-```bash
-tsc --allowJs main.js
+由于这个话题内容太大，因此直接提供外部链接作为答案：[为什么 ES Module 的浏览器支持没有意义](https://zhuanlan.zhihu.com/p/25046637)。
+
+这里我们按照错误要求，提供自定义的转译工具：
+
+```html
+<!DOCTYPE html>
+<title>Hello Angular</title>
+<ng-component>Loading...</ng-component>
+<script src="https://unpkg.com/systemjs"></script>
+<!-- change start -->
+<script>
+  System.config({
+    transpiler: 'ts',
+    packages: {
+      "ts": {
+        "main": "lib/plugin.js"
+      },
+      "typescript": {
+        "main": "lib/typescript.js",
+        "meta": {
+          "lib/typescript.js": {
+            "exports": "ts"
+          }
+        }
+      }
+    },
+    paths: {
+      'npm:': 'https://unpkg.com/',
+      'github:': 'https://raw.githubusercontent.com/',
+    },
+    map: {
+      'typescript': 'npm:typescript',
+      'ts': 'github:frankwallis/plugin-typescript/master',
+      'rxjs': 'npm:rxjs/index.js',
+      'rxjs/operators': 'npm:rxjs/operators/index.js',
+      '@angular/core': 'npm:@angular/core',
+      '@angular/common': 'npm:@angular/common',
+      '@angular/compiler': 'npm:@angular/compiler',
+      '@angular/platform-browser': 'npm:@angular/platform-browser',
+      '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic',
+    },
+  })
+</script>
+<!-- change end -->
+<script>
+  SystemJS.import('./main.js')
+</script>
 ```
 
-现在错误变了，为：
+看似内容很多，其实只有两点：
 
-```text
-error TS5055: Cannot write file '.../app.component.js' because it would overwrite input file.
-  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
-error TS5055: Cannot write file '.../app.module.js' because it would overwrite input file.
-  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
-error TS5055: Cannot write file 'main.js' because it would overwrite input file.
-  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
-```
+1. 使用 TypeScript 作为转译工具<sup>*</sup>，基于 [plugin-typescript](https://github.com/frankwallis/plugin-typescript) 实现；
+2. 提供模块名称映射，使用 `unpkg.com` 提供的 CDN 作为依赖源。
 
-这又是什么意思呢？
+> **使用 TypeScript 转译**：此处仅需要处理 ES Module，因此 TypeScript 并不是必须要求，也可以使用 Babel 等工具。
 
-简单地说，我们知道 TypeScript 文件会被编译为 JavaScript 文件，编译后后缀名由 `.ts` 变为 `.js`。那么如果直接编译 `.js` 文件呢？直接把源文件覆盖掉么？这样显然是不行的，为此我们需要指定输出目录：
-
-```bash
-tsc --allowJs --outDir dist main.js
-```
-
-输出到 `dist` 目录的话，总不用担心把源文件给覆盖掉了，不过现在又有一些其它问题：
-
-```text
-node_modules/@angular/common/src/directives/ng_class.d.ts(48,34): error TS2304: Cannot find name 'Set'.
-node_modules/@angular/compiler/src/aot/compiler.d.ts(48,32): error TS2304: Cannot find name 'Map'.
-...
-```
-
-虽然看着很长，其实信息只有一点，就是缺少一些 ES2015 中新增内容的类型定义。事实上，TypeScript 不仅支持编译到 JavaScript，还能设定不同的 JavaScript 级别，默认为 ES5。然后，在输出 ES5 的情况下，TypeScript 会发现我们使用了 ES2015 的内容，由于这些内容不是语法，只是 API，所以是不会通过转译实现的，而是要自行添加相应的 Polyfill。
-
-TypeScript 为我们提供了两种内置的解决方案，一种是保持输出级别为 ES5，但是告诉 TypeScript 我们能够自行解决 Polyfill 的问题：
-
-```bash
-tsc --allowJs --outDir dist --lib es2015,dom main.js
-```
-
-这里通过 `lib` 选项指定需要引入的类型定义文件[^20]。另一种方案是将输出级别改为 ES2015，如果我们的目标平台较为先进的话：
-
-```bash
-tsc --allowJs --outDir dist --target es2015 main.js
-```
-
-我们这里选择后者，因为仅仅是作为教学目的。
-
-由于 TypeScript 自带了对最新（以及部分比最新还要更新）的 JavaScript 语言特性，我们现在可以直接在 JavaScript 文件中使用更多的语法糖，例如 Decorator。
-
-我们将 JavaScript 文件修改为使用 Decorator 的版本[^21]：
+有了 TypeScript 作为转译工具，我们便可以使用浏览器中尚未实现的 ES 特性，例如静态属性，现在将元数据位置移到类的内部：
 
 ```javascript
 /* app.component.js */
-import { Component } from '@angular/core'
 
-@Component({
-  selector: 'main',
-  template: '<h1>Hello Angular</h1>',
-})
-export class AppComponent { }
+/* ... */
+class AppComponent {
+  /* change start */
+  static annotations = [
+    new Component({
+      template: '<h1>Hello Angular</h1>',
+    })
+  ]
+  /* change end */
+}
+
+/* change start */
+/* change end */
+export { AppComponent }
 
 /* app.module.js */
-import { NgModule } from '@angular/core'
-import { BrowserModule } from '@angular/platform-browser'
-import { AppComponent } from './app.component'
 
+/* ... */
+class AppModule {
+  /* change start */
+  static annotations = [
+    new NgModule({
+      imports: [
+        BrowserModule,
+      ],
+      declarations: [
+        AppComponent,
+      ],
+      bootstrap: [
+        AppComponent,
+      ],
+    })
+  ]
+  /* change end */
+}
+
+/* change start */
+/* change end */
+export { AppModule }
+```
+
+上面用到的语法就是当前 Stage 3 的[静态属性](https://github.com/tc39/proposal-static-class-features)，在 TypeScript 中已经得到支持。
+
+不过我们仅仅需要导出类型本身，单独列出 `export` 未免过于繁琐，为此可以把 `export` 声明<sup>*</sup> inline 化，得到：
+
+> **export 声明**：ES 规范中 `import` 和 `export` 这类内容并不属于 **语句(Statement)**，类似于「import 语句」是完全错误的说法。这里使用 TypeScript AST 使用的 `ExportDeclaration` 进行称呼。
+
+```javascript
+/* app.component.js */
+
+/* ... */
+/* change start */export /* change end */class AppComponent {
+  /* ... */
+}
+
+/* change start */
+/* change end */
+/* EOF */
+
+/* app.module.js */
+
+/* ... */
+/* change start */export /* change end */class AppModule {
+  /* ... */
+}
+
+/* change start */
+/* change end */
+/* EOF */
+```
+
+这样代码组织上会显得更加简洁，不过仍然还有发展空间。
+
+由于元数据都是静态内容，使用命令式的属性赋值仍然存在语法噪音，为此将此改为更加偏向声明式的 **装饰器(Decorator)** 语法：
+
+> **静态属性改为装饰器**：将静态属性改为 Decorator 的过程前后文件的语义是发生了变化的，在 JavaScript 语言层面并不等价，只是在 Angular 的功能实现上等价。
+
+```javascript
+/* app.component.js */
+
+/* ... */
+/* change start */
+@Component({
+  template: '<h1>Hello Angular</h1>',
+})
+/* change end */
+export class AppComponent {
+  /* change start */
+  /* change end */
+}
+
+/* app.module.js */
+
+/* ... */
+/* change start */
 @NgModule({
   imports: [
     BrowserModule,
@@ -494,67 +496,107 @@ import { AppComponent } from './app.component'
     AppComponent,
   ],
 })
-export class AppModule { }
+/* change end */
+export class AppModule {
+  /* change start */
+  /* change end */
+}
 ```
 
-相比于手动属性赋值而言，这样又更加简洁直观了不少。
-
-然而当我们再次尝试使用 `tsc` 编译的时候，发现了新的错误：
+之后会得到：
 
 ```text
-app.component.js(7,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option to remove this warning.
-app.module.js(16,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option to remove this warning.
+plugin.js:406 TypeScript [Error] Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option to remove this warning. (TS1219)
 ```
 
-这里是在说 Decorator 默认是不提供支持的，想要用的话自己加开关。所以很简单，加上开关就好了：
+这是由于装饰器在 TypeScript 中仍然作为实验特性<sup>*</sup>，需要主动开启：
 
-```bash
-tsc --allowJs --outDir dist --target es2015 --experimentalDecorators main.js
+> **装饰器实验特性**：[装饰器特性](https://github.com/tc39/proposal-decorators)目前仍处于 Stage 2，而 TypeScript 实现的为更加早期版本的提案内容，详情参见 [TypeScript中的装饰器(Decorators)的本质是什么（或者说它具体做了什么工作）？](https://www.zhihu.com/question/68257128/answer/261502855)。
+
+```html
+<!-- ... -->
+<script>
+  System.config({
+    transpiler: 'ts',
+    /* change start */
+    typescriptOptions: {
+      experimentalDecorators: true,
+    },
+    /* change end */
+    /* ... */
+  })
+</script>
+<!-- ... -->
 ```
 
-成功编译文件。然后重新使用 Webpack 打包，注意路径的改动：
+完整的文件内容如下：
 
-```bash
-webpack dist/main.js bundle.js
-```
-
-刷新浏览器，我们在浏览器中看到了一个错误：
-
-```text
-Uncaught TypeError: Reflect.defineMetadata is not a function
-```
-
-这个是因为我们在上一节中提供了一个假的 Metadata Reflection API，因为当时还不需要用到。不过现在是真的需要了，为此我们加上对应的 Polyfill：
+**index.html**
 
 ```html
 <!DOCTYPE html>
 <title>Hello Angular</title>
-<main>Loading...</main>
-<script src="https://unpkg.com/core-js/client/shim.js"></script>
-<script src="https://unpkg.com/zone.js/dist/zone.js"></script>
-<script src="./bundle.js"></script>
+<ng-component>Loading...</ng-component>
+<script src="https://unpkg.com/systemjs"></script>
+<script>
+  System.config({
+    transpiler: 'ts',
+    typescriptOptions: {
+      experimentalDecorators: true,
+    },
+    packages: {
+      "ts": {
+        "main": "lib/plugin.js"
+      },
+      "typescript": {
+        "main": "lib/typescript.js",
+        "meta": {
+          "lib/typescript.js": {
+            "exports": "ts"
+          }
+        }
+      }
+    },
+    paths: {
+      'npm:': 'https://unpkg.com/',
+      'github:': 'https://raw.githubusercontent.com/',
+    },
+    map: {
+      'typescript': 'npm:typescript',
+      'ts': 'github:frankwallis/plugin-typescript/master',
+      'rxjs': 'npm:rxjs/index.js',
+      'rxjs/operators': 'npm:rxjs/operators/index.js',
+      '@angular/core': 'npm:@angular/core',
+      '@angular/common': 'npm:@angular/common',
+      '@angular/compiler': 'npm:@angular/compiler',
+      '@angular/platform-browser': 'npm:@angular/platform-browser',
+      '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic',
+    },
+  })
+</script>
+<script>
+  SystemJS.import('./main.js')
+</script>
 ```
 
-重新看到了我们的 `Hello Angular`。
+**app.component.js**
 
-不过需要注意，目前我们的文件仍然是 `.js` 后缀，即 JavaScript 语言文件。
-
-最后，我们将 JavaScript 文件改成 TypeScript 文件，并不需要改动内容，仅仅是修改后缀名为 `.ts`：
-
-```typescript
-/* app.component.ts */
+```javascript
 import { Component } from '@angular/core'
 
 @Component({
-  selector: 'main',
   template: '<h1>Hello Angular</h1>',
 })
-export class AppComponent { }
+export class AppComponent {
+}
+```
 
-/* app.module.ts */
+**app.module.js**
+
+```javascript
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
-import { AppComponent } from './app.component'
+import { AppComponent } from './app.component.js'
 
 @NgModule({
   imports: [
@@ -567,48 +609,25 @@ import { AppComponent } from './app.component'
     AppComponent,
   ],
 })
-export class AppModule { }
+export class AppModule {
+}
+```
 
-/* main.ts */
+**main.js**
+
+```javascript
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'
-import { AppModule } from './app.module'
+import { AppModule } from './app.module.js'
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+platformBrowserDynamic().bootstrapModule(AppModule, { ngZone: 'noop' })
 ```
 
-同样使用 `tsc` 编译，不过已经不需要 `allowJs` 和 `ourDir` 选项了：
-
-```bash
-tsc --target es2015 --experimentalDecorators main.ts
-```
-
-不过这次又有点小问题：
-
-```text
-app.component.ts(1,27): error TS2307: Cannot find module '@angular/core'.
-app.module.ts(1,26): error TS2307: Cannot find module '@angular/core'.
-app.module.ts(2,31): error TS2307: Cannot find module '@angular/platform-browser'.
-main.ts(1,40): error TS2307: Cannot find module '@angular/platform-browser-dynamic'.
-```
-
-为什么明明没有动 `node_modules` 目录，就找不到相应的模块了呢？这其实是 TypeScript 一个历史遗留问题（不展开讨论），我们简单增加一个 `moduleResolution` 参数即可解决：
-
-```bash
-tsc --target es2015 --experimentalDecorators --moduleResolution node main.ts
-```
-
-随后重新打包：
-
-```bash
-webpack main.js bundle.js
-```
-
-刷新浏览器，发现一切正常。现在我们就成功地将整个项目 Script 形式的单文件 JavaScript 逐步迁移成了 Module 形式的多文件 TypeScript。不过目前我们 **并没有用到任何 TypeScript 语言** 的内容，仅仅是将 JavaScript 文件改了后缀名而已。
+刷新浏览器，发现一切正常。现在我们就成功地将整个项目 Script 形式的单文件 JavaScript 逐步迁移成了 Module 形式的多文件 JavaScript，并且让内容更加清晰易懂。不过目前我们 **并没有用到任何 TypeScript 语言** 的内容，仅仅是使用到了 TypeScript 来作为 JavaScript 的降级编译器。
 
 在线示例：
 
 <iframe width="800" height="600"
-        src="https://stackblitz.com/edit/learn-angular-001-002?embed=1&file=main.ts"></iframe>
+        src="https://stackblitz.com/edit/learn-angular-001-002?embed=1&file=app.component.js"></iframe>
 
 
 ## 可能的疑惑
@@ -627,7 +646,7 @@ Github 上有一个 PlayGround 的 Repo：[angular/atscript-playground](https://
 
 #### 既然 AOT 编译的要求是 TypeScript 工具和 Decorator 语法，那是否可以对使用 Decorator 语法的 JavaScript 文件进行 AOT 编译？
 
-理论上可行，Decorator 本身是（提案中的）JavaScript 语言特性，但是 TypeScript 工具对 JavaScript 文件的支持（Salsa）与 TypeScript 文件的支持略有差异，需要使用额外的构建步骤将 `.js` 文件重命名为 `.ts` 文件，另外可能还需要设置忽略相应的类型检查错误。
+理论上可行，Decorator 本身是（提案中的）JavaScript 语言特性，但是 TypeScript 工具对 JavaScript 文件的支持（Salsa）与 TypeScript 文件的支持略有差异，需要使用额外的构建步骤将 `.js` 文件转制为 `.ts` 文件，另外可能还需要设置忽略相应的类型检查错误。
 
 另外，不建议在没有相关实力的情况下主动踩坑。
 
@@ -637,50 +656,14 @@ Github 上有一个 PlayGround 的 Repo：[angular/atscript-playground](https://
 
 另外，不建议在没有相关实力的情况下主动踩坑。
 
-#### 明明 Edge 浏览器也提供了 ES Module 支持，为什么不给出相应的选项？
-
-因为我现在手上用的是 Mac。
-
-#### 为什么不在浏览器原生模块化的步骤中把外部依赖也使用 Module 的形式引入？
-
-HTML 规范所实现的 ES Module 的 Runtime Semantics: HostResolveImportedModule 过程与目前所有的模块使用方式都不兼容，详情参考：[为什么 ES Module 的浏览器支持没有意义 - 知乎专栏](https://zhuanlan.zhihu.com/p/25046637)。
-
 #### 为什么 file 协议会有跨域问题？
 
 Web 开发基础不在本书的覆盖范围内。请自行搜索其它外部资源。
-
-#### 为什么不直接写成 inline export 的形式？
-
-import, content, export 的三段式结构的表达形式更为清晰，且对原有内容几乎没有任何改动，有助于理解模块的本质。
-
-#### ES Module 到底有多少种 import 和 export 语法？
-
-JavaScript 语言基础不在本书的覆盖范围内。请自行搜索其它外部资源。
-
-#### 为什么要用 Webpack 做示例？
-
-因为 Angular CLI 用的就是 Webpack。（仅限于正式版本中）
 
 #### 为什么 TypeScript 工具的 JavaScript 支持部分叫做 Salsa？
 
 内部项目代号，大家后来习惯了就都这么叫。
 
-#### 为什么使用 TypeScript 工具编译 JavaScript 代码时不需要 --moduleResolution 选项？
-
-因为 TypeScript 默认对 JavaScript 代码不进行类型检查，因此虽然同样无法正确识别 `@angular/core` 的位置，鉴于其不会对编译结果造成影响（模块名原样保留），所以不会妨碍编译过程。另外，TypeScript 2.3 版本开始增加了一个 `--checkJs` 的选项用于提供对 JavaScript 文件的类型检查。
-
 #### 哪里能查到 TypeScript CLI 的所有编译器选项？
 
 这里：[Compiler Options · TypeScript](http://www.typescriptlang.org/docs/handbook/compiler-options.html)。
-
----
-
-[^17]: Yarn 是一款 Facebook 推出的包管理器，基于 NPM Registry，相比 NPM 而言对功能和性能进行了一些增强。官网为：[Yarn](https://yarnpkg.com/)。
-
-[^18]: 就语言规范的定义而言，`import` 和 `export` 这类语法形式构成的内容并不属于 **Statement（语句）**。
-
-[^19]: Webpack 是一个通用的 JavaScript 模块打包器，官网为：[webpack](https://webpack.js.org/)。
-
-[^20]: TypeScript 编译器的 `lib` 选项仅仅添加的是类型定义，用于通过类型检查，并不会添加实际的运行时内容。
-
-[^21]: 将静态属性改为 Decorator 的过程前后文件的语义是发生了变化的，在 JavaScript 语言层面并不等价，只是在 Angular 的功能实现上基本等价。
