@@ -460,8 +460,8 @@ platformBrowserDynamic().bootstrapModule(AppModule, { ngZone: 'noop' })
 
 在线示例：
 
-<a class="jsbin-embed" href="http://jsbin.com/wabived/embed?html,output">Hello Angular on jsbin.com</a>
-<script src="http://static.jsbin.com/js/embed.min.js?4.1.4"></script>
+<a class="jsbin-embed" href="https://jsbin.com/wabived/embed?html,output">Hello Angular on jsbin.com</a>
+<script src="https://static.jsbin.com/js/embed.min.js?4.1.4"></script>
 
 ## 可能的疑惑
 
