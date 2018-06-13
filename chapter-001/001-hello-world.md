@@ -460,8 +460,8 @@ platformBrowserDynamic().bootstrapModule(AppModule, { ngZone: 'noop' })
 
 在线示例：
 
-<iframe width="800" height="600"
-        src="https://stackblitz.com/edit/learn-angular-001-001?embed=1&file=index.html"></iframe>
+<a class="jsbin-embed" href="http://jsbin.com/wabived/embed?html,output">Hello Angular on jsbin.com</a>
+<script src="http://static.jsbin.com/js/embed.min.js?4.1.4"></script>
 
 ## 可能的疑惑
 
