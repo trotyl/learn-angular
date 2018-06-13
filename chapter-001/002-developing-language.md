@@ -626,9 +626,7 @@ platformBrowserDynamic().bootstrapModule(AppModule, { ngZone: 'noop' })
 
 在线示例：
 
-<iframe width="800" height="600"
-        src="https://stackblitz.com/edit/learn-angular-001-002?embed=1&file=app.component.js"></iframe>
-
+<iframe src="https://embed.plnkr.co/Szg6wAQIFWD9Jl2Sbb1x?deferRun" width="100%" height="600px"></iframe>
 
 ## 可能的疑惑
 
