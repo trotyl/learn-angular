@@ -4,6 +4,8 @@
 
 既然承诺不使用任何开发工具，因此也就无法推荐编辑器，读者可以自己选择任何具备文本编辑功能的程序。
 
+## HTML 入口
+
 现在，我们需要建立一个 **HTML** 文件，为了简单起见，我们只使用必要的 HTML 标签<sup>*</sup>：
 
 > **必要的 HTML 标签**：在 HTML 中，`<html>`、`<head>` 和 `<body>` 等都是可选标签，但是大部分情况下为了保持页面的结构清晰我们仍然会使用这些标签。详见：[HTML 5.1: 8. The HTML syntax](https://www.w3.org/TR/html/syntax.html#optional-tags)。
@@ -17,6 +19,10 @@
 用浏览器<sup>*</sup>打开这个 HTML 文件，我们能够看到一行（并不怎么好看的）`Loading...` 字样。
 
 > **浏览器**：浏览器并不属于开发工具，只是普通的日常 App，所以并不违反上面不使用开发工具的承诺。当然，这里要求浏览器能够支持 ES2015。
+
+这里使用了一个名为 `<ng-component>` 的元素，类似于 [Custom Elements](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements)。虽然现在还没有任何功能，不过最终我们会将其作为 Angular 应用的启动入口。
+
+## 组件定义
 
 我们知道（如果不知道那现在就知道了）Angular 使用 **组件化** 的方式来组织应用内容<sup>*</sup>，所以一个应用里面必须要有 **组件(Component)**。相比于 AngularJS 而言，Angular 的设计更加面向现代化的 JavaScript 语言特性，每个组件就是一个 **类(class)**，这里我们定义一个名为 `AppComponent`<sup>*</sup> 的类作为我们应用的 **根组件(Root Component)**<sup>*</sup>（也是唯一组件）：
 
@@ -165,7 +171,9 @@ AppComponent.annotations = [
 
 现在组件的定义已经完成了，接着来考虑如何启动应用。
 
-从 `2.0.0-rc.5` 版本开始，Angular 中新引入了一个 **NgModule** 的概念<sup>*</sup>，用于作为应用的基本可分割单元。每个组件都必须从属于某个 NgModule。
+## NgModule 定义
+
+从 `2.0.0-rc.5` 版本开始，Angular 中新引入了一个 **NgModule** 的概念<sup>*</sup>，用于作为应用的基本组织单元。每个组件都必须从属于某个 NgModule。在启动之前，必须完成完成组件与 NgModule 的关联。
 
 > **引入 NgModule**：实际上，只有 TypeScript 版本的 Angular 才引入了 NgModule 的概念，而 Dart 版本的 Angular 并不具备 NgModule 概念，仍然使用类似于 2.0.0-rc.4 及之前的方式进行开发。详情参考：[About AngularDart](https://webdev.dartlang.org/angular)。不过绝大多数情况下我们默认说的都是 Angular 的 TypeScript 实现。
 
@@ -261,6 +269,8 @@ AppModule.annotations = [
 ```
 
 这样就将 `AppComponent` 设置为 `AppModule` 的自启动组件。那么又要如何启动 `AppModule` 这个 NgModule 呢？
+
+## 应用启动
 
 我们首先尝试使用 `platformBrowser` 提供的 API：
 
@@ -398,6 +408,8 @@ platformBrowserDynamic().bootstrapModule(AppModule/* change start */, { ngZone: 
 Hello Angular
 ```
 
+## 内容精简
+
 最后，我们可以尝试移除 `AppComponent` 的 `selector`：
 
 ```javascript
@@ -412,7 +424,11 @@ AppComponent.annotations = [
 
 发现应用仍然能够继续工作，这是因为组件默认的 `selector` 即为 `ng-component`，实际应用中并不推荐使用默认选择器。
 
-完整的 HTML 文件内容如下：
+## 总结
+
+至此，我们在没有使用任何开发工具或语言扩展的情况下，完成了一个最为传统的（只使用 `<script>` 标签引入内容）的 Hello World for Angular 的版本。
+
+## 代码归档
 
 ```html
 <!DOCTYPE html>
@@ -458,9 +474,7 @@ platformBrowserDynamic().bootstrapModule(AppModule, { ngZone: 'noop' })
 </script>
 ```
 
-至此，我们在没有使用任何开发工具或语言扩展的情况下，完成了一个最为传统的（只使用 `<script>` 标签引入内容）的 Hello World for Angular 的版本。
-
-在线示例：
+## 在线示例
 
 <iframe src="https://embed.plnkr.co/8CopS7kPXKLB9827KG2M?deferRun" width="100%" height="600px" frameborder="0"></iframe>
 
