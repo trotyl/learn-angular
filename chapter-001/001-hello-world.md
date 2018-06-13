@@ -460,7 +460,7 @@ platformBrowserDynamic().bootstrapModule(AppModule, { ngZone: 'noop' })
 
 在线示例：
 
-<iframe src="https://embed.plnkr.co/8CopS7kPXKLB9827KG2M?deferRun" width="100%" height="600px"></iframe>
+<iframe src="https://embed.plnkr.co/8CopS7kPXKLB9827KG2M?deferRun" width="100%" height="600px" frameborder="0"></iframe>
 
 ## 可能的疑惑
 
