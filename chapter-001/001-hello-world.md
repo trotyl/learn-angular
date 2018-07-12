@@ -402,6 +402,21 @@ Error: In this configuration Angular requires Zone.js
 platformBrowserDynamic().bootstrapModule(AppModule/* change start */, { ngZone: 'noop' }/* change end */)
 ```
 
+同时，为了解决上述 BUG，我们在引导代码之前自行定义一个全局的 Zone 变量：
+
+```javascript
+window['Zone'] = {
+  get current() { return this },
+  assertZonePatched() { },
+  fork() { return this },
+  get() { return true },
+  run(fn) { return fn() },
+  runGuarded(fn) { return fn() },
+}
+```
+
+不过需要理解这里只是为了绕过类型检查，事实上并不会用到 Zone.js。
+
 之后，我们就能看到我们想要的内容：
 
 ```text
@@ -469,6 +484,15 @@ AppModule.annotations = [
     ],
   })
 ]
+
+window['Zone'] = {
+  get current() { return this },
+  assertZonePatched() { },
+  fork() { return this },
+  get() { return true },
+  run(fn) { return fn() },
+  runGuarded(fn) { return fn() },
+}
 
 platformBrowserDynamic().bootstrapModule(AppModule, { ngZone: 'noop' })
 </script>
