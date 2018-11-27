@@ -25,7 +25,7 @@ Angular 项目本身是用 TypeScript<sup>*</sup> 或 Dart<sup>*</sup> 开发的
 
 在说到 TypeScript 之前，不得不提及的一门语言是 AtScript<sup>*</sup>。
 
-> **AtScript**：AtScript 是专门为开发 Angular 所设计的语言，因此在 Angular 团队决定迁移到 TypeScript 之后，该语言即被宣布废弃。官网在 [AtScript Primer](http://atscript.org/)，扩展名仍为 `.js`。
+> **AtScript**：AtScript 是专门为开发 Angular 所设计的语言，因此在 Angular 团队决定迁移到 TypeScript 之后，该语言即被宣布废弃。官方文档在 [AtScript Primer](https://docs.google.com/document/d/11YUzC-1d0V1-Q3V0fQ7KSit97HnZoKVygDxpWzEYW0U/edit)，扩展名仍为 `.js`。
 
 Angular 的一个重要设计理念就是 **声明式(Declarative)** 编程，为了落实这一理念，Angular 在 API 设计上的一个重大改进就是很大程度上基于<sup>*</sup> `@Something` 的 **注解(Annotation)**／**装饰器(Decorator)** 的声明语法。
 
